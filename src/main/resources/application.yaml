@@ -1,0 +1,16 @@
+spring:
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://localhost:5432/db_shelfie
+        username: shelfie
+        password: password
+
+    # JPA settings
+    jpa:
+        hibernate:
+            ddl-auto: create
+        show-sql: true
+        database: postgresql
+
+    flyway:
+        baseline-on-migrate: true
