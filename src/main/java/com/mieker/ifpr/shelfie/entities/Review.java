@@ -12,7 +12,7 @@ public class Review {
     @Column(name = "review_id", nullable = false)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "my_books_id", nullable = false)
     private MyBooks myBooks;
     @Column(name = "review_rating")
     private float rating;

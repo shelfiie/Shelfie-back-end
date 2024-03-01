@@ -19,8 +19,8 @@ public class Report {
     @JoinColumn(name = "review_id", nullable = false)
     private Review review;
     @Enumerated(EnumType.STRING)
-    @Column(name = "report_status", nullable = false, updatable = false, insertable = false)
-    private ReportStatus reportStatus;
     @Column(name = "report_status", nullable = false)
+    private ReportStatus reportStatus;
+    @Column(name = "report_created_at", nullable = false)
     private Date createdAt;
 }
