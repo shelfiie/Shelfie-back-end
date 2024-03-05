@@ -1,14 +1,14 @@
 spring:
     datasource:
         driver-class-name: org.postgresql.Driver
-        url: jdbc:postgresql://ec2-44-213-151-75.compute-1.amazonaws.com:5432/dfei45gc0d6uh7
-        username: atlzqltvzlymbg
-        password: 58c6cd873e056237fe9e753e306d0c7509ec75d1e576839513eb44e0eaf46d0b
+        url: jdbc:postgresql://ec2-44-214-98-128.compute-1.amazonaws.com:5432/d2jqbff0j4qag1
+        username: gfaxyctdxizimw
+        password: f45dfaf7dbc005fa80e97071228e28637cd1727cabae0f4d5b58e41adf279485
 
     # JPA settings
     jpa:
         hibernate:
-            ddl-auto: update
+            ddl-auto: create
         show-sql: true
         database: postgresql
 

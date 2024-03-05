@@ -1,9 +1,11 @@
-package com.mieker.ifpr.shelfie.entities;
+package com.mieker.ifpr.shelfie.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Date;
 
+@Data
 @Entity
 @Table(name = "tb_badge")
 public class Badge {

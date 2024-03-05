@@ -1,10 +1,12 @@
-package com.mieker.ifpr.shelfie.entities;
+package com.mieker.ifpr.shelfie.entity;
 
-import com.mieker.ifpr.shelfie.entities.enumeration.ReportStatus;
+import com.mieker.ifpr.shelfie.entity.enumeration.ReportStatus;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Date;
 
+@Data
 @Entity
 @Table(name = "tb_report")
 public class Report {
