@@ -81,6 +81,7 @@ CREATE TABLE tb_user (
                          user_email VARCHAR(255) NOT NULL UNIQUE,
                          user_password VARCHAR(255) NOT NULL,
                          user_image VARCHAR(255),
+                         user_role VARCHAR(255) NOT NULL CHECK (user_role IN ('ROLE_ADMIN','ROLE_READER')),
                          user_created_at TIMESTAMP(6) NOT NULL,
                          PRIMARY KEY (user_id)
 );
