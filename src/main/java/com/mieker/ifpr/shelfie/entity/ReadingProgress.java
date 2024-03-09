@@ -2,8 +2,11 @@ package com.mieker.ifpr.shelfie.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -11,15 +14,16 @@ import java.util.Date;
 public class ReadingProgress {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "reading_progress_id", nullable = false)
-    private Long id;
-    @Column(name = "reading_progress_page", nullable = false)
+    @Column(name = "reading_progress_id", nullable = false, updatable = false)
+    private UUID id;
+    @Column(name = "reading_progress_page", nullable = false, updatable = false)
     private Integer page;
     @ManyToOne
-    @JoinColumn(name = "my_books_id", nullable = false)
+    @JoinColumn(name = "my_books_id", nullable = false, updatable = false)
     private MyBooks myBooks;
     @Column(name = "reading_progress_commentary")
     private String commentary;
-    @Column(name = "reading_progress_created_at", nullable = false)
+    @CreationTimestamp(source = SourceType.DB)
+    @Column(name = "reading_progress_created_at", nullable = false, updatable = false)
     private Date createdAt;
 }

@@ -2,8 +2,11 @@ package com.mieker.ifpr.shelfie.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -12,9 +15,9 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "review_id", nullable = false)
-    private Long id;
+    private UUID id;
     @ManyToOne
-    @JoinColumn(name = "my_books_id", nullable = false)
+    @JoinColumn(name = "my_books_id", nullable = false, updatable = false)
     private MyBooks myBooks;
     @Column(name = "review_rating")
     private float rating;
@@ -22,6 +25,7 @@ public class Review {
     private String review;
     @Column(name = "review_enabled")
     private boolean enabled;
-    @Column(name = "review_created_at", nullable = false)
+    @CreationTimestamp(source = SourceType.DB)
+    @Column(name = "review_created_at", nullable = false, updatable = false)
     private Date createdAt;
 }

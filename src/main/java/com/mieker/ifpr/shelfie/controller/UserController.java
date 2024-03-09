@@ -1,41 +1,45 @@
 package com.mieker.ifpr.shelfie.controller;
 
+import com.mieker.ifpr.shelfie.dto.SignUpDTO;
+import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.repository.UserRepository;
 import com.mieker.ifpr.shelfie.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 //TODO
 // olhar isso aqui dps o crossorigins
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
-    UserService userService;
+    private final UserService userService;
 
-//    criar usuário
+
+    //    criar usuário
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody SignUpDTO signUpDTO) {
         try {
-            User newUser = userService.createUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
-//            return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+            User user = userService.createUser(signUpDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-//        User newUser = userService.createUser(user);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
 //    get user by id
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
         User user = userService.getUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
@@ -49,25 +53,28 @@ public class UserController {
 
 //    Update user
     @PutMapping("{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody UpdateUserDTO userUpdateDTO) {
         try {
-            user.setId(id);
-            User updatedUser = userService.updateUser(user);
-            System.out.println(updatedUser);
-            return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+            User user = userService.updateUser(id, userUpdateDTO);
+            System.out.println(user);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-//        user.setId(id);
-//        User updatedUser = userService.updateUser(user);
-//        return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+
     }
 
 //    Delete user
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
-        userService.deleteUser(id);
-        ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        return ResponseEntity.ok("User deleted successfully");
+    public ResponseEntity<String> deleteUser(@PathVariable("id") UUID id) {
+        try {
+            userService.deleteUser(id);
+            ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.ok("User deleted successfully");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

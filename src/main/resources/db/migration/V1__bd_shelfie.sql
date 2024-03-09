@@ -1,6 +1,6 @@
 CREATE TABLE tb_badge (
-                          badge_id BIGINT NOT NULL,
-                          user_id BIGINT NOT NULL,
+                          badge_id VARCHAR(255) NOT NULL,
+                          user_id VARCHAR(255)  NOT NULL,
                           badge_image VARCHAR(255) NOT NULL,
                           badge_name VARCHAR(255) NOT NULL,
                           badge_description TEXT NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE tb_badge (
 );
 
 CREATE TABLE tb_book (
-                         book_id BIGINT NOT NULL,
+                         book_id VARCHAR(255) NOT NULL,
                          book_google_id VARCHAR(255) NOT NULL UNIQUE,
                          book_isbn_10 VARCHAR(255) NOT NULL UNIQUE,
                          book_isbn_13 VARCHAR(255) NOT NULL UNIQUE,
@@ -20,7 +20,7 @@ CREATE TABLE tb_book (
 
 
 CREATE TABLE tb_friend (
-                           friend_id BIGINT NOT NULL,
+                           friend_id VARCHAR(255) NOT NULL,
                            user_id_a BIGINT NOT NULL,
                            user_id_b BIGINT NOT NULL,
                            friendship_request_status VARCHAR(255) NOT NULL CHECK (friendship_request_status IN ('ACEITO','PENDENTE','RECUSADO')),
@@ -30,7 +30,7 @@ CREATE TABLE tb_friend (
 );
 
 CREATE TABLE tb_like (
-                         like_id BIGINT NOT NULL,
+                         like_id VARCHAR(255) NOT NULL,
                          review_id BIGINT NOT NULL,
                          user_id BIGINT NOT NULL,
                          like_created_at TIMESTAMP(6) NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE tb_like (
 );
 
 CREATE TABLE tb_my_books (
-                             my_books_id BIGINT NOT NULL,
+                             my_books_id VARCHAR(255) NOT NULL,
                              book_id BIGINT NOT NULL,
                              user_id BIGINT NOT NULL,
                              my_books_status VARCHAR(255) NOT NULL CHECK (my_books_status IN ('LIDO','LENDO','QUERO_LER','ABANDONADO')),
@@ -47,7 +47,7 @@ CREATE TABLE tb_my_books (
 );
 
 CREATE TABLE tb_reading_progress (
-                                     reading_progress_id BIGINT NOT NULL,
+                                     reading_progress_id VARCHAR(255) NOT NULL,
                                      my_books_id BIGINT NOT NULL,
                                      reading_progress_page INTEGER NOT NULL,
                                      reading_progress_commentary TEXT,
@@ -56,7 +56,7 @@ CREATE TABLE tb_reading_progress (
 );
 
 CREATE TABLE tb_report (
-                           report_id BIGINT NOT NULL,
+                           report_id VARCHAR(255) NOT NULL,
                            user_id BIGINT NOT NULL,
                            review_id BIGINT NOT NULL,
                            report_status VARCHAR(255) NOT NULL CHECK (report_status IN ('PENDENTE','RESOLVIDO','RECUSADO')),
@@ -65,7 +65,7 @@ CREATE TABLE tb_report (
 );
 
 CREATE TABLE tb_review (
-                           review_id BIGINT NOT NULL,
+                           review_id VARCHAR(255) NOT NULL,
                            my_books_id BIGINT NOT NULL,
                            review_rating FLOAT4,
                            review_review TEXT,
@@ -75,7 +75,7 @@ CREATE TABLE tb_review (
 );
 
 CREATE TABLE tb_user (
-                         user_id BIGINT NOT NULL,
+                         user_id VARCHAR(255) NOT NULL,
                          user_name VARCHAR(255) NOT NULL,
                          user_username VARCHAR(255) NOT NULL UNIQUE,
                          user_email VARCHAR(255) NOT NULL UNIQUE,
