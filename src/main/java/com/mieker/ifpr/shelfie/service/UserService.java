@@ -29,10 +29,10 @@ public class UserService {
 //    TODO
 //    Olha isso aqui
 //    @Autowired
-//    private ConfigMapper mapper;
+//    private MapperConfig mapper;
 
 //    @Autowired
-//    private ConfigMapper modelMapper;
+//    private MapperConfig modelMapper;
 
 //    public User createUser(User user) {
 //        return userRepository.save(user);
@@ -55,7 +55,7 @@ public class UserService {
     }
 
 //    private User convertUserRegistration(SignUpDTO signUpDTO) throws ParseException{
-//        ConfigMapper mapper = new ConfigMapper();
+//        MapperConfig mapper = new MapperConfig();
 ////        User user = new User();
 //        return mapper.map(signUpDTO, User.class);
 ////         user;
