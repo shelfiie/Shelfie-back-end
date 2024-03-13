@@ -25,15 +25,7 @@ public class UserService {
     //
 //    TODO
 //    Olha isso aqui
-//    @Autowired
-//    private ConfigMapper mapper;
 
-//    @Autowired
-//    private ConfigMapper modelMapper;
-
-//    public User createUser(User user) {
-//        return userRepository.save(user);
-//    }
 
 //    criando um userDto
     public User createUser(RegisterDTO registerDTO) throws ParseException {
@@ -47,16 +39,18 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
         userToUpdate = userMapper.updateUserFromDTO(userToUpdate, userUpdateDTO);
-//        userToUpdate = this.userMapper.updateUser(userUpdateDTO);
         return userRepository.save(userToUpdate);
     }
 
+<<<<<<< HEAD
 //    private User convertUserRegistration(RegisterDTO signUpDTO) throws ParseException{
 //        ConfigMapper mapper = new ConfigMapper();
 ////        User user = new User();
 //        return mapper.map(signUpDTO, User.class);
 ////         user;
 //    }
+=======
+>>>>>>> gms-back-login-merge
 
     public User getUserById(UUID id) {
         Optional<User> user = userRepository.findById(id);
@@ -67,15 +61,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-
-//    public User updateUser(User user) {
-//        User existingUser = userRepository.findById(user.getId()).get();
-//        existingUser.setName(user.getName());
-//        existingUser.setImage(user.getImage());
-//        existingUser.setUsername(user.getUsername());
-//        return userRepository.save(existingUser);
-//    }
-//
     public void deleteUser(UUID id) {
         userRepository.deleteById(id);
     }

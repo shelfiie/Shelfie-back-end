@@ -3,11 +3,19 @@ package com.mieker.ifpr.shelfie.controller;
 import com.mieker.ifpr.shelfie.dto.RegisterDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
+<<<<<<< HEAD
+=======
+import com.mieker.ifpr.shelfie.exception.GlobalExceptionHandler;
+import com.mieker.ifpr.shelfie.repository.UserRepository;
+>>>>>>> gms-back-login-merge
 import com.mieker.ifpr.shelfie.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +31,10 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
+//    Admin endpoints
 
     //    criar usuário
+<<<<<<< HEAD
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody RegisterDTO registerDTO) {
         try {
@@ -35,6 +45,18 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+=======
+//    @PostMapping
+//    public ResponseEntity<User> createUser(@RequestBody SignUpDTO signUpDTO) {
+//        try {
+//            User user = userService.createUser(signUpDTO);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//    }
+>>>>>>> gms-back-login-merge
 
 //    get user by id
     @GetMapping("{id}")
@@ -74,6 +96,20 @@ public class UserController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////
+//    Readers endpoints
+
+    @GetMapping("/me")
+    public ResponseEntity<User> AuthenticatedUser()  {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User currentUser = (User) authentication.getPrincipal();
+            return ResponseEntity.ok(currentUser);
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }
