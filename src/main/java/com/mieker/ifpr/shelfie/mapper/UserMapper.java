@@ -1,12 +1,10 @@
 package com.mieker.ifpr.shelfie.mapper;
 
-import com.mieker.ifpr.shelfie.dto.SignUpDTO;
+import com.mieker.ifpr.shelfie.dto.RegisterDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -20,8 +18,8 @@ public class UserMapper {
         this.mapper = mapper;
     }
 
-    public User signUpToUser(SignUpDTO signUpDTO) throws ParseException {
-        return mapper.map(signUpDTO, User.class);
+    public User signUpToUser(RegisterDTO registerDTO) throws ParseException {
+        return mapper.map(registerDTO, User.class);
     }
 
     // Método para converter um objeto User em um UpdateUserDTO

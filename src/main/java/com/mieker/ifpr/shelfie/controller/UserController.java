@@ -1,9 +1,8 @@
 package com.mieker.ifpr.shelfie.controller;
 
-import com.mieker.ifpr.shelfie.dto.SignUpDTO;
+import com.mieker.ifpr.shelfie.dto.RegisterDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
-import com.mieker.ifpr.shelfie.repository.UserRepository;
 import com.mieker.ifpr.shelfie.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +26,9 @@ public class UserController {
 
     //    criar usuário
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody SignUpDTO signUpDTO) {
+    public ResponseEntity<User> createUser(@RequestBody RegisterDTO registerDTO) {
         try {
-            User user = userService.createUser(signUpDTO);
+            User user = userService.createUser(registerDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(user);
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -1,15 +1,12 @@
 package com.mieker.ifpr.shelfie.service;
 
-import com.mieker.ifpr.shelfie.dto.SignUpDTO;
+import com.mieker.ifpr.shelfie.dto.RegisterDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.mapper.UserMapper;
 import com.mieker.ifpr.shelfie.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -39,9 +36,9 @@ public class UserService {
 //    }
 
 //    criando um userDto
-    public User createUser(SignUpDTO signUpDTO) throws ParseException {
-        User user = userMapper.signUpToUser(signUpDTO);
-//        user = convertUserRegistration(signUpDTO);
+    public User createUser(RegisterDTO registerDTO) throws ParseException {
+        User user = userMapper.signUpToUser(registerDTO);
+//        user = convertUserRegistration(registerDTO);
         return userRepository.save(user);
     }
 
@@ -54,7 +51,7 @@ public class UserService {
         return userRepository.save(userToUpdate);
     }
 
-//    private User convertUserRegistration(SignUpDTO signUpDTO) throws ParseException{
+//    private User convertUserRegistration(RegisterDTO signUpDTO) throws ParseException{
 //        ConfigMapper mapper = new ConfigMapper();
 ////        User user = new User();
 //        return mapper.map(signUpDTO, User.class);
