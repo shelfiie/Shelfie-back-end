@@ -43,6 +43,7 @@ CREATE TABLE tb_my_books (
                              user_id BIGINT NOT NULL,
                              my_books_status VARCHAR(255) NOT NULL CHECK (my_books_status IN ('LIDO','LENDO','QUERO_LER','ABANDONADO')),
                              my_books_created_at TIMESTAMP(6) NOT NULL,
+                             my_books_enable BOOLEAN NOT NULL,
                              PRIMARY KEY (my_books_id)
 );
 
