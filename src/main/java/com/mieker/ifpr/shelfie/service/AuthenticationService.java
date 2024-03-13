@@ -1,7 +1,7 @@
 package com.mieker.ifpr.shelfie.service;
 
 import com.mieker.ifpr.shelfie.dto.LoginDTO;
-import com.mieker.ifpr.shelfie.dto.SignUpDTO;
+import com.mieker.ifpr.shelfie.dto.RegisterDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.mapper.UserMapper;
 import com.mieker.ifpr.shelfie.repository.UserRepository;
@@ -28,7 +28,7 @@ public class AuthenticationService {
         this.userMapper = userMapper;
     }
 
-    public User signUp (SignUpDTO input) throws LoginException {
+    public User signUp (RegisterDTO input) throws LoginException {
         User user = new User();
         user.setName(input.getName());
         user.setEmail(input.getEmail());

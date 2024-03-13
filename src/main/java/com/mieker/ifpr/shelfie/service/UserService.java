@@ -42,16 +42,6 @@ public class UserService {
         return userRepository.save(userToUpdate);
     }
 
-<<<<<<< HEAD
-//    private User convertUserRegistration(RegisterDTO signUpDTO) throws ParseException{
-//        ConfigMapper mapper = new ConfigMapper();
-////        User user = new User();
-//        return mapper.map(signUpDTO, User.class);
-////         user;
-//    }
-=======
->>>>>>> gms-back-login-merge
-
     public User getUserById(UUID id) {
         Optional<User> user = userRepository.findById(id);
         return user.orElse(null);

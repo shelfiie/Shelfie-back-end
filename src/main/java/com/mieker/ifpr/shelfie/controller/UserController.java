@@ -3,11 +3,6 @@ package com.mieker.ifpr.shelfie.controller;
 import com.mieker.ifpr.shelfie.dto.RegisterDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
-<<<<<<< HEAD
-=======
-import com.mieker.ifpr.shelfie.exception.GlobalExceptionHandler;
-import com.mieker.ifpr.shelfie.repository.UserRepository;
->>>>>>> gms-back-login-merge
 import com.mieker.ifpr.shelfie.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +29,6 @@ public class UserController {
 //    Admin endpoints
 
     //    criar usuário
-<<<<<<< HEAD
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody RegisterDTO registerDTO) {
         try {
@@ -45,18 +39,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-=======
-//    @PostMapping
-//    public ResponseEntity<User> createUser(@RequestBody SignUpDTO signUpDTO) {
-//        try {
-//            User user = userService.createUser(signUpDTO);
-//            return ResponseEntity.status(HttpStatus.CREATED).body(user);
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//    }
->>>>>>> gms-back-login-merge
+
 
 //    get user by id
     @GetMapping("{id}")
