@@ -7,10 +7,12 @@ import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -32,9 +34,11 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "user_image")
     private String image;
+    @Column(name = "user_enable", nullable = false)
+    private boolean enabled = true;
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false, updatable = false)
-    private UserRoles role = UserRoles.ROLE_READER;
+    private UserRoles role;
 //    faz o timestamp na hora que for criado o usuário, sem precisar ser passado
     @CreationTimestamp(source = SourceType.DB)
     @Column(name = "user_created_at", nullable = false, updatable = false)
@@ -42,7 +46,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.toString());
+
+        return List.of(authority);
     }
 
     @Override

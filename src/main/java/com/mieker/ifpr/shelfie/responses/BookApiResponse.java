@@ -1,4 +1,4 @@
-package com.mieker.ifpr.shelfie.response;
+package com.mieker.ifpr.shelfie.responses;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;

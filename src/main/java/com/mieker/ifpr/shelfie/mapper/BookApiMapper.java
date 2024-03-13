@@ -1,10 +1,8 @@
 package com.mieker.ifpr.shelfie.mapper;
 
 import com.mieker.ifpr.shelfie.dto.BookApiDTO;
-import com.mieker.ifpr.shelfie.response.BookApiResponse;
+import com.mieker.ifpr.shelfie.responses.BookApiResponse;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 public class BookApiMapper {

@@ -1,12 +1,14 @@
 package com.mieker.ifpr.shelfie.service;
 
-import com.mieker.ifpr.shelfie.dto.RegisterDTO;
+import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
+import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import com.mieker.ifpr.shelfie.mapper.UserMapper;
 import com.mieker.ifpr.shelfie.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -21,16 +23,27 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     //
 //    TODO
 //    Olha isso aqui
 
 
-//    criando um userDto
-    public User createUser(RegisterDTO registerDTO) throws ParseException {
-        User user = userMapper.signUpToUser(registerDTO);
-//        user = convertUserRegistration(registerDTO);
+//    criando um user
+//    public User createUser(RegisterUserDTO registerDTO) throws ParseException {
+//        User user = userMapper.signUpToUser(registerDTO);
+//        return userRepository.save(user);
+//    }
+
+//    criar um user admin
+    public User createAdministrator(RegisterUserDTO input) {
+        User user = new User();
+        user.setName(input.getName());
+        user.setEmail(input.getEmail());
+        user.setPassword(passwordEncoder.encode(input.getPassword()));
+        user.setUserName(input.getUserName());
+        user.setRole(UserRoles.ROLE_ADMIN);
         return userRepository.save(user);
     }
 

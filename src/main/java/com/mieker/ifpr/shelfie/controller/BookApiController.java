@@ -21,7 +21,6 @@ public class BookApiController {
 
     @GetMapping("/google/{isbn10}")
     public ResponseEntity<BookApiDTO> getBookByIsbn10(@PathVariable String isbn10) {
-
         BookApiDTO book = bookApiService.getBookByISBN10(isbn10);
         return ResponseEntity.ok(book);
     }
@@ -29,7 +28,6 @@ public class BookApiController {
     @PostMapping
     public ResponseEntity<Book> createBook(@RequestBody BookApiDTO bookDTO) {
         try {
-//            BookApiDTO bookApi = bookApiService.getBookByISBN10(isbn10);
             Book book = bookService.createBook(bookDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(book);
         } catch (Exception e) {

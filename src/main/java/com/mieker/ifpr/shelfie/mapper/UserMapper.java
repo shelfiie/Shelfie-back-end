@@ -1,6 +1,6 @@
 package com.mieker.ifpr.shelfie.mapper;
 
-import com.mieker.ifpr.shelfie.dto.RegisterDTO;
+import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import org.modelmapper.ModelMapper;
@@ -18,7 +18,7 @@ public class UserMapper {
         this.mapper = mapper;
     }
 
-    public User signUpToUser(RegisterDTO registerDTO) throws ParseException {
+    public User signUpToUser(RegisterUserDTO registerDTO) throws ParseException {
         return mapper.map(registerDTO, User.class);
     }
 

@@ -5,7 +5,7 @@ import lombok.Data;
 //TODO
 //
 @Data
-public class RegisterDTO {
+public class RegisterUserDTO {
     private String name;
     private String userName;
     private String email;

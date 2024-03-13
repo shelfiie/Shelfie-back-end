@@ -2,13 +2,10 @@ package com.mieker.ifpr.shelfie.service;
 
 import com.mieker.ifpr.shelfie.dto.BookApiDTO;
 import com.mieker.ifpr.shelfie.mapper.BookApiMapper;
-import com.mieker.ifpr.shelfie.response.BookApiResponse;
+import com.mieker.ifpr.shelfie.responses.BookApiResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor

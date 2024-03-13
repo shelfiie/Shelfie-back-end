@@ -1,8 +1,9 @@
 package com.mieker.ifpr.shelfie.service;
 
 import com.mieker.ifpr.shelfie.dto.LoginDTO;
-import com.mieker.ifpr.shelfie.dto.RegisterDTO;
+import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
+import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import com.mieker.ifpr.shelfie.mapper.UserMapper;
 import com.mieker.ifpr.shelfie.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.LoginException;
-import java.text.ParseException;
 
 @Service
 public class AuthenticationService {
@@ -28,12 +28,13 @@ public class AuthenticationService {
         this.userMapper = userMapper;
     }
 
-    public User signUp (RegisterDTO input) throws LoginException {
+    public User signUp (RegisterUserDTO input) throws LoginException {
         User user = new User();
         user.setName(input.getName());
         user.setEmail(input.getEmail());
         user.setPassword(passwordEncoder.encode(input.getPassword()));
         user.setUserName(input.getUserName());
+        user.setRole(UserRoles.ROLE_READER);
         return userRepository.save(user);
     }
 

@@ -1,6 +1,6 @@
 package com.mieker.ifpr.shelfie.controller;
 
-import com.mieker.ifpr.shelfie.dto.RegisterDTO;
+import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.service.UserService;
@@ -8,8 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,16 +29,16 @@ public class UserController {
 //    Admin endpoints
 
     //    criar usuário
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody RegisterDTO registerDTO) {
-        try {
-            User user = userService.createUser(registerDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(user);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
+//    @PostMapping
+//    public ResponseEntity<User> createUser(@RequestBody RegisterUserDTO registerDTO) {
+//        try {
+//            User user = userService.createUser(registerDTO);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//    }
 
 
 //    get user by id
@@ -49,6 +49,7 @@ public class UserController {
     }
 
 //    get all users
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -66,33 +67,24 @@ public class UserController {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-
     }
 
 //    Delete user
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") UUID id) {
-        try {
-            userService.deleteUser(id);
-            ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            return ResponseEntity.ok("User deleted successfully");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        userService.deleteUser(id);
+        ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.ok("User deleted successfully");
     }
 
     ////////////////////////////////////////////////////////////////////////
 //    Readers endpoints
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
     public ResponseEntity<User> AuthenticatedUser()  {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            User currentUser = (User) authentication.getPrincipal();
-            return ResponseEntity.ok(currentUser);
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(currentUser);
     }
 }
