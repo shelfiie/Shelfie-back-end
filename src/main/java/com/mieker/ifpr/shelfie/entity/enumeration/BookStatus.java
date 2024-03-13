@@ -1,4 +1,4 @@
-package com.mieker.ifpr.shelfie.entities.enumeration;
+package com.mieker.ifpr.shelfie.entity.enumeration;
 
 public enum BookStatus {
     LIDO,
