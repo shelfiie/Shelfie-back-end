@@ -18,10 +18,14 @@ import java.util.UUID;
 
 //TODO
 // olhar isso aqui dps o crossorigins
-@CrossOrigin(origins = "http://localhost:8080")
+//@CrossOrigin(origins = "http://localhost:8080")
+
+@CrossOrigin(origins = "*")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/users")
+//@CrossOrigin(origins = "http://172.16.68.188:5173")
+
 public class UserController {
     @Autowired
     private final UserService userService;
@@ -79,6 +83,8 @@ public class UserController {
 
     ////////////////////////////////////////////////////////////////////////
 //    Readers endpoints
+//todo
+//    paginometro
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")

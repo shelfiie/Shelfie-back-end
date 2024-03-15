@@ -29,5 +29,21 @@ public class BookApiService {
         assert response != null;
         return BookApiMapper.mapApiToDto(response);
     }
+
+    public BookApiDTO getBookByGoogleId(String googleId) {
+        String url = "https://www.googleapis.com/books/v1/volumes";
+        String uri = "?q=" + googleId;
+
+        BookApiResponse response = WebClient
+                .create(url)
+                .get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(BookApiResponse.class)
+                .block();
+
+        assert response != null;
+        return BookApiMapper.mapApiToDto(response);
+    }
 }
 

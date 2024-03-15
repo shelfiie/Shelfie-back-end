@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.login.LoginException;
 
-//@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {

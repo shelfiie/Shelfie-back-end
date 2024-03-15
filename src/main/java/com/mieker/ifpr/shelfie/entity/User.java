@@ -36,6 +36,7 @@ public class User implements UserDetails {
     private String image;
     @Column(name = "user_enable", nullable = false)
     private boolean enabled = true;
+//    rota para ativar e rota para desativar
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false, updatable = false)
     private UserRoles role;
@@ -43,6 +44,10 @@ public class User implements UserDetails {
     @CreationTimestamp(source = SourceType.DB)
     @Column(name = "user_created_at", nullable = false, updatable = false)
     private Date createdAt;
+
+    @Transient
+//    não vai persistir essa tabela
+    private Long paginometro;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

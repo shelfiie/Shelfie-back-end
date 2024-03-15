@@ -8,8 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/api/books/google")
 public class BookApiController {
     private final BookService bookService;
     private final BookApiService bookApiService;
@@ -19,11 +20,20 @@ public class BookApiController {
         this.bookApiService = bookApiService;
     }
 
-    @GetMapping("/google/{isbn10}")
+//    pegar livro pelo isbn10
+    @GetMapping("/isbn/{isbn10}")
     public ResponseEntity<BookApiDTO> getBookByIsbn10(@PathVariable String isbn10) {
         BookApiDTO book = bookApiService.getBookByISBN10(isbn10);
         return ResponseEntity.ok(book);
     }
+
+//    pegar livro pelo id do google
+    @GetMapping("/{googleId}")
+    public ResponseEntity<BookApiDTO> getBookByGoogleId(@PathVariable String googleId) {
+        BookApiDTO book = bookApiService.getBookByGoogleId(googleId);
+        return ResponseEntity.ok(book);
+    }
+
 
     @PostMapping
     public ResponseEntity<Book> createBook(@RequestBody BookApiDTO bookDTO) {
