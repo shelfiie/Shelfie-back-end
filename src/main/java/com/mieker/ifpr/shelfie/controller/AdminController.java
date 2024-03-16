@@ -26,3 +26,7 @@ public class AdminController {
         return ResponseEntity.ok(createAdmin);
     }
 }
+
+// na admin controller tem que ter as rotas para:
+// disable reviews
+// disable user

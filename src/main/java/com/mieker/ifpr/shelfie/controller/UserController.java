@@ -1,7 +1,9 @@
 package com.mieker.ifpr.shelfie.controller;
 
+import com.mieker.ifpr.shelfie.dto.DisableDTO;
 import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
+import com.mieker.ifpr.shelfie.dto.UserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.service.UserService;
 import lombok.AllArgsConstructor;
@@ -32,19 +34,6 @@ public class UserController {
 
 //    Admin endpoints
 
-    //    criar usuário
-//    @PostMapping
-//    public ResponseEntity<User> createUser(@RequestBody RegisterUserDTO registerDTO) {
-//        try {
-//            User user = userService.createUser(registerDTO);
-//            return ResponseEntity.status(HttpStatus.CREATED).body(user);
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//    }
-
-
 //    get user by id
     @GetMapping("{id}")
     public ResponseEntity<User> getUserById(@PathVariable UUID id) {
@@ -55,13 +44,13 @@ public class UserController {
 //    get all users
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsers();
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
 //    Update user
-    @PutMapping("{id}")
+    @PutMapping("update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody UpdateUserDTO userUpdateDTO) {
         try {
             User user = userService.updateUser(id, userUpdateDTO);
@@ -74,12 +63,12 @@ public class UserController {
     }
 
 //    Delete user
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") UUID id) {
-        userService.deleteUser(id);
-        ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        return ResponseEntity.ok("User deleted successfully");
-    }
+//    @DeleteMapping("{id}")
+//    public ResponseEntity<String> deleteUser(@PathVariable("id") UUID id) {
+//        userService.deleteUser(id);
+//        ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//        return ResponseEntity.ok("User deleted successfully");
+//    }
 
     ////////////////////////////////////////////////////////////////////////
 //    Readers endpoints
@@ -92,5 +81,18 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
         return ResponseEntity.ok(currentUser);
+    }
+
+//    para fazer o delete do usuário, mas só alterando seu status para disabled
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<String> deleteUser(@PathVariable("id") UUID id, @RequestBody DisableDTO disableDTO) {
+        try {
+            User user = userService.updateUserDisable(id, disableDTO);
+            System.out.println(user);
+            return ResponseEntity.ok("User disabled successfully");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

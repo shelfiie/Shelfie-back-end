@@ -20,13 +20,6 @@ public class BookApiController {
         this.bookApiService = bookApiService;
     }
 
-//    pegar livro pelo isbn10
-//    @GetMapping("/isbn/{isbn10}")
-//    public ResponseEntity<BookApiDTO> getBookByIsbn10(@PathVariable String isbn10) {
-//        BookApiDTO book = bookApiService.getBookByISBN10(isbn10);
-//        return ResponseEntity.ok(book);
-//    }
-
 //    pegar livro pelo id do google
     @GetMapping("/{googleId}")
     public ResponseEntity<BookApiDTO> getBookByGoogleId(@PathVariable String googleId) {
@@ -35,7 +28,8 @@ public class BookApiController {
         return ResponseEntity.ok(book);
     }
 
-
+//    TODO
+//    arrumar isso aqui, ele tem que retornar uma dto
     @PostMapping
     public ResponseEntity<Book> createBook(@RequestBody BookApiDTO bookDTO) {
         try {

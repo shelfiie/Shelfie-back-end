@@ -33,7 +33,7 @@ public class MyBookService {
 
     public MyBookDTO create(UUID userId, String googleId, BookStatus bookStatus) throws ParseException {
         Optional<Book> optionalBook = bookRepository.findByGoogleId(googleId);
-        System.out.println(googleId);
+//        System.out.println(googleId);
         MyBooks myBook = optionalBook.isPresent() ? addBookToUser(optionalBook.get().getId(), userId, bookStatus) : createBookAndAddToUser(googleId, userId, bookStatus);
         return myBookMapper.myBookToMyBookDTO(myBook);
     }

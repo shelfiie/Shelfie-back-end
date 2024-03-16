@@ -11,17 +11,17 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name = "tb_my_books")
+@Table(name = "tb_my_books", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "book_id"})})
 public class MyBooks {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "my_books_id", nullable = false)
     private UUID id;
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, updatable = false, unique = true)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
     @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false, updatable = false, unique = true)
+    @JoinColumn(name = "book_id", nullable = false, updatable = false)
     private Book book;
     @Enumerated(EnumType.STRING)
     @Column(name = "my_books_status", nullable = false)

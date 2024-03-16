@@ -1,7 +1,9 @@
 package com.mieker.ifpr.shelfie.service;
 
+import com.mieker.ifpr.shelfie.dto.DisableDTO;
 import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
+import com.mieker.ifpr.shelfie.dto.UserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import com.mieker.ifpr.shelfie.mapper.UserMapper;
@@ -15,6 +17,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 // user controller -> service -> repository -> dto
 // 
 
@@ -55,14 +58,33 @@ public class UserService {
         return userRepository.save(userToUpdate);
     }
 
+    public User updateUserDisable(UUID id, DisableDTO disableDTO) throws ParseException {
+        User userToUpdate = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+        System.out.println(id);
+        userToUpdate = userMapper.updateUserDisabled(userToUpdate, disableDTO);
+        return userRepository.save(userToUpdate);
+    }
+
     public User getUserById(UUID id) {
         Optional<User> user = userRepository.findById(id);
         return user.orElse(null);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+//    public List<User> getAllUsers() {
+//        return userRepository.findAll();
+//    }
+
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+//        o stream faz uma sequencia dos objetos retornados para que cada objeto seja mapeado individualmente
+        return users.stream()
+//                referências de método
+                .map(userMapper::userToUserDTO)
+                .collect(Collectors.toList());
     }
+
 
     public void deleteUser(UUID id) {
         userRepository.deleteById(id);
