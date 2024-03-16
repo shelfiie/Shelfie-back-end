@@ -1,13 +1,21 @@
 name: deploy-rest-api-shelfie
 #run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
 jobs:
-  check-bats-version:
+  deployment:
     runs-on: ubuntu-latest
+    environment: production
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
         with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+          token: ${{ secrets.DIGITAL_OCEAN_SHELFIE }}
