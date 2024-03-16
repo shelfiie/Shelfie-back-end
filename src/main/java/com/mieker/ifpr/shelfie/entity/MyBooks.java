@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name = "tb_my_books")
+@Table(name = "tb_my_books", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "book_id"})})
 public class MyBooks {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

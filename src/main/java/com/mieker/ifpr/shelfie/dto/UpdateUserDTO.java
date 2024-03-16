@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class UpdateUserDTO {
     private String name;
-    private String username;
+    private String userName;
     private String image;
 }

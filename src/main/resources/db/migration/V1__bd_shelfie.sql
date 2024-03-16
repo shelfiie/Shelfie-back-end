@@ -44,6 +44,7 @@ CREATE TABLE tb_my_books (
                              my_books_status VARCHAR(255) NOT NULL CHECK (my_books_status IN ('LIDO','LENDO','QUERO_LER','ABANDONADO')),
                              my_books_created_at TIMESTAMP(6) NOT NULL,
                              my_books_enable BOOLEAN NOT NULL,
+                             UNIQUE(book_id, user_id),
                              PRIMARY KEY (my_books_id)
 );
 
@@ -82,6 +83,7 @@ CREATE TABLE tb_user (
                          user_email VARCHAR(255) NOT NULL UNIQUE,
                          user_password VARCHAR(255) NOT NULL,
                          user_image VARCHAR(255),
+                         my_books_enable BOOLEAN NOT NULL,
                          user_role VARCHAR(255) NOT NULL CHECK (user_role IN ('ROLE_ADMIN','ROLE_READER')),
                          user_created_at TIMESTAMP(6) NOT NULL,
                          PRIMARY KEY (user_id)
