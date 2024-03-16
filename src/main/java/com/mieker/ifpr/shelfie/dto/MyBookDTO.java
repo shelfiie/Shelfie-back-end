@@ -8,6 +8,6 @@ import java.util.UUID;
 @Data
 public class MyBookDTO {
     private UUID userId;
-    private UUID googleId;
+    private UUID bookId;
     private BookStatus bookStatus;
 }

@@ -18,10 +18,10 @@ public class MyBooks {
     @Column(name = "my_books_id", nullable = false)
     private UUID id;
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false, unique = true)
     private User user;
     @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false, updatable = false)
+    @JoinColumn(name = "book_id", nullable = false, updatable = false, unique = true)
     private Book book;
     @Enumerated(EnumType.STRING)
     @Column(name = "my_books_status", nullable = false)

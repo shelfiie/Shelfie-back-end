@@ -21,15 +21,16 @@ public class BookApiController {
     }
 
 //    pegar livro pelo isbn10
-    @GetMapping("/isbn/{isbn10}")
-    public ResponseEntity<BookApiDTO> getBookByIsbn10(@PathVariable String isbn10) {
-        BookApiDTO book = bookApiService.getBookByISBN10(isbn10);
-        return ResponseEntity.ok(book);
-    }
+//    @GetMapping("/isbn/{isbn10}")
+//    public ResponseEntity<BookApiDTO> getBookByIsbn10(@PathVariable String isbn10) {
+//        BookApiDTO book = bookApiService.getBookByISBN10(isbn10);
+//        return ResponseEntity.ok(book);
+//    }
 
 //    pegar livro pelo id do google
     @GetMapping("/{googleId}")
     public ResponseEntity<BookApiDTO> getBookByGoogleId(@PathVariable String googleId) {
+        System.out.println(googleId);
         BookApiDTO book = bookApiService.getBookByGoogleId(googleId);
         return ResponseEntity.ok(book);
     }

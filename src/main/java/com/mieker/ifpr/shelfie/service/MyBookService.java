@@ -31,52 +31,28 @@ public class MyBookService {
     private final UserService userService;
     private final MyBookMapper myBookMapper;
 
-    public MyBookDTO create(UUID userId, String googleId, BookStatus bookStatus) {
-//        MyBookDTO myBookDTO = new MyBookDTO();
-        Optional<Book> book = bookRepository.findByGoogleId(googleId);
+    public MyBookDTO create(UUID userId, String googleId, BookStatus bookStatus) throws ParseException {
+        Optional<Book> optionalBook = bookRepository.findByGoogleId(googleId);
         System.out.println(googleId);
-        if (book.isPresent()) {
-
-        }
-
-        MyBooks myBook = book.isPresent() ? addBookToUser(book.get(), userId, bookStatus) : createBookAndAddToUser(googleId, userId, bookStatus);
+        MyBooks myBook = optionalBook.isPresent() ? addBookToUser(optionalBook.get().getId(), userId, bookStatus) : createBookAndAddToUser(googleId, userId, bookStatus);
         return myBookMapper.myBookToMyBookDTO(myBook);
-
-//
-//        if (myBooks.isPresent()) {
-//            System.out.println("Book already exists");
-//        } else {
-//            BookApiDTO bookDTO = bookApiService.getBookByGoogleId(googleId);
-//            try {
-//                Book book = bookService.createBook(bookDTO);
-//            } catch (ParseException e) {
-//                throw new RuntimeException(e);
-//            }
-//            System.out.println("Book does not exist. Create a new book");
-////            BookApiDTO book = bookApiService.getBookByGoogleId(googleId);
-//        return myBooks.isPresent() ? addBookToUser(myBooks.get(), userId, bookStatus) : createBookAndAddToUser(googleId, userId, bookStatus);
-//
-//        }
-//        return null;
     }
 
-    public MyBooks addBookToUser(Book book, UUID userId, BookStatus bookStatus) {
+    public MyBooks addBookToUser(UUID bookId, UUID userId, BookStatus bookStatus) {
         MyBooks myBooks = new MyBooks();
         User user =  userService.getUserById(userId);
+        Book book = bookService.getBookById(bookId);
+        System.out.println(book.getId());
         myBooks.setBook(book);
         myBooks.setUser(user);
         myBooks.setBookStatus(bookStatus);
         return myBookRepository.save(myBooks);
     }
 
-    public MyBooks createBookAndAddToUser(String googleId, UUID userId, BookStatus bookStatus) {
+    public MyBooks createBookAndAddToUser(String googleId,UUID userId,BookStatus bookStatus) throws ParseException {
         BookApiDTO bookDTO = bookApiService.getBookByGoogleId(googleId);
-        try {
-            Book book = bookService.createBook(bookDTO);
-            return addBookToUser(book, userId, bookStatus);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+        Book book = bookService.createBook(bookDTO);
+        return addBookToUser(book.getId(), userId, bookStatus);
     }
 }
 

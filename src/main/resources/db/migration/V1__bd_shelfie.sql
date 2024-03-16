@@ -39,8 +39,8 @@ CREATE TABLE tb_like (
 
 CREATE TABLE tb_my_books (
                              my_books_id VARCHAR(255) NOT NULL,
-                             book_id BIGINT NOT NULL,
-                             user_id BIGINT NOT NULL,
+                             book_id BIGINT NOT NULL UNIQUE,
+                             user_id BIGINT NOT NULL UNIQUE,
                              my_books_status VARCHAR(255) NOT NULL CHECK (my_books_status IN ('LIDO','LENDO','QUERO_LER','ABANDONADO')),
                              my_books_created_at TIMESTAMP(6) NOT NULL,
                              my_books_enable BOOLEAN NOT NULL,

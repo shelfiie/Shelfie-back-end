@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.UUID;
 
 @CrossOrigin(origins = "*")
@@ -27,7 +28,7 @@ public class MyBookController {
     private final MyBookService myBookService;
     private final ModelMapper mapper;
     @PostMapping("/{userId}/{googleId}/{bookStatus}")
-    public ResponseEntity<MyBookDTO> createMyBooks(@PathVariable UUID userId, @PathVariable String googleId, @PathVariable BookStatus bookStatus) {
+    public ResponseEntity<MyBookDTO> createMyBooks(@PathVariable UUID userId, @PathVariable String googleId, @PathVariable BookStatus bookStatus) throws ParseException {
 //        MyBookDTO myBookDTO = new MyBookDTO();
 //        myBookDTO.setGoogleId(googleId);
 //        myBookDTO.setUserId(userId);

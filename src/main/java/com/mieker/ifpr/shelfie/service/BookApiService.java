@@ -14,25 +14,9 @@ public class BookApiService {
 
     private final BookApiMapper bookApiMapper;
 
-    public BookApiDTO getBookByISBN10(String isbn10) {
-        String url = "https://www.googleapis.com/books/v1/volumes";
-        String uri = "?q=isbn:" + isbn10;
-
-        BookApiResponse response = WebClient
-                .create(url)
-                .get()
-                .uri(uri)
-                .retrieve()
-                .bodyToMono(BookApiResponse.class)
-                .block();
-
-        assert response != null;
-        return BookApiMapper.mapApiToDto(response);
-    }
-
     public BookApiDTO getBookByGoogleId(String googleId) {
         String url = "https://www.googleapis.com/books/v1/volumes";
-        String uri = "?q=" + googleId;
+        String uri = "/" + googleId;
 
         BookApiResponse response = WebClient
                 .create(url)
@@ -43,7 +27,7 @@ public class BookApiService {
                 .block();
 
         assert response != null;
-        return BookApiMapper.mapApiToDto(response);
+        return BookApiMapper.mapApiToDtoGoogleId(response);
     }
 }
 

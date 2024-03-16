@@ -6,15 +6,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BookApiMapper {
-//    mapeia os dados que retornam de uma consulta a api por isbn
-    public static BookApiDTO mapApiToDto(BookApiResponse response) {
-        BookApiResponse.Item item = response.getItems().get(0); // Supondo que haja apenas um item retornado
+////    mapeia os dados que retornam de uma consulta a api pelo id do goole
+    public static BookApiDTO mapApiToDtoGoogleId(BookApiResponse response) {
         BookApiDTO book = new BookApiDTO();
-        book.setGoogleId(item.getGoogleId());
-        System.out.println(item.getVolumeInfo().getTitle());
-        book.setTitle(item.getVolumeInfo().getTitle());
-        if (item.getVolumeInfo().getIndustryIdentifiers() != null) {
-            for (BookApiResponse.Item.VolumeInfo.IndustryIdentifier identifier : item.getVolumeInfo().getIndustryIdentifiers()) {
+        book.setGoogleId(response.getId());
+        System.out.println(response.getId());
+        book.setTitle(response.getVolumeInfo().getTitle());
+        if (response.getVolumeInfo().getIndustryIdentifiers() != null) {
+            for (BookApiResponse.VolumeInfo.IndustryIdentifier identifier : response.getVolumeInfo().getIndustryIdentifiers()) {
                 if ("ISBN_13".equals(identifier.getType())) {
                     book.setIsbn13(identifier.getIdentifier());
                 } else if ("ISBN_10".equals(identifier.getType())) {
@@ -22,7 +21,6 @@ public class BookApiMapper {
                 }
             }
         }
-
         return book;
     }
 }
