@@ -1,7 +1,9 @@
 package com.mieker.ifpr.shelfie.mapper;
 
-import com.mieker.ifpr.shelfie.dto.RegisterDTO;
+import com.mieker.ifpr.shelfie.dto.DisableDTO;
+import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
+import com.mieker.ifpr.shelfie.dto.UserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ public class UserMapper {
         this.mapper = mapper;
     }
 
-    public User signUpToUser(RegisterDTO registerDTO) throws ParseException {
+    public User signUpToUser(RegisterUserDTO registerDTO) throws ParseException {
         return mapper.map(registerDTO, User.class);
     }
 
@@ -32,5 +34,15 @@ public class UserMapper {
 //        tem que passar o updateuserDTO que são os dados atualizados, e o user que vai ser atualizado
         this.mapper.map(updateUserDTO, user);
         return user;
+    }
+
+    public User updateUserDisabled(User user, DisableDTO disableDTO) {
+//        user.setEnabled(false);
+        mapper.map(disableDTO, user);
+        return user;
+    }
+
+    public UserDTO userToUserDTO(User user) {
+        return this.mapper.map(user, UserDTO.class);
     }
 }

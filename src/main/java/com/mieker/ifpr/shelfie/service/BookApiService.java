@@ -2,13 +2,10 @@ package com.mieker.ifpr.shelfie.service;
 
 import com.mieker.ifpr.shelfie.dto.BookApiDTO;
 import com.mieker.ifpr.shelfie.mapper.BookApiMapper;
-import com.mieker.ifpr.shelfie.response.BookApiResponse;
+import com.mieker.ifpr.shelfie.responses.BookApiResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -17,9 +14,9 @@ public class BookApiService {
 
     private final BookApiMapper bookApiMapper;
 
-    public BookApiDTO getBookByISBN10(String isbn10) {
+    public BookApiDTO getBookByGoogleId(String googleId) {
         String url = "https://www.googleapis.com/books/v1/volumes";
-        String uri = "?q=isbn:" + isbn10;
+        String uri = "/" + googleId;
 
         BookApiResponse response = WebClient
                 .create(url)
@@ -30,7 +27,7 @@ public class BookApiService {
                 .block();
 
         assert response != null;
-        return BookApiMapper.mapApiToDto(response);
+        return BookApiMapper.mapApiToDtoGoogleId(response);
     }
 }
 
