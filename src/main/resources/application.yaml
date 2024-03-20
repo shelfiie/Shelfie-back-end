@@ -4,8 +4,10 @@ spring:
 #        url: jdbc:postgresql://ec2-44-214-98-128.compute-1.amazonaws.com:5432/d2jqbff0j4qag1
 #        username: wjetyfkceunluc
 #        password: b86cd274f36a3863434df11393e229d7d0fc1fc6857a565342ac3d9bd593f853
-        url: jdbc:postgresql://localhost:5432/db_shelfie
-        username: shelfie
+#        url: jdbc:postgresql://localhost:5432/db_shelfie
+        url: jdbc:postgresql://db:5435/db_shelfie
+#        username: shelfie
+        username: postgres
         password: password
 
     # JPA settings
