@@ -10,7 +10,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/db_shelfie
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5433/db_shelfie
 #      - SPRING_DATASOURCE_USERNAME=$YOUR_USERNAME
 #      - SPRING_DATASOURCE_PASSWORD=$YOUR_PASSWORD
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -26,4 +26,4 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=db_shelfie
     ports:
-      - "5435:5432"
+      - "5433:5432"

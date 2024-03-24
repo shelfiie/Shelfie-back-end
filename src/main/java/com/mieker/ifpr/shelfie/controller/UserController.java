@@ -43,6 +43,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/hi")
+    public ResponseEntity<String> hi() {
+
+        return ResponseEntity.ok("hiii-com preauthorize");
+    }
+
+//    @PreAuthorize("isAuthenticated()")
+//    @CrossOrigi/n(origins = "*")
+    @GetMapping("/hii")
+    public ResponseEntity<String> hii() {
+
+        return ResponseEntity.ok("hiii-sem preauthorize");
+    }
+
 //    get all users
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping
@@ -70,13 +85,15 @@ public class UserController {
 //    Readers endpoints
 //todo
 //    paginometro
-
+//    @CrossOrigin(origins = "http://localhost:5173")
 //    endpoint de consulta do próprio usuário
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
     public ResponseEntity<User> AuthenticatedUser()  {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication);
         User currentUser = (User) authentication.getPrincipal();
+        System.out.println(currentUser);
         return ResponseEntity.ok(currentUser);
     }
 
