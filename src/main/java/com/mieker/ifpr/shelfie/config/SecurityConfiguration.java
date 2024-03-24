@@ -3,6 +3,7 @@ package com.mieker.ifpr.shelfie.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,23 +29,37 @@ public class SecurityConfiguration {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/auth/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+        http.csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+//    @Bean
+//    public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
+//        http.csrf()
+//                .disable()
+//                .authorizeHttpRequests()
+//                .requestMatchers("/auth/**")
+//                .permitAll()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//        return http.build();
+//    }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
@@ -54,10 +69,10 @@ public class SecurityConfiguration {
 //        configuration.setAllowedOrigins(List.of("http://172.16.68.188:5173"));
 //        configuration.setAllowedMethods(List.of("GET","POST", "PUT"));
 //        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedOrigins(List.of("http://172.16.68.188:5173"));
-        configuration.setAllowedMethods(List.of("GET","POST", "PUT", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
+//        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
         configuration.addAllowedOrigin("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");

@@ -34,11 +34,28 @@ public class UserController {
 
 //    Admin endpoints
 
+//    TODO
+//    arrumar esse para retornar um DTO
 //    get user by id
     @GetMapping("{id}")
     public ResponseEntity<User> getUserById(@PathVariable UUID id) {
         User user = userService.getUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/hi")
+    public ResponseEntity<String> hi() {
+
+        return ResponseEntity.ok("hiii-com preauthorize");
+    }
+
+//    @PreAuthorize("isAuthenticated()")
+//    @CrossOrigi/n(origins = "*")
+    @GetMapping("/hii")
+    public ResponseEntity<String> hii() {
+
+        return ResponseEntity.ok("hiii-sem preauthorize");
     }
 
 //    get all users
@@ -49,6 +66,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
+//    TODO
+//    arrumar isso aqui para retornar um DTO
 //    Update user
     @PutMapping("update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody UpdateUserDTO userUpdateDTO) {
@@ -62,24 +81,19 @@ public class UserController {
         }
     }
 
-//    Delete user
-//    @DeleteMapping("{id}")
-//    public ResponseEntity<String> deleteUser(@PathVariable("id") UUID id) {
-//        userService.deleteUser(id);
-//        ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//        return ResponseEntity.ok("User deleted successfully");
-//    }
-
     ////////////////////////////////////////////////////////////////////////
 //    Readers endpoints
 //todo
 //    paginometro
-
+//    @CrossOrigin(origins = "http://localhost:5173")
+//    endpoint de consulta do próprio usuário
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
     public ResponseEntity<User> AuthenticatedUser()  {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication);
         User currentUser = (User) authentication.getPrincipal();
+        System.out.println(currentUser);
         return ResponseEntity.ok(currentUser);
     }
 

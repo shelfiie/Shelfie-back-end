@@ -8,7 +8,7 @@ import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import com.mieker.ifpr.shelfie.mapper.MyBookMapper;
 import com.mieker.ifpr.shelfie.repository.BookRepository;
-import com.mieker.ifpr.shelfie.repository.MyBookRepository;
+import com.mieker.ifpr.shelfie.repository.MyBooksRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ public class MyBookService {
 //    implementar o dto
 //    mapper
 
-    private final MyBookRepository myBookRepository;
+    private final MyBooksRepository myBooksRepository;
     private final BookRepository bookRepository;
     private final BookApiService bookApiService;
     private final BookService bookService;
@@ -33,7 +33,6 @@ public class MyBookService {
 
     public MyBookDTO create(UUID userId, String googleId, BookStatus bookStatus) throws ParseException {
         Optional<Book> optionalBook = bookRepository.findByGoogleId(googleId);
-//        System.out.println(googleId);
         MyBooks myBook = optionalBook.isPresent() ? addBookToUser(optionalBook.get().getId(), userId, bookStatus) : createBookAndAddToUser(googleId, userId, bookStatus);
         return myBookMapper.myBookToMyBookDTO(myBook);
     }
@@ -42,11 +41,10 @@ public class MyBookService {
         MyBooks myBooks = new MyBooks();
         User user =  userService.getUserById(userId);
         Book book = bookService.getBookById(bookId);
-        System.out.println(book.getId());
         myBooks.setBook(book);
         myBooks.setUser(user);
         myBooks.setBookStatus(bookStatus);
-        return myBookRepository.save(myBooks);
+        return myBooksRepository.save(myBooks);
     }
 
     public MyBooks createBookAndAddToUser(String googleId,UUID userId,BookStatus bookStatus) throws ParseException {
@@ -55,6 +53,10 @@ public class MyBookService {
         return addBookToUser(book.getId(), userId, bookStatus);
     }
 }
+
+// TODO:
+// implementar o resto do crud
+//      só falta o diable e o get
 
 // TODO
 // criar um método? que vai comparar se já tem o usuário e o livro associado com as IDS

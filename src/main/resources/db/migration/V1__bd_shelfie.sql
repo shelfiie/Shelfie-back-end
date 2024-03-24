@@ -1,6 +1,6 @@
 CREATE TABLE tb_badge (
-                          badge_id VARCHAR(255) NOT NULL,
-                          user_id VARCHAR(255)  NOT NULL,
+                          badge_id UUID NOT NULL,
+                          user_id UUID  NOT NULL,
                           badge_image VARCHAR(255) NOT NULL,
                           badge_name VARCHAR(255) NOT NULL,
                           badge_description TEXT NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE tb_badge (
 );
 
 CREATE TABLE tb_book (
-                         book_id VARCHAR(255) NOT NULL,
+                         book_id UUID NOT NULL,
                          book_google_id VARCHAR(255) NOT NULL UNIQUE,
                          book_isbn_10 VARCHAR(255) NOT NULL UNIQUE,
                          book_isbn_13 VARCHAR(255) NOT NULL UNIQUE,
@@ -20,9 +20,9 @@ CREATE TABLE tb_book (
 
 
 CREATE TABLE tb_friend (
-                           friend_id VARCHAR(255) NOT NULL,
-                           user_id_a BIGINT NOT NULL,
-                           user_id_b BIGINT NOT NULL,
+                           friend_id UUID NOT NULL,
+                           user_id_a UUID NOT NULL,
+                           user_id_b UUID NOT NULL,
                            friendship_request_status VARCHAR(255) NOT NULL CHECK (friendship_request_status IN ('ACEITO','PENDENTE','RECUSADO')),
                            friendship_request_accepted TIMESTAMP(6),
                            friendship_request_date TIMESTAMP(6) NOT NULL,
@@ -30,27 +30,28 @@ CREATE TABLE tb_friend (
 );
 
 CREATE TABLE tb_like (
-                         like_id VARCHAR(255) NOT NULL,
-                         review_id BIGINT NOT NULL,
-                         user_id BIGINT NOT NULL,
+                         like_id UUID NOT NULL,
+                         review_id UUID NOT NULL,
+                         user_id UUID NOT NULL,
                          like_created_at TIMESTAMP(6) NOT NULL,
                          PRIMARY KEY (like_id)
 );
 
 CREATE TABLE tb_my_books (
-                             my_books_id VARCHAR(255) NOT NULL,
-                             book_id BIGINT NOT NULL,
-                             user_id BIGINT NOT NULL,
+                             my_books_id UUID NOT NULL,
+                             book_id UUID NOT NULL,
+                             user_id UUID NOT NULL,
                              my_books_status VARCHAR(255) NOT NULL CHECK (my_books_status IN ('LIDO','LENDO','QUERO_LER','ABANDONADO')),
                              my_books_created_at TIMESTAMP(6) NOT NULL,
-                             my_books_enable BOOLEAN NOT NULL,
+                             my_books_enabled BOOLEAN NOT NULL,
+                             my_books_favorite BOOLEAN NOT NULL,
                              UNIQUE(book_id, user_id),
                              PRIMARY KEY (my_books_id)
 );
 
 CREATE TABLE tb_reading_progress (
-                                     reading_progress_id VARCHAR(255) NOT NULL,
-                                     my_books_id BIGINT NOT NULL,
+                                     reading_progress_id UUID NOT NULL,
+                                     my_books_id UUID NOT NULL,
                                      reading_progress_page INTEGER NOT NULL,
                                      reading_progress_commentary TEXT,
                                      reading_progress_created_at TIMESTAMP(6) NOT NULL,
@@ -58,17 +59,17 @@ CREATE TABLE tb_reading_progress (
 );
 
 CREATE TABLE tb_report (
-                           report_id VARCHAR(255) NOT NULL,
-                           user_id BIGINT NOT NULL,
-                           review_id BIGINT NOT NULL,
+                           report_id UUID NOT NULL,
+                           user_id UUID NOT NULL,
+                           review_id UUID NOT NULL,
                            report_status VARCHAR(255) NOT NULL CHECK (report_status IN ('PENDENTE','RESOLVIDO','RECUSADO')),
                            report_created_at TIMESTAMP(6) NOT NULL,
                            PRIMARY KEY (report_id)
 );
 
 CREATE TABLE tb_review (
-                           review_id VARCHAR(255) NOT NULL,
-                           my_books_id BIGINT NOT NULL,
+                           review_id UUID NOT NULL,
+                           my_books_id UUID NOT NULL,
                            review_rating FLOAT4,
                            review_review TEXT,
                            review_enabled BOOLEAN,
@@ -77,13 +78,13 @@ CREATE TABLE tb_review (
 );
 
 CREATE TABLE tb_user (
-                         user_id VARCHAR(255) NOT NULL,
+                         user_id UUID NOT NULL,
                          user_name VARCHAR(255) NOT NULL,
                          user_username VARCHAR(255) NOT NULL UNIQUE,
                          user_email VARCHAR(255) NOT NULL UNIQUE,
                          user_password VARCHAR(255) NOT NULL,
                          user_image VARCHAR(255),
-                         my_books_enable BOOLEAN NOT NULL,
+                         user_enabled BOOLEAN NOT NULL,
                          user_role VARCHAR(255) NOT NULL CHECK (user_role IN ('ROLE_ADMIN','ROLE_READER')),
                          user_created_at TIMESTAMP(6) NOT NULL,
                          PRIMARY KEY (user_id)

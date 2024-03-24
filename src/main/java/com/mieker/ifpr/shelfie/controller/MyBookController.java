@@ -22,23 +22,18 @@ import java.util.UUID;
 @AllArgsConstructor
 @RequestMapping("/api/mybooks")
 public class MyBookController {
-    //    rota (googleid) -> service -> na service procura se tem esse id no banco -> se tiver adiciona no banco mais usuário
-    //    rota (googleid) -> service -> na service procura se tem esse id no banco -> se não tiver adiciona no banco tb_books
 
     private final MyBookService myBookService;
     private final ModelMapper mapper;
     @PostMapping("/{userId}/{googleId}/{bookStatus}")
     public ResponseEntity<MyBookDTO> createMyBooks(@PathVariable UUID userId, @PathVariable String googleId, @PathVariable BookStatus bookStatus) throws ParseException {
-//        MyBookDTO myBookDTO = new MyBookDTO();
-//        myBookDTO.setGoogleId(googleId);
-//        myBookDTO.setUserId(userId);
-//        myBookDTO.setBookStatus(bookStatus);
-
-//        retornar DTO
         MyBookDTO myBookDTO = myBookService.create(userId, googleId, bookStatus);
-//        dps eu reflito sobre
-//        MyBookDTO myBookDTO = mapper.map(myBooks, MyBookDTO.class);
-
         return ResponseEntity.ok(myBookDTO);
     }
+
+//    TODO
+//    criar rota de update do status do mybooks
+//    criar rota de disable do mybooks
+//    criar rota de get mybooks do usuario
+//    criar rota de get mybooks de todos os mybooks
 }

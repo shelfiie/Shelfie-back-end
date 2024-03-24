@@ -26,8 +26,10 @@ public class MyBooks {
     @Enumerated(EnumType.STRING)
     @Column(name = "my_books_status", nullable = false)
     private BookStatus bookStatus;
-    @Column(name = "my_books_enable", nullable = false)
+    @Column(name = "my_books_enabled", nullable = false)
     private boolean enabled = true;
+    @Column(name = "my_books_favorite", nullable = false)
+    private boolean favorite = false;
     @CreationTimestamp(source = SourceType.DB)
     @Column(name = "my_books_created_at", nullable = false, updatable = false)
     private Date createdAt;

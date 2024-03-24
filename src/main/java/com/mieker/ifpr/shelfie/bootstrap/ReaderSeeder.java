@@ -7,33 +7,30 @@ import com.mieker.ifpr.shelfie.repository.UserRepository;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-//TODO
-//implementar isso aqui
-@Component
-public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
+public class ReaderSeeder implements ApplicationListener<ContextRefreshedEvent> {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AdminSeeder(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public ReaderSeeder(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        this.createAdministrator();
+        this.createReader();
     }
 
-    private void createAdministrator() {
+    private void createReader() {
         RegisterUserDTO registerUserDTO = new RegisterUserDTO();
-        registerUserDTO.setName("Admin");
-        registerUserDTO.setEmail("admin@g.com");
-        registerUserDTO.setUserName("admin");
-        registerUserDTO.setPassword("password");
+        registerUserDTO.setName("Teste");
+        registerUserDTO.setEmail("teste@g.com");
+        registerUserDTO.setUserName("teste");
+        registerUserDTO.setPassword("teste");
 
         Optional<User> optionalUser = userRepository.findByEmail(registerUserDTO.getEmail());
 
@@ -46,12 +43,11 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
         user.setEmail(registerUserDTO.getEmail());
         user.setPassword(passwordEncoder.encode(registerUserDTO.getPassword()));
         user.setUserName(registerUserDTO.getUserName());
-        user.setRole(UserRoles.ROLE_ADMIN);
+        user.setRole(UserRoles.ROLE_READER);
         user.setEnabled(true);
 
         userRepository.save(user);
     }
-
     @Override
     public boolean supportsAsyncExecution() {
         return ApplicationListener.super.supportsAsyncExecution();
