@@ -35,3 +35,8 @@ build/
 postgres.txt
 docker-compose.yaml
 Dockerfile
+
+.gitignore
+
+.github/
+```
