@@ -15,7 +15,58 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
+#      - name: Install doctl
+#        uses: digitalocean/action-doctl@v2
+#        with:
+#          token: ${{ secrets.DIGITAL_OCEAN_SHELFIE }}
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#      - name: Set up JDK 17
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: '17'
+#          distribution: 'temurin'
+#
+#      - name: Build and Deploy
+#        run:  sudo mvn clean install
+#        with:
+#          token: ${{ secrets.DIGITAL_OCEAN_SHELFIE }}
+#      - name: Complete
+#        run: sudo java -jar [Location of jar] &
+#name: Deploy to DigitalOcean
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#
+#jobs:
+#  deploy:
+#    runs-on: ubuntu-latest
+
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v2
+#        with:
+#          node-version: '14'
+#
+#      - name: Install dependencies
+#        run: npm install
+
+      - name: Deploy to DigitalOcean
+        uses: appleboy/ssh-action@master
         with:
-          token: ${{ secrets.DIGITAL_OCEAN_SHELFIE }}
+          host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+          username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
+          key: ${{ secrets.DIGITAL_OCEAN_SSH_KEY }}
+          port: ${{ secrets.DIGITAL_OCEAN_PORT }}
+          script: |
+            git clone git@github.com:shelfiie/Shelfie-back-end.git
+            cd /root/Shelfie-back-end
+            git pull origin main
+            npm run build
+            # Comandos adicionais de implantação
