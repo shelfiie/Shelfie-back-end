@@ -60,7 +60,7 @@ jobs:
       - name: Deploy to DigitalOcean
         uses: appleboy/ssh-action@master
         with:
-          token: ${{ secrets.DIGITAL_OCEAN_SHELFIE }}
+#          token: ${{ secrets.DIGITAL_OCEAN_SHELFIE }}
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
