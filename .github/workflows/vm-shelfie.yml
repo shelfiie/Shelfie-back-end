@@ -60,10 +60,11 @@ jobs:
       - name: Deploy to DigitalOcean
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.DIGITAL_OCEAN_HOST }}
-          username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
-          key: ${{ secrets.DIGITAL_OCEAN_SSH_KEY }}
-          port: ${{ secrets.DIGITAL_OCEAN_PORT }}
+          token: ${{ secrets.DIGITAL_OCEAN_SHELFIE }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
           script: |
             git clone git@github.com:shelfiie/Shelfie-back-end.git
             cd /root/Shelfie-back-end
