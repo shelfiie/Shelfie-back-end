@@ -69,5 +69,7 @@ jobs:
             git clone git@github.com:shelfiie/Shelfie-back-end.git
             cd /root/Shelfie-back-end
             git pull origin main
-            npm run build
+            mvn package -Dmaven.test.skip=true
+            java -jar target/shelfie-0.0.1-SNAPSHOT.jar
+#            npm run build
             # Comandos adicionais de implantação
