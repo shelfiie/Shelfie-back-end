@@ -43,21 +43,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/hi")
-    public ResponseEntity<String> hi() {
-
-        return ResponseEntity.ok("hiii-com preauthorize");
-    }
-
-//    @PreAuthorize("isAuthenticated()")
-//    @CrossOrigi/n(origins = "*")
-    @GetMapping("/hii")
-    public ResponseEntity<String> hii() {
-
-        return ResponseEntity.ok("hiii-sem preauthorize");
-    }
-
 //    get all users
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping

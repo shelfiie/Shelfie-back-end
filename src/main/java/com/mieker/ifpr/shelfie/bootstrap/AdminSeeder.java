@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-//TODO
-//implementar isso aqui
 @Component
 public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
     private final UserRepository userRepository;

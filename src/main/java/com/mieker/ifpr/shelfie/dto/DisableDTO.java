@@ -6,5 +6,5 @@ import java.util.UUID;
 
 @Data
 public class DisableDTO {
-    private boolean enabled;
+    private boolean enabled = false;
 }
