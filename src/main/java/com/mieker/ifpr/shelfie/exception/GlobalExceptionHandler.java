@@ -19,8 +19,9 @@ import java.nio.file.AccessDeniedException;
 import java.security.SignatureException;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
-    @ExceptionHandler(Exception.class)
+public class GlobalExceptionHandler extends Throwable {
+    @ExceptionHandler({Exception.class, DataIntegrityViolationException.class})
+
     public ProblemDetail handleSecurityException(Exception exception) {
         ProblemDetail errorDetail = null;
 
@@ -53,6 +54,11 @@ public class GlobalExceptionHandler {
             errorDetail.setProperty("description", "The JWT token has expired");
         }
 
+        if (exception instanceof DataIntegrityViolationException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), exception.getMessage());
+            errorDetail.setProperty("description", "Ocorreu um erro de violação de integridade de dados.");
+        }
+
         if (exception instanceof MethodArgumentTypeMismatchException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), exception.getMessage());
             errorDetail.setProperty("description", "O parâmetro passado é inválido.");
@@ -66,11 +72,4 @@ public class GlobalExceptionHandler {
         return errorDetail;
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ResponseEntity<ProblemDetail> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
-        ProblemDetail errorDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Ocorreu um erro de violação de integridade de dados.");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetail);
-    }
 }

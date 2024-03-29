@@ -1,9 +1,7 @@
 package com.mieker.ifpr.shelfie.controller;
 
-import com.mieker.ifpr.shelfie.dto.DisableDTO;
 import com.mieker.ifpr.shelfie.dto.MyBooksDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateMyBooksDTO;
-import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import com.mieker.ifpr.shelfie.service.MyBookService;
 import lombok.AllArgsConstructor;
@@ -56,9 +54,10 @@ public class MyBooksController {
     @PutMapping("/{id}/disable")
     public ResponseEntity<String> deleteMyBooks(@PathVariable("id") UUID id) {
         try {
-            MyBooks myBooks = myBookService.updateMyBooksDisable(id);
-            System.out.println(myBooks);
-            return ResponseEntity.ok("My Books Disabled.");
+//            não sei se esse eu retorno alguma coisa ou não
+            MyBooksDTO myBooks = myBookService.updateMyBooksDisable(id);
+//            System.out.println(myBooks);
+            return ResponseEntity.ok("Livro apagado com sucesso.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

@@ -26,10 +26,11 @@ public class User implements UserDetails {
     @Column(name = "user_name", nullable = false)
     private String name;
     @Column(name = "user_username", unique = true, nullable = false)
-    private String userName;
-    @Getter
+    private String usernome;
+//    @Getter
     @Column(name = "user_password", nullable = false, updatable = false)
     private String password;
+
     @Column(name = "user_email", unique = true, nullable = false, updatable = false)
     private String email;
     @Column(name = "user_image")

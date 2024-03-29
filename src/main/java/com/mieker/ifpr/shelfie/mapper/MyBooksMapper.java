@@ -31,14 +31,12 @@ public class MyBooksMapper {
 
 //    TODO
 //    refatorar o user disable lá
-    public MyBooks updateMyBooksDisabled(MyBooks myBooksToUpdate) {
-        myBooksToUpdate.setEnabled(false);
-        mapper.map(myBooksToUpdate, MyBooksDTO.class);
-        return myBooksToUpdate;
+    public MyBooksDTO updateMyBooksDisabled(MyBooks myBooksToUpdate) {
+        return  mapper.map(myBooksToUpdate, MyBooksDTO.class);
+//       myBooksToUpdate;
     }
 
     public UpdateMyBooksDTO updateMyBooks(MyBooks myBooksToUpdate) {
-//        myBooksToUpdate.setBookStatus(bookStatus);
         UpdateMyBooksDTO updateMyBooksDTO = mapper.map(myBooksToUpdate, UpdateMyBooksDTO.class);
         System.out.println("mapper" + updateMyBooksDTO);
         return updateMyBooksDTO;
@@ -46,8 +44,3 @@ public class MyBooksMapper {
 }
 
 
-//
-//        book.setGoogleId(bookDTO.getGoogleId());
-//        book.setTitle(bookDTO.getTitle());
-//        book.setIsbn13(bookDTO.getIsbn13());
-//        book.setIsbn10(bookDTO.getIsbn10());
