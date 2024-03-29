@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,7 +18,10 @@ import java.util.UUID;
 public class BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-
+//    todo
+//    arrumar isso aqui
+//    o mapper ta fazendo serviços que é setar o books
+//    arrumar isso
     public Book createBook(BookApiDTO bookDTO) throws ParseException {
         Book book = bookMapper.bookDTOtoBook(bookDTO);
 //        user = convertUserRegistration(signUpDTO);
@@ -36,5 +40,9 @@ public class BookService {
         } catch (IllegalArgumentException ex) {
             return false; // O valor não é válido
         }
+    }
+
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
     }
 }
