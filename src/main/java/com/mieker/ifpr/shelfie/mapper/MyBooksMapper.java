@@ -3,6 +3,7 @@ package com.mieker.ifpr.shelfie.mapper;
 import com.mieker.ifpr.shelfie.dto.MyBooksDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateMyBooksDTO;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
+import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -36,9 +37,11 @@ public class MyBooksMapper {
         return myBooksToUpdate;
     }
 
-    public MyBooks updateMyBooks(MyBooks myBooksToUpdate, UpdateMyBooksDTO updateMyBooksDTO) {
-        mapper.map(updateMyBooksDTO, myBooksToUpdate);
-        return myBooksToUpdate;
+    public UpdateMyBooksDTO updateMyBooks(MyBooks myBooksToUpdate) {
+//        myBooksToUpdate.setBookStatus(bookStatus);
+        UpdateMyBooksDTO updateMyBooksDTO = mapper.map(myBooksToUpdate, UpdateMyBooksDTO.class);
+        System.out.println("mapper" + updateMyBooksDTO);
+        return updateMyBooksDTO;
     }
 }
 
