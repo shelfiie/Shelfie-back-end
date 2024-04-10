@@ -13,6 +13,7 @@ public class BookApiResponse {
     @Data
     public static class VolumeInfo {
         private String title;
+        private Integer pageCount;
         private List<IndustryIdentifier> industryIdentifiers;
 
         @Data

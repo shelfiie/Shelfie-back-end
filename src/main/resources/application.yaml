@@ -6,18 +6,20 @@ spring:
 #        password: b86cd274f36a3863434df11393e229d7d0fc1fc6857a565342ac3d9bd593f853
 #        url: jdbc:postgresql://localhost:5432/db_shelfie
         url: jdbc:postgresql://localhost:5432/db_shelfie
-        username: postgres
+        username: shelfie
         password: password
 
     # JPA settings
     jpa:
         hibernate:
-            ddl-auto: update
+            ddl-auto: create
         show-sql: true
         database: postgresql
 
     flyway:
         baseline-on-migrate: true
+#        schemas: db_shelfie
+#        migrate
 
 
     security:

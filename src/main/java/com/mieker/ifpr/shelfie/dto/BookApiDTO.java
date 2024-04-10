@@ -9,6 +9,7 @@ import java.util.List;
 public class BookApiDTO {
     private String googleId;
     private String title;
+    private Integer pages;
     private String isbn13;
     private String isbn10;
 }

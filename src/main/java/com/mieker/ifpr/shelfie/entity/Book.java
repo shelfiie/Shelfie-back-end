@@ -24,6 +24,8 @@ public class Book {
     private String isbn13;
     @Column(name = "book_isbn_10", unique = true, nullable = false, updatable = false)
     private String isbn10;
+    @Column(name = "book_pages", nullable = false, updatable = false)
+    private Integer pages;
     @CreationTimestamp(source = SourceType.DB)
     @Column(name = "book_created_at", nullable = false, updatable = false)
     private Date createdAt;
