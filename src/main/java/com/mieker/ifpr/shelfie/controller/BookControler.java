@@ -1,6 +1,6 @@
 package com.mieker.ifpr.shelfie.controller;
 
-import com.mieker.ifpr.shelfie.dto.BookApiDTO;
+import com.mieker.ifpr.shelfie.dto.BookDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.service.BookApiService;
 import com.mieker.ifpr.shelfie.service.BookService;
@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -28,19 +29,29 @@ public class BookControler {
         return ResponseEntity.ok(book);
     }
 
-    //    pegar livro pelo id do google
+    //    pegar livro pelo id do google na api do google
+//    only admin tem acesso a essa rota
     @GetMapping("/google/{googleId}")
-    public ResponseEntity<BookApiDTO> getBookByGoogleId(@PathVariable String googleId) {
+    public ResponseEntity<BookDTO> getBookByGoogleId(@PathVariable String googleId) {
         System.out.println(googleId);
-        BookApiDTO book = bookApiService.getBookByGoogleId(googleId);
+        BookDTO book = bookApiService.getBookByGoogleId(googleId);
         return ResponseEntity.ok(book);
     }
 
-    @PostMapping
-    public ResponseEntity<Book> createBook(@RequestBody BookApiDTO bookDTO) {
+    //    pegar livro pelo id do banco
+    @GetMapping("{id}")
+    public ResponseEntity<BookDTO> getBookById(@PathVariable UUID id) {
+//        System.out.println(googleId);
+        BookDTO book = bookService.getBookById(id);
+        return ResponseEntity.ok(book);
+    }
+
+//    only admin tem acesso a essa rota
+    @PostMapping("/create/{googleId}")
+    public ResponseEntity<String> createBook(@PathVariable String googleId) {
         try {
-            Book book = bookService.createBook(bookDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(book);
+            bookService.createBook(googleId);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Livro criado com sucesso.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

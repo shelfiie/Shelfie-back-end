@@ -1,6 +1,6 @@
 package com.mieker.ifpr.shelfie.service;
 
-import com.mieker.ifpr.shelfie.dto.BookApiDTO;
+import com.mieker.ifpr.shelfie.dto.BookDTO;
 import com.mieker.ifpr.shelfie.dto.MyBooksDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateMyBooksDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
@@ -51,8 +51,9 @@ public class MyBookService {
 
 //    criar o livro e relacionar ao usuário
     public MyBooks createBookAndAddToUser(String googleId,UUID userId,BookStatus bookStatus) throws ParseException {
-        BookApiDTO bookDTO = bookApiService.getBookByGoogleId(googleId);
-        Book book = bookService.createBook(bookDTO);
+//
+        BookDTO bookDTO = bookApiService.getBookByGoogleId(googleId);
+        Book book = bookService.createBook(googleId);
         return addBookToUser(book.getId(), userId, bookStatus);
     }
 

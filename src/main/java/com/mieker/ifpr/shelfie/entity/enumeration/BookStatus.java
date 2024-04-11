@@ -4,5 +4,6 @@ public enum BookStatus {
     LIDO,
     LENDO,
     QUERO_LER,
-    ABANDONADO
+    ABANDONADO,
+    EM_ESPERA
 }

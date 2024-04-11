@@ -1,6 +1,6 @@
 package com.mieker.ifpr.shelfie.service;
 
-import com.mieker.ifpr.shelfie.dto.BookApiDTO;
+import com.mieker.ifpr.shelfie.dto.BookDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import com.mieker.ifpr.shelfie.mapper.BookMapper;
@@ -18,19 +18,28 @@ import java.util.UUID;
 public class BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final BookApiService bookApiService;
+
 //    todo
 //    arrumar isso aqui
 //    o mapper ta fazendo serviços que é setar o books
 //    arrumar isso
-    public Book createBook(BookApiDTO bookDTO) throws ParseException {
-        Book book = bookMapper.bookDTOtoBook(bookDTO);
-//        user = convertUserRegistration(signUpDTO);
-        return bookRepository.save(book);
+
+
+    public Book createBook(String googleId) throws ParseException {
+        Book book = bookRepository.findByGoogleId(googleId).orElse(null);
+        if (book != null) {
+            return book;
+        } else {
+            BookDTO bookDTO = bookApiService.getBookByGoogleId(googleId);
+            book = bookMapper.bookDTOtoBook(bookDTO);
+            return bookRepository.save(book);
+        }
     }
 
-    public Book getBookById(UUID id) {
-        Optional<Book> book = bookRepository.findById(id);
-        return book.orElse(null);
+    public BookDTO getBookById(UUID id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("MyBooks not found with id: " + id));
+        return bookMapper.bookToBookDTO(book);
     }
 
     public boolean isBookStatusValid(String status) {

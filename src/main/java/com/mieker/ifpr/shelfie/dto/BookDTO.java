@@ -1,12 +1,9 @@
 package com.mieker.ifpr.shelfie.dto;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class BookApiDTO {
+public class BookDTO {
     private String googleId;
     private String title;
     private Integer pages;
