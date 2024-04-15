@@ -26,5 +26,5 @@ jobs:
             cd /root/Shelfie-back-end
             git pull origin main
             mvn package -Dmaven.test.skip=true
-            java -jar target/shelfie-0.0.1-SNAPSHOT.jar
+#            java -jar target/shelfie-0.0.1-SNAPSHOT.jar
             # Comandos adicionais de implantação
