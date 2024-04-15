@@ -1,6 +1,6 @@
 package com.mieker.ifpr.shelfie.service;
 
-import com.mieker.ifpr.shelfie.dto.BookApiDTO;
+import com.mieker.ifpr.shelfie.dto.BookDTO;
 import com.mieker.ifpr.shelfie.mapper.BookApiMapper;
 import com.mieker.ifpr.shelfie.responses.BookApiResponse;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ public class BookApiService {
 
     private final BookApiMapper bookApiMapper;
 
-    public BookApiDTO getBookByGoogleId(String googleId) {
+    public BookDTO getBookByGoogleId(String googleId) {
         String url = "https://www.googleapis.com/books/v1/volumes";
         String uri = "/" + googleId;
 

@@ -6,6 +6,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -32,5 +33,5 @@ public class MyBooks {
     private boolean favorite = false;
     @CreationTimestamp(source = SourceType.DB)
     @Column(name = "my_books_created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    private LocalDate createdAt;
 }

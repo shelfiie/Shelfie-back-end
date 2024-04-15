@@ -19,7 +19,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-// anotation para fornecer as anotatios para controlar o controle de acesso as rotas
+// anotation para fornecer as anotations para controlar o controle de acesso as rotas
 public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -43,29 +43,10 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
-//        http.csrf()
-//                .disable()
-//                .authorizeHttpRequests()
-//                .requestMatchers("/auth/**")
-//                .permitAll()
-//                .anyRequest()
-//                .authenticated()
-//                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .authenticationProvider(authenticationProvider)
-//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//        return http.build();
-//    }
-
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 //        TODO
-//        MAYARA OLHA AQUI
 //        configuration.setAllowedOrigins(List.of("http://172.16.68.188:5173"));
 //        configuration.setAllowedMethods(List.of("GET","POST", "PUT"));
 //        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));

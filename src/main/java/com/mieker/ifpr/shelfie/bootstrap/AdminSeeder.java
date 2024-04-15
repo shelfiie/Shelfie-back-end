@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-//TODO
-//implementar isso aqui
 @Component
 public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
     private final UserRepository userRepository;
@@ -32,7 +30,7 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
         RegisterUserDTO registerUserDTO = new RegisterUserDTO();
         registerUserDTO.setName("Admin");
         registerUserDTO.setEmail("admin@g.com");
-        registerUserDTO.setUserName("admin");
+        registerUserDTO.setUsernome("admin");
         registerUserDTO.setPassword("password");
 
         Optional<User> optionalUser = userRepository.findByEmail(registerUserDTO.getEmail());
@@ -45,7 +43,7 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
         user.setName(registerUserDTO.getName());
         user.setEmail(registerUserDTO.getEmail());
         user.setPassword(passwordEncoder.encode(registerUserDTO.getPassword()));
-        user.setUserName(registerUserDTO.getUserName());
+        user.setUsernome(registerUserDTO.getUsernome());
         user.setRole(UserRoles.ROLE_ADMIN);
         user.setEnabled(true);
 

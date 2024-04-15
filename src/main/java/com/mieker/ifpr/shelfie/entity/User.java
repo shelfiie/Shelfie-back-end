@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -26,10 +27,11 @@ public class User implements UserDetails {
     @Column(name = "user_name", nullable = false)
     private String name;
     @Column(name = "user_username", unique = true, nullable = false)
-    private String userName;
-    @Getter
+    private String usernome;
+//    @Getter
     @Column(name = "user_password", nullable = false, updatable = false)
     private String password;
+
     @Column(name = "user_email", unique = true, nullable = false, updatable = false)
     private String email;
     @Column(name = "user_image")
@@ -43,8 +45,10 @@ public class User implements UserDetails {
 //    faz o timestamp na hora que for criado o usuário, sem precisar ser passado
     @CreationTimestamp(source = SourceType.DB)
     @Column(name = "user_created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    private LocalDate createdAt;
 
+//    todo
+//    transformas isso aq em atributo
     @Transient
 //    não vai persistir essa tabela
     private Long paginometro;

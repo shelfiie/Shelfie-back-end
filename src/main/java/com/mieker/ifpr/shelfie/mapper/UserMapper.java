@@ -1,6 +1,5 @@
 package com.mieker.ifpr.shelfie.mapper;
 
-import com.mieker.ifpr.shelfie.dto.DisableDTO;
 import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.dto.UserDTO;
@@ -30,16 +29,15 @@ public class UserMapper {
     }
 
 //    mapeia os valores do DTO updateUserDTO para o objeto user e retorna o objeto user atualizado.
-    public User updateUserFromDTO(User user, UpdateUserDTO updateUserDTO) {
-//        tem que passar o updateuserDTO que são os dados atualizados, e o user que vai ser atualizado
-        this.mapper.map(updateUserDTO, user);
-        return user;
-    }
+//    public User updateUserFromDTO(User user, UpdateUserDTO updateUserDTO) {
+////        tem que passar o updateuserDTO que são os dados atualizados, e o user que vai ser atualizado
+//        return mapper.map(user, updateUserDTO);
+////        return user;
+//    }
 
-    public User updateUserDisabled(User user, DisableDTO disableDTO) {
+    public UserDTO updateUserDisabled(User user) {
 //        user.setEnabled(false);
-        mapper.map(disableDTO, user);
-        return user;
+        return mapper.map(user, UserDTO.class);
     }
 
     public UserDTO userToUserDTO(User user) {

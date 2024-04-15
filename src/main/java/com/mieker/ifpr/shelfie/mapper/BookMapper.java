@@ -1,6 +1,6 @@
 package com.mieker.ifpr.shelfie.mapper;
 
-import com.mieker.ifpr.shelfie.dto.BookApiDTO;
+import com.mieker.ifpr.shelfie.dto.BookDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +17,20 @@ public class BookMapper {
         this.mapper = mapper;
     }
 
-    public Book bookDTOtoBook(BookApiDTO bookDTO) throws ParseException {
+    public Book bookDTOtoBook(BookDTO bookDTO) throws ParseException {
         Book book = new Book();
         book.setGoogleId(bookDTO.getGoogleId());
         book.setTitle(bookDTO.getTitle());
+        book.setPages(bookDTO.getPages());
         book.setIsbn13(bookDTO.getIsbn13());
         book.setIsbn10(bookDTO.getIsbn10());
         return book;
 //        olhar aqui
 //        o mapper.map ta dando erro de conversão?
 //        return mapper.map(bookDTO, Book.class);
+    }
+
+    public BookDTO bookToBookDTO(Book book) {
+        return mapper.map(book, BookDTO.class);
     }
 }

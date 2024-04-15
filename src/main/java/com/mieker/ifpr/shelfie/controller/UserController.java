@@ -1,11 +1,11 @@
 package com.mieker.ifpr.shelfie.controller;
 
-import com.mieker.ifpr.shelfie.dto.DisableDTO;
-import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.dto.UserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
+import com.mieker.ifpr.shelfie.exception.GlobalExceptionHandler;
 import com.mieker.ifpr.shelfie.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,24 +39,9 @@ public class UserController {
 //    arrumar esse para retornar um DTO
 //    get user by id
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
-        User user = userService.getUserById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/hi")
-    public ResponseEntity<String> hi() {
-
-        return ResponseEntity.ok("hiii-com preauthorize");
-    }
-
-//    @PreAuthorize("isAuthenticated()")
-//    @CrossOrigi/n(origins = "*")
-    @GetMapping("/hii")
-    public ResponseEntity<String> hii() {
-
-        return ResponseEntity.ok("hiii-sem preauthorize");
+    public ResponseEntity<UserDTO> getUserById(@PathVariable UUID id) {
+        UserDTO userDTO = userService.getUserById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
 //    get all users
@@ -66,30 +52,17 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
-//    TODO
-//    arrumar isso aqui para retornar um DTO
 //    Update user
-    @PutMapping("update/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody UpdateUserDTO userUpdateDTO) {
-        try {
-            User user = userService.updateUser(id, userUpdateDTO);
-            System.out.println(user);
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    @PutMapping("/{id}/update")
+    public ResponseEntity<UpdateUserDTO> updateUser(@PathVariable("id") UUID id, @RequestBody UpdateUserDTO userUpdateDTO) throws ParseException, GlobalExceptionHandler {
+        UpdateUserDTO updateUserDTO = userService.updateUser(id, userUpdateDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(updateUserDTO);
     }
 
-    ////////////////////////////////////////////////////////////////////////
-//    Readers endpoints
-//todo
-//    paginometro
-//    @CrossOrigin(origins = "http://localhost:5173")
 //    endpoint de consulta do próprio usuário
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
-    public ResponseEntity<User> AuthenticatedUser()  {
+    public ResponseEntity<User> authenticatedUser()  {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication);
         User currentUser = (User) authentication.getPrincipal();
@@ -99,14 +72,15 @@ public class UserController {
 
 //    para fazer o delete do usuário, mas só alterando seu status para disabled
     @PutMapping("/{id}/disable")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") UUID id, @RequestBody DisableDTO disableDTO) {
+    public ResponseEntity<String> disableUser(@PathVariable UUID id) {
         try {
-            User user = userService.updateUserDisable(id, disableDTO);
-            System.out.println(user);
-            return ResponseEntity.ok("User disabled successfully");
+            UserDTO userDTO = userService.updateUserDisable(id);
+            String message = String.format("User '%s' disabled successfully", userDTO.getName());
+            return ResponseEntity.ok(message);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }
