@@ -2,6 +2,7 @@ package com.mieker.ifpr.shelfie.repository;
 
 import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.User;
+import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,4 +17,6 @@ public interface MyBooksRepository extends JpaRepository<MyBooks, UUID> {
     List<MyBooks> findAllByUserIdAndEnabledTrue(UUID id);
 
     List<MyBooks> findAllByBookId(UUID bookId);
+
+    List<MyBooks> findAllByUserIdAndBookStatus(UUID userId, BookStatus bookStatus);
 }
