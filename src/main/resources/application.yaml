@@ -27,3 +27,9 @@ spring:
             secret:
                 key: 4f7d18bbb33b1f4d5af4ad61eea96f89c6102ad1e66aeb38d40f1cb7f9238afd
             expiration-time: 86400000
+springdoc:
+    api-docs:
+        path: /api-docs
+    swagger-ui:
+        path: /swagger-ui
+
