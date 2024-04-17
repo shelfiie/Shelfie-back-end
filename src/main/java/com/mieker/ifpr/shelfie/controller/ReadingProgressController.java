@@ -25,11 +25,8 @@ public class ReadingProgressController {
 
     @PostMapping
     public ResponseEntity<String> createReadingProgression(@RequestBody ReadingProgressDTO readingProgressDTO) {
-//        TODO
-//        tem que retornar que deu certo
-//        tem que adicionar aqui a quantidade páginas também
-        rpService.create(readingProgressDTO);
-        return ResponseEntity.status(201).body("Progresso de leitura criado com sucesso.");
+        String message = rpService.create(readingProgressDTO);
+        return ResponseEntity.status(201).body(message);
     }
 
     @GetMapping("/{myBooksId}")

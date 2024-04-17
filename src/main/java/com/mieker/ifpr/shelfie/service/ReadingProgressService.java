@@ -7,6 +7,7 @@ import com.mieker.ifpr.shelfie.dto.ReadingProgressDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.ReadingProgress;
+import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import com.mieker.ifpr.shelfie.mapper.BookMapper;
 import com.mieker.ifpr.shelfie.mapper.MyBooksMapper;
 import com.mieker.ifpr.shelfie.mapper.ReadingProgressMapper;
@@ -31,14 +32,27 @@ public class ReadingProgressService {
     private final MyBooksMapper myBooksMapper;
     private final ReadingProgressMapper rpMapper;
 
-    public void create (ReadingProgressDTO rpDTO) {
+    public String create (ReadingProgressDTO rpDTO) {
         ReadingProgress rp = new ReadingProgress();
         MyBooksDTO mbDTO = myBookService.getMyBooksById(rpDTO.getMyBooksId());
         MyBooks myBooks = myBooksMapper.myBookDTOtoMyBook(mbDTO);
-        rp.setMyBooks(myBooks);
-        rp.setPage(rpDTO.getPage());
-        rp.setCommentary(rpDTO.getCommentary());
-        rpRepository.save(rp);
+        Book books = bookRepository.findById(myBooks.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + myBooks.getBook().getId()));
+        System.out.println(rpDTO.getPage());
+        System.out.println(books.getPages());
+
+        String message = "";
+        if (myBooks.getBookStatus() == BookStatus.LENDO && myBooks.isEnabled() && rpDTO.getPage() <= books.getPages()) {
+            rp.setMyBooks(myBooks);
+            rp.setPage(rpDTO.getPage());
+            rp.setCommentary(rpDTO.getCommentary());
+            rpRepository.save(rp);
+            message = "Progresso de leitura criado com sucesso.";
+        } else if (rpDTO.getPage() >= books.getPages()){
+            message = "Quantidades de páginas adicionadas acima da quantidade total de páginas do livro.";
+        } else {
+            message = "Não foi possível criar o progresso de leitura.";
+        }
+        return message;
     }
 
     public List<CollectionOfMyBooksDTO> getReadingProgressByMyBooksId(UUID myBooksId) {

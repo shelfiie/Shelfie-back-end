@@ -19,10 +19,6 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
 
-//TODO
-// olhar isso aqui dps o crossorigins
-//@CrossOrigin(origins = "http://localhost:8080")
-
 @CrossOrigin(origins = "*")
 @RestController
 @AllArgsConstructor
