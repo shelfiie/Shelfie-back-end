@@ -2,6 +2,8 @@ package com.mieker.ifpr.shelfie.entity;
 
 import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -31,7 +33,6 @@ public class User implements UserDetails {
 //    @Getter
     @Column(name = "user_password", nullable = false, updatable = false)
     private String password;
-
     @Column(name = "user_email", unique = true, nullable = false, updatable = false)
     private String email;
     @Column(name = "user_image")

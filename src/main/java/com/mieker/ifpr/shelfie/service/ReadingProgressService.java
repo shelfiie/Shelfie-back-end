@@ -4,22 +4,32 @@ package com.mieker.ifpr.shelfie.service;
 import com.mieker.ifpr.shelfie.dto.CollectionOfMyBooksDTO;
 import com.mieker.ifpr.shelfie.dto.MyBooksDTO;
 import com.mieker.ifpr.shelfie.dto.ReadingProgressDTO;
+import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.ReadingProgress;
 import com.mieker.ifpr.shelfie.mapper.BookMapper;
 import com.mieker.ifpr.shelfie.mapper.MyBooksMapper;
+import com.mieker.ifpr.shelfie.mapper.ReadingProgressMapper;
+import com.mieker.ifpr.shelfie.repository.BookRepository;
+import com.mieker.ifpr.shelfie.repository.MyBooksRepository;
 import com.mieker.ifpr.shelfie.repository.ReadingProgressRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ReadingProgressService {
     private final ReadingProgressRepository rpRepository;
+    private final MyBooksRepository myBooksRepository;
+    private final BookRepository bookRepository;
     private final MyBookService myBookService;
     private final MyBooksMapper myBooksMapper;
+    private final ReadingProgressMapper rpMapper;
 
     public void create (ReadingProgressDTO rpDTO) {
         ReadingProgress rp = new ReadingProgress();
@@ -31,9 +41,43 @@ public class ReadingProgressService {
         rpRepository.save(rp);
     }
 
-//    arrumar isso aq
-//    public CollectionOfMyBooksDTO getReadingProgressByMyBooksId(UUID userId, UUID myBooksId) {
-////        return new CollectionOfMyBooksDTO(rpRepository.findByMyBooksId(myBooksId));
-////        ai mexer nisso aq mas to cm pregui
-//    }
+    public List<CollectionOfMyBooksDTO> getReadingProgressByMyBooksId(UUID myBooksId) {
+        MyBooks mb = myBooksRepository.findById(myBooksId).orElseThrow(() -> new RuntimeException("Não encontrado MyBooks com id: " + myBooksId));
+        Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + mb.getBook().getId()));
+        String googleId = book.getGoogleId();
+        List<ReadingProgress> rpList = rpRepository.findByMyBooksId(myBooksId);
+        return rpList.stream()
+                .map( rp -> {
+                    CollectionOfMyBooksDTO dto = rpMapper.readingProgressToCollectionOfMyBooks(rp);
+                    dto.setGoogleId(googleId);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<CollectionOfMyBooksDTO> getReadingProgressByUserId(UUID userId) {
+        List<MyBooks> myBooksList = myBooksRepository.findByUserId(userId);
+//        System.out.println(myBooksList);
+        List<CollectionOfMyBooksDTO> resultList = new ArrayList<>(); // Lista para armazenar os resultados
+
+        for (MyBooks mb : myBooksList) {
+            List<ReadingProgress> rpList = rpRepository.findByMyBooksId(mb.getId());
+            System.out.println(mb.getId());
+            System.out.println(rpList);
+
+            // Mapeie e adicione os DTOs à lista de resultados
+            resultList.addAll(rpList.stream()
+                    .map(rp -> {
+
+                        System.out.println("\n1\n");
+                        CollectionOfMyBooksDTO dto = rpMapper.readingProgressToCollectionOfMyBooks(rp);
+                        Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + mb.getBook().getId()));
+                        dto.setGoogleId(book.getGoogleId());
+                        return dto;
+                    })
+                    .toList());
+        }
+        return resultList;
+    }
+
 }
