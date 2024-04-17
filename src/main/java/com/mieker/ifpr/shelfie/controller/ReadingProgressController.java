@@ -27,8 +27,8 @@ public class ReadingProgressController {
         return ResponseEntity.status(201).body("Progresso de leitura criado com sucesso.");
     }
 
-//    @GetMapping("{userId}/{myBooksId}")
-//    public ResponseEntity<CollectionOfMyBooksDTO> getListOfReadingProgress(@RequestParam UUID userId, @RequestParam UUID myBooksId) {
-//        return ResponseEntity.ok(rpService.getReadingProgressByMyBooksId(userId, myBooksId));
+//    @GetMapping("/{myBooksId}")
+//    public ResponseEntity<CollectionOfMyBooksDTO> getReadingProgressByMyBooksId(@PathVariable UUID myBooksId) {
+//        return ResponseEntity.ok(rpService.getReadingProgressByMyBooksId(myBooksId));
 //    }
 }

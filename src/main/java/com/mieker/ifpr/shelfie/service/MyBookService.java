@@ -102,4 +102,9 @@ public class MyBookService {
         List<MyBooks> myBooks = myBooksRepository.findAllByBookId(bookId);
         return myBooks.stream().map(myBooksMapper::myBookToMyBookDTO).collect(Collectors.toList());
     }
+
+    public List<MyBooksDTO> getMyBooksByStatus(UUID userId, BookStatus bookStatus) {
+        List<MyBooks> myBooks = myBooksRepository.findAllByUserIdAndBookStatus(userId, bookStatus);
+        return myBooks.stream().map(myBooksMapper::myBookToMyBookDTO).collect(Collectors.toList());
+    }
 }
