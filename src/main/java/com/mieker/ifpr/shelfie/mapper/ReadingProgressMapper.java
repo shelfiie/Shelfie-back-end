@@ -1,8 +1,6 @@
 package com.mieker.ifpr.shelfie.mapper;
 
-import com.mieker.ifpr.shelfie.dto.CollectionOfMyBooksDTO;
-import com.mieker.ifpr.shelfie.dto.MyBooksDTO;
-import com.mieker.ifpr.shelfie.entity.MyBooks;
+import com.mieker.ifpr.shelfie.dto.ReadingProgress.CollectionOfMyBooksDTO;
 import com.mieker.ifpr.shelfie.entity.ReadingProgress;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

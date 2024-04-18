@@ -29,7 +29,12 @@ public class MyBooksController {
     private final MyBookService myBookService;
     private final ModelMapper mapper;
 
+//    todo:
+//    editar aq, n precisa passar o usuario como parametro
+//    pegar ele do token
+
 //    rota que associa um usuário reader a um livro
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{userId}/{googleId}/{bookStatus}")
     public ResponseEntity<MyBooksDTO> createMyBooks(@PathVariable UUID userId, @PathVariable String googleId, @PathVariable BookStatus bookStatus) throws ParseException {
         MyBooksDTO myBooksDTO = myBookService.create(userId, googleId, bookStatus);
@@ -38,6 +43,7 @@ public class MyBooksController {
 
 //    rota dos admins
 //    retorna o id dos usuários, id dos livros e situação dos livros
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<MyBooksDTO>> getAllMyBooks() {
         List<MyBooksDTO> myBooks = myBookService.getAllMyBooks();
@@ -46,6 +52,8 @@ public class MyBooksController {
 
 //    rota do usuario reader
 //    retorna o mybooks do id passado como parâmetro
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<MyBooksDTO> getMyBooksById(@PathVariable UUID id) {
         MyBooksDTO myBooksDTO = myBookService.getMyBooksById(id);
@@ -54,6 +62,7 @@ public class MyBooksController {
 
 //    rota authenticated
 //    rota para desativar um my books
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{id}/disable")
     public ResponseEntity<String> deleteMyBooks(@PathVariable("id") UUID id) {
         try {
@@ -155,6 +164,7 @@ public class MyBooksController {
     }
 
 //    rota para retornar todos os mybooks de um livro
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{bookId}/list")
     public ResponseEntity<List<MyBooksDTO>> getMyBooksByBookId(@PathVariable UUID bookId) {
         List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByBookId(bookId);

@@ -22,7 +22,6 @@ import java.security.SignatureException;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends Throwable {
     @ExceptionHandler({Exception.class, DataIntegrityViolationException.class})
-
     public ProblemDetail handleSecurityException(Exception exception) {
         ProblemDetail errorDetail = null;
 
@@ -65,6 +64,11 @@ public class GlobalExceptionHandler extends Throwable {
             errorDetail.setProperty("description", "O parâmetro passado é inválido.");
         }
 
+        if (exception instanceof RuntimeException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), exception.getMessage());
+            errorDetail.setProperty("description", "Unknown internal server error.");
+        }
+
         if (exception instanceof NoResourceFoundException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), exception.getMessage());
             errorDetail.setProperty("description", "Rota não existe.");
@@ -78,4 +82,12 @@ public class GlobalExceptionHandler extends Throwable {
         return errorDetail;
     }
 
+
+
 }
+
+//
+//@ExceptionHandler(IdNotFoundException.class)
+//public ResponseEntity handleIdNotFoundException(IdNotFoundException notFound) {
+//    return ResponseEntity.notFound().build();
+//}

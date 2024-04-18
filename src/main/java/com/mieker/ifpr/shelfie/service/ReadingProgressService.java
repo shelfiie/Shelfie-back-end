@@ -1,14 +1,14 @@
 package com.mieker.ifpr.shelfie.service;
 
 
-import com.mieker.ifpr.shelfie.dto.CollectionOfMyBooksDTO;
+import com.mieker.ifpr.shelfie.dto.ReadingProgress.CollectionOfMyBooksDTO;
 import com.mieker.ifpr.shelfie.dto.MyBooksDTO;
-import com.mieker.ifpr.shelfie.dto.ReadingProgressDTO;
+import com.mieker.ifpr.shelfie.dto.ReadingProgress.ReadingProgressDTO;
+import com.mieker.ifpr.shelfie.dto.ReadingProgress.UpdateReadingProgressDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.ReadingProgress;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
-import com.mieker.ifpr.shelfie.mapper.BookMapper;
 import com.mieker.ifpr.shelfie.mapper.MyBooksMapper;
 import com.mieker.ifpr.shelfie.mapper.ReadingProgressMapper;
 import com.mieker.ifpr.shelfie.repository.BookRepository;
@@ -94,4 +94,31 @@ public class ReadingProgressService {
         return resultList;
     }
 
+    public String deleteReadingProgress(UUID id) {
+        ReadingProgress rp = rpRepository.findById(id).orElseThrow(() -> new RuntimeException("Não encontrado ReadingProgress com id: " + id));
+        rpRepository.delete(rp);
+        return  "Progresso de leitura deletado com sucesso.";
+    }
+
+    public List<CollectionOfMyBooksDTO> getAllReadingProgress() {
+        List<ReadingProgress> rpList = rpRepository.findAll();
+        return rpList.stream()
+                .map( rp -> {
+                    CollectionOfMyBooksDTO dto = rpMapper.readingProgressToCollectionOfMyBooks(rp);
+                    MyBooks mb = myBooksRepository.findById(rp.getMyBooks().getId()).orElseThrow(() -> new RuntimeException("Não encontrado MyBooks com id: " + rp.getMyBooks().getId()));
+                    Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + mb.getBook().getId()));
+                    dto.setGoogleId(book.getGoogleId());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public String updateReadingProgress(UUID id, UpdateReadingProgressDTO updReadingProgressDTO) {
+        ReadingProgress rp = rpRepository.findById(id).orElseThrow(() -> new RuntimeException("Não encontrado ReadingProgress com id: " + id));
+        if (!updReadingProgressDTO.getCommentary().isEmpty()) {
+            rp.setCommentary(updReadingProgressDTO.getCommentary());
+        }
+        rpRepository.save(rp);
+        return "Progresso de leitura atualizado com sucesso.";
+    }
 }
