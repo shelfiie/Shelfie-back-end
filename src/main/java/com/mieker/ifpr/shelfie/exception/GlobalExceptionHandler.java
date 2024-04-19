@@ -29,29 +29,29 @@ public class GlobalExceptionHandler extends Throwable {
 
         if (exception instanceof BadCredentialsException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), exception.getMessage());
-            errorDetail.setProperty("description", "The username or password is incorrect");
+            errorDetail.setProperty("description", "O email ou a senha estão incorretos.");
 
             return errorDetail;
         }
 
         if (exception instanceof AccountStatusException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
-            errorDetail.setProperty("description", "The account is locked");
+            errorDetail.setProperty("description", "A conta está bloqueada");
         }
 
         if (exception instanceof AccessDeniedException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
-            errorDetail.setProperty("description", "You are not authorized to access this resource");
+            errorDetail.setProperty("description", "Você não tem permissão para acessar este recurso.");
         }
 
         if (exception instanceof SignatureException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
-            errorDetail.setProperty("description", "The JWT signature is invalid");
+            errorDetail.setProperty("description", "O token é inválido.");
         }
 
         if (exception instanceof ExpiredJwtException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
-            errorDetail.setProperty("description", "The JWT token has expired");
+            errorDetail.setProperty("description", "O token expirou.");
         }
 
         if (exception instanceof DataIntegrityViolationException) {
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler extends Throwable {
 
         if (exception instanceof RuntimeException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), exception.getMessage());
-            errorDetail.setProperty("description", "Unknown internal server error.");
+            errorDetail.setProperty("description", "Erro desconhecido.");
         }
 
         if (exception instanceof NoResourceFoundException) {
@@ -76,7 +76,7 @@ public class GlobalExceptionHandler extends Throwable {
 
         if (errorDetail == null) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), exception.getMessage());
-            errorDetail.setProperty("description", "Unknown internal server error.");
+            errorDetail.setProperty("description", "Erro desconhecido.");
         }
 
         return errorDetail;

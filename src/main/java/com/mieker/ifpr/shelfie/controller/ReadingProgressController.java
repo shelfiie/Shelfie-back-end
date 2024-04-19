@@ -4,6 +4,7 @@ import com.mieker.ifpr.shelfie.dto.ReadingProgress.CollectionOfMyBooksDTO;
 import com.mieker.ifpr.shelfie.dto.ReadingProgress.ReadingProgressDTO;
 import com.mieker.ifpr.shelfie.dto.ReadingProgress.UpdateReadingProgressDTO;
 import com.mieker.ifpr.shelfie.entity.User;
+import com.mieker.ifpr.shelfie.exception.GlobalExceptionHandler;
 import com.mieker.ifpr.shelfie.service.ReadingProgressService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class ReadingProgressController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping
+//    todo:
+//    arrumar essa aqui q só usuários relacionados a mybooks podem adicionar leituras nela
     public ResponseEntity<String> createReadingProgression(@RequestBody ReadingProgressDTO readingProgressDTO) {
         String message = rpService.create(readingProgressDTO);
         return ResponseEntity.status(201).body(message);
@@ -73,3 +76,7 @@ public class ReadingProgressController {
         return ResponseEntity.status(200).body(message);
     }
 }
+
+// todo:
+// antes de passar para a review arrumar todos os todos
+
