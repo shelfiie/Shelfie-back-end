@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasAnyRole;
-
 @CrossOrigin(origins = "*")
 @RestController
 @AllArgsConstructor
@@ -43,7 +41,6 @@ public class ReadingProgressController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @PreAuthorize("isAuthenticated()")
     @GetMapping("/all")
     public ResponseEntity<List<CollectionOfMyBooksDTO>> getAllReadingProgress() {
         return ResponseEntity.ok(rpService.getAllReadingProgress());
@@ -66,9 +63,6 @@ public class ReadingProgressController {
         return ResponseEntity.status(200).body(message);
     }
 
-//    TODO
-//    como fazer pra só quem é o user da reading progress poder atualizar
-//    não da só para utilizar os isauthenticated
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/{id}")
     public ResponseEntity<String> updateReadingProgress(@PathVariable UUID id, @RequestBody UpdateReadingProgressDTO updReadingProgressDTO) {

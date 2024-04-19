@@ -41,9 +41,10 @@ public class ReadingProgressService {
         MyBooksDTO mbDTO = myBookService.getMyBooksById(rpDTO.getMyBooksId());
         MyBooks myBooks = myBooksMapper.myBookDTOtoMyBook(mbDTO);
         Book books = bookRepository.findById(myBooks.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + myBooks.getBook().getId()));
-        System.out.println(rpDTO.getPage());
-        System.out.println(books.getPages());
-
+        UUID userId = getUserId();
+        if (!myBooks.getUser().getId().equals(userId)) {
+            throw new AccessDeniedException("Você não tem permissão para adicionar progresso de leitura a este livro.");
+        }
         String message = "";
         if (myBooks.getBookStatus() == BookStatus.LENDO && myBooks.isEnabled() && rpDTO.getPage() <= books.getPages()) {
             rp.setMyBooks(myBooks);
@@ -105,44 +106,15 @@ public class ReadingProgressService {
     }
 
     public String deleteReadingProgress(UUID id) {
-        ReadingProgress rp = rpRepository.findById(id).orElseThrow(() -> new RuntimeException("Não encontrado ReadingProgress com id: " + id));
-        UUID myBooksId = rp.getMyBooks().getId();
-        MyBooks mb = myBooksRepository.findById(myBooksId).orElseThrow();
-        UUID userId = getUserId();
-
-        if (!mb.getUser().getId().equals(userId)) {
-            throw new AccessDeniedException("Você não tem permissão para excluir este progresso de leitura.");
-        }
+        ReadingProgress rp = getReadingProgressById(id);
+        checkPermission(rp.getMyBooks().getId());
         rpRepository.delete(rp);
-        return  "Progresso de leitura deletado com sucesso.";
+        return "Progresso de leitura deletado com sucesso.";
     }
 
-
-
     public String updateReadingProgress(UUID id, UpdateReadingProgressDTO updReadingProgressDTO) {
-        ReadingProgress rp = rpRepository.findById(id).orElseThrow(() -> new RuntimeException("Não encontrado ReadingProgress com id: " + id));
-        UUID myBooksId = rp.getMyBooks().getId();
-        MyBooks mb = myBooksRepository.findById(myBooksId).orElseThrow();
-        UUID userId = getUserId();
-        if (!mb.getUser().getId().equals(userId)) {
-            throw new AccessDeniedException("Você não tem permissão para excluir este progresso de leitura.");
-        }
-
-//        todo
-//        olhar aq e apagar
-
-//        todo
-//        ver isso aq
-//        // Verifica se o usuário autenticado é o proprietário da leitura de progresso
-//        UUID userId = authenticationFacade.getUserId();
-//        if (!rp.getUser().getId().equals(userId)) {
-//            throw new AccessDeniedException("Você não tem permissão para excluir esta leitura de progresso");
-//        }
-
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        System.out.println(authentication);
-//        User currentUser = (User) authentication.getPrincipal();
-        System.out.println(userId);
+        ReadingProgress rp = getReadingProgressById(id);
+        checkPermission(rp.getMyBooks().getId());
         if (!updReadingProgressDTO.getCommentary().isEmpty()) {
             rp.setCommentary(updReadingProgressDTO.getCommentary());
         }
@@ -178,21 +150,17 @@ public class ReadingProgressService {
                 .collect(Collectors.toList());
     }
 
-//    todo:
-//    tentar remover esse codigo duplicado
-//    faz um switch case maybe
+    private ReadingProgress getReadingProgressById(UUID id) {
+        return rpRepository.findById(id).orElseThrow(() -> new RuntimeException("Não encontrado ReadingProgress com id: " + id));
+    }
 
-
-//    private void checkUserPermission(UUID id) {
-//        ReadingProgress rp = rpRepository.findById(id).orElseThrow(() -> new RuntimeException("Não encontrado ReadingProgress com id: " + id));
-//        UUID myBooksId = rp.getMyBooks().getId();
-//        MyBooks mb = myBooksRepository.findById(myBooksId).orElseThrow();
-//        UUID userId = getUserId();
-//
-//        if (!mb.getUser().getId().equals(userId)) {
-//            throw new AccessDeniedException("Você não tem permissão para excluir este progresso de leitura.");
-//        }
-//    }
+    private void checkPermission(UUID myBooksId) {
+        MyBooks mb = myBooksRepository.findById(myBooksId).orElseThrow();
+        UUID userId = getUserId();
+        if (!mb.getUser().getId().equals(userId)) {
+            throw new AccessDeniedException("Você não tem permissão para acessar este progresso de leitura.");
+        }
+    }
 
     private UUID getUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
