@@ -1,4 +1,4 @@
-package com.mieker.ifpr.shelfie.dto;
+package com.mieker.ifpr.shelfie.dto.User;
 
 import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.mieker.ifpr.shelfie.controller;
 
-import com.mieker.ifpr.shelfie.dto.BookDTO;
+import com.mieker.ifpr.shelfie.dto.Book.BookDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.service.BookApiService;
 import com.mieker.ifpr.shelfie.service.BookService;

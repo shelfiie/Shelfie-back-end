@@ -1,7 +1,7 @@
 package com.mieker.ifpr.shelfie.controller;
 
-import com.mieker.ifpr.shelfie.dto.MyBooksDTO;
-import com.mieker.ifpr.shelfie.dto.UpdateMyBooksDTO;
+import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksDTO;
+import com.mieker.ifpr.shelfie.dto.MyBooks.UpdateMyBooksDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import com.mieker.ifpr.shelfie.service.MyBookService;

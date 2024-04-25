@@ -1,6 +1,6 @@
 package com.mieker.ifpr.shelfie.mapper;
 
-import com.mieker.ifpr.shelfie.dto.BookDTO;
+import com.mieker.ifpr.shelfie.dto.Book.BookDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

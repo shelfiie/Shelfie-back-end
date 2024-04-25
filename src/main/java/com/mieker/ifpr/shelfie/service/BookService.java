@@ -1,6 +1,6 @@
 package com.mieker.ifpr.shelfie.service;
 
-import com.mieker.ifpr.shelfie.dto.BookDTO;
+import com.mieker.ifpr.shelfie.dto.Book.BookDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import com.mieker.ifpr.shelfie.mapper.BookMapper;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
