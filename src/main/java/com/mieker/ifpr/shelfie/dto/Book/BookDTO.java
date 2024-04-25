@@ -1,4 +1,4 @@
-package com.mieker.ifpr.shelfie.dto;
+package com.mieker.ifpr.shelfie.dto.Book;
 
 import lombok.Data;
 

@@ -1,8 +1,8 @@
 
 package com.mieker.ifpr.shelfie.controller;
 
-import com.mieker.ifpr.shelfie.dto.LoginDTO;
-import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
+import com.mieker.ifpr.shelfie.dto.User.LoginDTO;
+import com.mieker.ifpr.shelfie.dto.User.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.responses.LoginResponse;
 import com.mieker.ifpr.shelfie.service.AuthenticationService;

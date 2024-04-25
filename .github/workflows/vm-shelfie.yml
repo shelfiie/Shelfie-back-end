@@ -1,9 +1,9 @@
 name: deploy-rest-api-shelfie
 
 on:
-  push:
-    branches:
-      - main
+#  push:
+#    branches:
+#      - main
   pull_request:
     branches:
       - main

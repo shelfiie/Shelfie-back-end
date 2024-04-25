@@ -1,6 +1,6 @@
 package com.mieker.ifpr.shelfie.bootstrap;
 
-import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
+import com.mieker.ifpr.shelfie.dto.User.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import com.mieker.ifpr.shelfie.repository.UserRepository;

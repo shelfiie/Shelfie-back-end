@@ -1,8 +1,8 @@
 package com.mieker.ifpr.shelfie.mapper;
 
-import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
-import com.mieker.ifpr.shelfie.dto.UpdateUserDTO;
-import com.mieker.ifpr.shelfie.dto.UserDTO;
+import com.mieker.ifpr.shelfie.dto.User.RegisterUserDTO;
+import com.mieker.ifpr.shelfie.dto.User.UpdateUserDTO;
+import com.mieker.ifpr.shelfie.dto.User.UserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

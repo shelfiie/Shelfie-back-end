@@ -1,6 +1,6 @@
 package com.mieker.ifpr.shelfie.service;
 
-import com.mieker.ifpr.shelfie.dto.BookDTO;
+import com.mieker.ifpr.shelfie.dto.Book.BookDTO;
 import com.mieker.ifpr.shelfie.mapper.BookApiMapper;
 import com.mieker.ifpr.shelfie.responses.BookApiResponse;
 import lombok.AllArgsConstructor;
