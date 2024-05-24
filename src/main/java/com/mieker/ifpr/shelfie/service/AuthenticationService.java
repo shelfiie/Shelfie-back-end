@@ -1,7 +1,7 @@
 package com.mieker.ifpr.shelfie.service;
 
-import com.mieker.ifpr.shelfie.dto.LoginDTO;
-import com.mieker.ifpr.shelfie.dto.RegisterUserDTO;
+import com.mieker.ifpr.shelfie.dto.User.LoginDTO;
+import com.mieker.ifpr.shelfie.dto.User.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import com.mieker.ifpr.shelfie.mapper.UserMapper;
@@ -29,6 +29,15 @@ public class AuthenticationService {
     }
 
     public User signUp (RegisterUserDTO input) throws LoginException {
+
+        if (userRepository.existsByEmail(input.getEmail())) {
+            throw new LoginException("Email já cadastrado.");
+        }
+
+        if (userRepository.existsByUsernome(input.getUsernome())) {
+            throw new LoginException("Nome de usuário já cadastrado.");
+        }
+
         User user = new User();
         user.setName(input.getName());
         user.setEmail(input.getEmail());

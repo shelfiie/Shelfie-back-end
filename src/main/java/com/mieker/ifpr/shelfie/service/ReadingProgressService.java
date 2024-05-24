@@ -2,7 +2,7 @@ package com.mieker.ifpr.shelfie.service;
 
 
 import com.mieker.ifpr.shelfie.dto.ReadingProgress.CollectionOfMyBooksDTO;
-import com.mieker.ifpr.shelfie.dto.MyBooksDTO;
+import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksDTO;
 import com.mieker.ifpr.shelfie.dto.ReadingProgress.ReadingProgressDTO;
 import com.mieker.ifpr.shelfie.dto.ReadingProgress.UpdateReadingProgressDTO;
 import com.mieker.ifpr.shelfie.entity.Book;

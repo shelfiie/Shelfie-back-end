@@ -1,8 +1,8 @@
 package com.mieker.ifpr.shelfie.service;
 
-import com.mieker.ifpr.shelfie.dto.BookDTO;
-import com.mieker.ifpr.shelfie.dto.MyBooksDTO;
-import com.mieker.ifpr.shelfie.dto.UpdateMyBooksDTO;
+import com.mieker.ifpr.shelfie.dto.Book.BookDTO;
+import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksDTO;
+import com.mieker.ifpr.shelfie.dto.MyBooks.UpdateMyBooksDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.User;
