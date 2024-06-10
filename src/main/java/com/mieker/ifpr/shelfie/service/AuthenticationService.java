@@ -1,5 +1,6 @@
 package com.mieker.ifpr.shelfie.service;
 
+import com.mieker.ifpr.shelfie.config.Validation;
 import com.mieker.ifpr.shelfie.dto.User.LoginDTO;
 import com.mieker.ifpr.shelfie.dto.User.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.LoginException;
+import java.util.regex.Pattern;
 
 @Service
 public class AuthenticationService {
@@ -28,6 +30,8 @@ public class AuthenticationService {
         this.userMapper = userMapper;
     }
 
+
+
     public User signUp (RegisterUserDTO input) throws LoginException {
 
         if (userRepository.existsByEmail(input.getEmail())) {
@@ -36,6 +40,10 @@ public class AuthenticationService {
 
         if (userRepository.existsByUsernome(input.getUsernome())) {
             throw new LoginException("Nome de usuário já cadastrado.");
+        }
+
+        if (!Validation.emailValidation(input.getEmail())) {
+            throw new LoginException("Email inválido.");
         }
 
         User user = new User();
