@@ -19,11 +19,6 @@ public class BookService {
     private final BookMapper bookMapper;
     private final BookApiService bookApiService;
 
-//    todo
-//    arrumar isso aqui
-//    o mapper ta fazendo serviços que é setar o books
-//    arrumar isso
-
 
     public Book createBook(String googleId) throws ParseException {
         Book book = bookRepository.findByGoogleId(googleId).orElse(null);
