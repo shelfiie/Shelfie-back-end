@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class UpdateUserDTO {
     private String name;
-    private String usernome;
+    private String nickname;
 }

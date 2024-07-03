@@ -16,7 +16,7 @@ import java.util.UUID;
 public class UserDTO {
     private UUID id;
     private String name;
-    private String usernome;
+    private String nickname;
     private String email;
     private String image;
     private boolean enabled;

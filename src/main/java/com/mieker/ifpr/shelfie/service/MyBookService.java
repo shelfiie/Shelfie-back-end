@@ -1,5 +1,6 @@
 package com.mieker.ifpr.shelfie.service;
 
+import com.mieker.ifpr.shelfie.config.Validation;
 import com.mieker.ifpr.shelfie.dto.Book.BookDTO;
 import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksDTO;
 import com.mieker.ifpr.shelfie.dto.MyBooks.UpdateMyBooksDTO;
@@ -30,9 +31,12 @@ public class MyBookService {
     private final BookApiService bookApiService;
     private final BookService bookService;
     private final MyBooksMapper myBooksMapper;
+    private Validation userValidation;
 
-//    criar associação do livro ao usuário
-    public MyBooksDTO create(UUID userId, String googleId, BookStatus bookStatus) throws ParseException {
+
+    //    criar associação do livro ao usuário
+    public MyBooksDTO create(String googleId, BookStatus bookStatus) throws ParseException {
+        UUID userId = userValidation.userAuthenticator();
         Optional<Book> optionalBook = bookRepository.findByGoogleId(googleId);
         MyBooks myBook = optionalBook.isPresent() ? addBookToUser(optionalBook.get().getId(), userId, bookStatus) : createBookAndAddToUser(googleId, userId, bookStatus);
         return myBooksMapper.myBookToMyBookDTO(myBook);
@@ -50,8 +54,7 @@ public class MyBookService {
     }
 
 //    criar o livro e relacionar ao usuário
-    public MyBooks createBookAndAddToUser(String googleId,UUID userId,BookStatus bookStatus) throws ParseException {
-//
+    public MyBooks createBookAndAddToUser(String googleId, UUID userId, BookStatus bookStatus) throws ParseException {
         BookDTO bookDTO = bookApiService.getBookByGoogleId(googleId);
         Book book = bookService.createBook(googleId);
         return addBookToUser(book.getId(), userId, bookStatus);
@@ -92,8 +95,9 @@ public class MyBookService {
     }
 
 //    pega todos mybooks de um usuario
-    public List<MyBooksDTO> getMyBooksByUserId(UUID id) {
-        List<MyBooks> myBooks = myBooksRepository.findAllByUserIdAndEnabledTrue(id);
+    public List<MyBooksDTO> getMyBooksByUserId() {
+        UUID userId = userValidation.userAuthenticator();
+        List<MyBooks> myBooks = myBooksRepository.findAllByUserIdAndEnabledTrue(userId);
         return myBooks.stream().map(myBooksMapper::myBookToMyBookDTO).collect(Collectors.toList());
     }
 
@@ -103,7 +107,8 @@ public class MyBookService {
         return myBooks.stream().map(myBooksMapper::myBookToMyBookDTO).collect(Collectors.toList());
     }
 
-    public List<MyBooksDTO> getMyBooksByStatus(UUID userId, BookStatus bookStatus) {
+    public List<MyBooksDTO> getMyBooksByStatus(BookStatus bookStatus) {
+        UUID userId = userValidation.userAuthenticator();
         List<MyBooks> myBooks = myBooksRepository.findAllByUserIdAndBookStatus(userId, bookStatus);
         return myBooks.stream().map(myBooksMapper::myBookToMyBookDTO).collect(Collectors.toList());
     }

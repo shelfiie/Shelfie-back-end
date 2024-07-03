@@ -1,5 +1,10 @@
 package com.mieker.ifpr.shelfie.config;
 
+import com.mieker.ifpr.shelfie.entity.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 // TODO:
@@ -16,4 +21,9 @@ public class Validation {
                 .matches();
     }
 
+    public UUID userAuthenticator() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        return currentUser.getId();
+    }
 }

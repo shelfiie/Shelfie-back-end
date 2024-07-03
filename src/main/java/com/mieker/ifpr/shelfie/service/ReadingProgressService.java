@@ -64,20 +64,6 @@ public class ReadingProgressService {
 //    criar uma rota para esse serviço
 //    esse para o usuário ver só a dele
 
-//    public List<CollectionOfMyBooksDTO> getReadingProgressByMyBooksId(UUID myBooksId) {
-//        MyBooks mb = myBooksRepository.findById(myBooksId).orElseThrow(() -> new RuntimeException("Não encontrado MyBooks com id: " + myBooksId));
-//        Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + mb.getBook().getId()));
-//        String googleId = book.getGoogleId();
-//        List<ReadingProgress> rpList = rpRepository.findByMyBooksId(myBooksId);
-//        return rpList.stream()
-//                .map( rp -> {
-//                    CollectionOfMyBooksDTO dto = rpMapper.readingProgressToCollectionOfMyBooks(rp);
-//                    dto.setGoogleId(googleId);
-//                    return dto;
-//                })
-//                .collect(Collectors.toList());
-//    }
-
 //    essa rota mostra os mybooks
 //    então como os mybooks o id ta relacionado
     public List<CollectionOfMyBooksDTO> getReadingProgressByUserId(UUID userId) {
@@ -104,6 +90,9 @@ public class ReadingProgressService {
         }
         return resultList;
     }
+
+//    todo
+//    arrumar o reading progress para disable
 
     public String deleteReadingProgress(UUID id) {
         ReadingProgress rp = getReadingProgressById(id);
