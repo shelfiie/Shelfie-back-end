@@ -5,11 +5,18 @@ import com.mieker.ifpr.shelfie.dto.Book.BookDTO;
 import com.mieker.ifpr.shelfie.dto.Review.ReviewDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
+import com.mieker.ifpr.shelfie.entity.Review;
+import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
+import com.mieker.ifpr.shelfie.exception.UserNotAssociatedException;
+import com.mieker.ifpr.shelfie.mapper.ReviewMapper;
 import com.mieker.ifpr.shelfie.repository.MyBooksRepository;
 import com.mieker.ifpr.shelfie.repository.ReviewRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.net.http.HttpResponse;
 import java.text.ParseException;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,27 +26,30 @@ import java.util.UUID;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final MyBooksRepository mbRepository;
+    private final ReviewMapper rMapper;
     private Validation userValidation;
 
-//    public ReviewService(ReviewRepository reviewRepository, MyBooksRepository mbRepository) {
-//        this.reviewRepository = reviewRepository;
-//        this.mbRepository = mbRepository;
-//    }
-
-//    TODO
-//    fazer o create
     public ReviewDTO createReview(UUID booksId, ReviewDTO reviewDTO) throws ParseException {
         UUID userId = userValidation.userAuthenticator();
-        ReviewDTO review = new ReviewDTO();
-        if (mbRepository.findByBookIdAndUserId(booksId, userId)) {
-            return review;
+        MyBooks myBooks = mbRepository.findMyBooksByBookIdAndUserId(booksId, userId);
+        Review review = new Review();
+        if (myBooks == null) {
+            throw new UserNotAssociatedException("Não tem usuário associado ao livro");
+        } else {
+            if (myBooks.getBookStatus() == BookStatus.LIDO || myBooks.getBookStatus() == BookStatus.ABANDONADO) {
+                review.setMyBooks(myBooks);
+                review.setReview(reviewDTO.getReview());
+                review.setRating(reviewDTO.getRating());
+                reviewRepository.save(review);
+            } else {
+                throw new UserNotAssociatedException("O status do livro não está como LIDO ou ABANDONADO.");
+            }
         }
-        return review;
+//        TODO
+//        ver o que retornar aqui
+//        criar um novo DTO para um response com id do usuario e do livro?
+        return rMapper.reviewToReviewDTO(review);
 
-//        UUID userId = userValidation.userAuthenticator();
-//        Optional<Book> optionalBook = bookRepository.findByGoogleId(googleId);
-//        MyBooks myBook = optionalBook.isPresent() ? addBookToUser(optionalBook.get().getId(), userId, bookStatus) : createBookAndAddToUser(googleId, userId, bookStatus);
-//        return myBooksMapper.myBookToMyBookDTO(myBook);
     }
 
 }

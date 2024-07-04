@@ -9,10 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -68,6 +65,10 @@ public class GlobalExceptionHandler extends Throwable {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), exception.getMessage());
             errorDetail.setProperty("description", "Erro desconhecido.");
         }
+        if (exception instanceof UserNotAssociatedException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), exception.getMessage());
+            errorDetail.setProperty("description", "Não tem usuário associado ao livro.");
+        }
 
         if (exception instanceof NoResourceFoundException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), exception.getMessage());
@@ -81,13 +82,4 @@ public class GlobalExceptionHandler extends Throwable {
 
         return errorDetail;
     }
-
-
-
 }
-
-//
-//@ExceptionHandler(IdNotFoundException.class)
-//public ResponseEntity handleIdNotFoundException(IdNotFoundException notFound) {
-//    return ResponseEntity.notFound().build();
-//}
