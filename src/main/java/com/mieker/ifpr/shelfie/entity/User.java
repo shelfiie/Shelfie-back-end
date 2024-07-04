@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private UUID id;
     @Column(name = "user_name", nullable = false)
     private String name;
-    @Column(name = "user_nickname", unique = true, nullable = false)
+    @Column(name = "user_username", unique = true, nullable = false)
     private String nickname;
 //    @Getter
     @Column(name = "user_password", nullable = false, updatable = false)

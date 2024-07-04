@@ -33,7 +33,7 @@ public class UserService {
         user.setName(input.getName());
         user.setEmail(input.getEmail());
         user.setPassword(passwordEncoder.encode(input.getPassword()));
-        user.setUsernome(input.getUsernome());
+        user.setNickname(input.getNickname());
         user.setRole(UserRoles.ROLE_ADMIN);
         return userRepository.save(user);
     }
@@ -42,7 +42,7 @@ public class UserService {
     public UpdateUserDTO updateUser(UUID id, UpdateUserDTO userUpdateDTO) throws ParseException, GlobalExceptionHandler {
         User userToUpdate = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
-        userToUpdate.setUsernome(userUpdateDTO.getUsernome());
+        userToUpdate.setNickname(userUpdateDTO.getNickname());
         userToUpdate.setName(userUpdateDTO.getName());
         userRepository.save(userToUpdate);
         return userMapper.userToUpdateUserDTO(userToUpdate);
