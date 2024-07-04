@@ -20,10 +20,11 @@ import java.util.UUID;
 public class ReviewController {
     @Autowired
     private final ReviewService reviewService;
+
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("{myBooksId}")
-    public ResponseEntity<ReviewDTO> createReview(@PathVariable UUID myBooksId) throws ParseException {
-        ReviewDTO reviewDTO = reviewService.create(myBooksId);
-        return ResponseEntity.ok(reviewDTO);
+    @PostMapping("{booksId}")
+    public ResponseEntity<ReviewDTO> createReview(@PathVariable UUID booksId, @RequestBody ReviewDTO reviewDTO) throws ParseException {
+        ReviewDTO responseReview = reviewService.create(booksId, reviewDTO);
+        return ResponseEntity.ok(responseReview);
     }
 }
