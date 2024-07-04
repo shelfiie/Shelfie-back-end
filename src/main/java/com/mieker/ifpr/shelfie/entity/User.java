@@ -4,8 +4,7 @@ import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +19,10 @@ import java.util.UUID;
 
 @Data
 @Entity
+@Builder
 @Table(name = "tb_user")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,8 +30,8 @@ public class User implements UserDetails {
     private UUID id;
     @Column(name = "user_name", nullable = false)
     private String name;
-    @Column(name = "user_username", unique = true, nullable = false)
-    private String usernome;
+    @Column(name = "user_nickname", unique = true, nullable = false)
+    private String nickname;
 //    @Getter
     @Column(name = "user_password", nullable = false, updatable = false)
     private String password;
