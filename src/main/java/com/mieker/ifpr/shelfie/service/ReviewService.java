@@ -21,6 +21,7 @@ public class ReviewService {
 //    fazer o create
     public Book createReview(UUID booksId, ReviewDTO reviewDTO) throws ParseException {
 
+
 //        UUID userId = userValidation.userAuthenticator();
 //        Optional<Book> optionalBook = bookRepository.findByGoogleId(googleId);
 //        MyBooks myBook = optionalBook.isPresent() ? addBookToUser(optionalBook.get().getId(), userId, bookStatus) : createBookAndAddToUser(googleId, userId, bookStatus);
