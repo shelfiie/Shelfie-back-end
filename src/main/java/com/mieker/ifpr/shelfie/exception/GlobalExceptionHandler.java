@@ -2,10 +2,8 @@ package com.mieker.ifpr.shelfie.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -65,7 +63,7 @@ public class GlobalExceptionHandler extends Throwable {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), exception.getMessage());
             errorDetail.setProperty("description", "Erro desconhecido.");
         }
-        if (exception instanceof UserNotAssociatedException) {
+        if (exception instanceof NotFoundException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), exception.getMessage());
             errorDetail.setProperty("description", "Não tem usuário associado ao livro.");
         }
