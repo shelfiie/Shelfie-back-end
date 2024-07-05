@@ -26,4 +26,6 @@ public interface MyBooksRepository extends JpaRepository<MyBooks, UUID> {
     List<MyBooks> findAllByUserIdAndBookStatus(UUID userId, BookStatus bookStatus);
 
     List<MyBooks> findByUserId(UUID id);
+
+    List<MyBooks> findAllByUserId(UUID userId);
 }

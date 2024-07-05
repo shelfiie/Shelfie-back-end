@@ -38,6 +38,13 @@ public class ReviewController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("mine")
+    public ResponseEntity<List<ResponseReviewDTO>> getMyReviews() throws ParseException {
+        List<ResponseReviewDTO> responseReviewList = reviewService.getMyReviews();
+        return ResponseEntity.ok(responseReviewList);
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("review/{reviewId}")
     public ResponseEntity<ResponseReviewDTO> getReviewById(@PathVariable UUID reviewId) throws ParseException {
         ResponseReviewDTO responseReview = reviewService.getReviewById(reviewId);
@@ -51,10 +58,18 @@ public class ReviewController {
         return ResponseEntity.ok(responseReviewList);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("user/{userId}")
+    public ResponseEntity<List<ResponseReviewDTO>> getReviewByUserId(@PathVariable UUID userId) throws ParseException {
+        List<ResponseReviewDTO> responseReviewList = reviewService.getReviewByUserId(userId);
+        return ResponseEntity.ok(responseReviewList);
+    }
+
+
 //    get review by id -- check
 //    get review by user id - esse pega o id do token
 //    get review by nickname - esse só o admin vai ter acesso
-//    get review by book id
+//    get review by book id - check
 //    update review
 //    delete review (esse é delete mesmo, feito pelo dono)
 }
