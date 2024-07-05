@@ -72,60 +72,18 @@ public class ReviewService {
 
     public List<ResponseReviewDTO> getReviewByBookId(UUID bookId) {
         List<MyBooks> myBooksList = mbRepository.findAllByBookId(bookId);
-        List<ResponseReviewDTO> reviewList = new ArrayList<>();
-
-        for (MyBooks myBooks : myBooksList){
-            List<Review> rList = reviewRepository.findByMyBooksId(myBooks.getId());
-
-            reviewList.addAll(rList.stream()
-                    .map(review -> {
-                        ResponseReviewDTO rrDTO = rMapper.reviewToResponseReviewDTO(review);
-                        MyBooks mb = mbRepository.findById(review.getMyBooks().getId()).orElseThrow(() -> new RuntimeException("MyBooks not found with id: " + review.getMyBooks().getId()));
-                        rrDTO.setBookId(mb.getBook().getId());
-                        rrDTO.setUserId(mb.getUser().getId());
-                        return rrDTO;
-            }).toList());
-        }
-        return reviewList;
+        return this.getReviewList(bookId, myBooksList);
     }
 
     public List<ResponseReviewDTO> getReviewByUserId(UUID userId) {
         List<MyBooks> myBooksList = mbRepository.findAllByUserId(userId);
-        List<ResponseReviewDTO> reviewList = new ArrayList<>();
-
-        for (MyBooks myBooks : myBooksList){
-            List<Review> rList = reviewRepository.findByMyBooksId(myBooks.getId());
-
-            reviewList.addAll(rList.stream()
-                    .map(review -> {
-                        ResponseReviewDTO rrDTO = rMapper.reviewToResponseReviewDTO(review);
-                        MyBooks mb = mbRepository.findById(review.getMyBooks().getId()).orElseThrow(() -> new RuntimeException("MyBooks not found with id: " + review.getMyBooks().getId()));
-                        rrDTO.setBookId(mb.getBook().getId());
-                        rrDTO.setUserId(mb.getUser().getId());
-                        return rrDTO;
-                    }).toList());
-        }
-        return reviewList;
+        return this.getReviewList(userId, myBooksList);
     }
 
     public List<ResponseReviewDTO> getMyReviews() {
         UUID userId = userValidation.userAuthenticator();
         List<MyBooks> myBooksList = mbRepository.findAllByUserId(userId);
         return this.getReviewList(userId, myBooksList);
-
-//        for (MyBooks myBooks : myBooksList){
-//            List<Review> rList = reviewRepository.findByMyBooksId(myBooks.getId());
-//
-//            reviewList.addAll(rList.stream()
-//                    .map(review -> {
-//                        ResponseReviewDTO rrDTO = rMapper.reviewToResponseReviewDTO(review);
-//                        MyBooks mb = mbRepository.findById(review.getMyBooks().getId()).orElseThrow(() -> new RuntimeException("MyBooks not found with id: " + review.getMyBooks().getId()));
-//                        rrDTO.setBookId(mb.getBook().getId());
-//                        rrDTO.setUserId(mb.getUser().getId());
-//                        return rrDTO;
-//                    }).toList());
-//        }
-//        return reviewList;
     }
 
     private List<ResponseReviewDTO> getReviewList(UUID id, List<MyBooks> myBooksList) {

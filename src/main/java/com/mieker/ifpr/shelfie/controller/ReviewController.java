@@ -65,11 +65,18 @@ public class ReviewController {
         return ResponseEntity.ok(responseReviewList);
     }
 
+//    @PreAuthorize("isAuthenticated()")
+//    @PutMapping("")
+//    public ResponseEntity<List<ResponseReviewDTO>> getReviewByUserId(@PathVariable UUID userId) throws ParseException {
+//        List<ResponseReviewDTO> responseReviewList = reviewService.getReviewByUserId(userId);
+//        return ResponseEntity.ok(responseReviewList);
+//    }
+
 
 //    get review by id -- check
-//    get review by user id - esse pega o id do token
-//    get review by nickname - esse só o admin vai ter acesso
+//    get review by user id - esse pega o id do token - check
 //    get review by book id - check
 //    update review
+//          atualizar o banco de dados, para ter um updated at
 //    delete review (esse é delete mesmo, feito pelo dono)
 }
