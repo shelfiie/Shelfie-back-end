@@ -13,4 +13,5 @@ public class ResponseReviewDTO {
     private float rating;
     private String review;
     private Date createdAt;
+    private Date updatedAt;
 }

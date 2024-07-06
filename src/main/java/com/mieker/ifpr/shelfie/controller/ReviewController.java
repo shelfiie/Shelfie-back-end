@@ -65,12 +65,12 @@ public class ReviewController {
         return ResponseEntity.ok(responseReviewList);
     }
 
-//    @PreAuthorize("isAuthenticated()")
-//    @PutMapping("")
-//    public ResponseEntity<List<ResponseReviewDTO>> getReviewByUserId(@PathVariable UUID userId) throws ParseException {
-//        List<ResponseReviewDTO> responseReviewList = reviewService.getReviewByUserId(userId);
-//        return ResponseEntity.ok(responseReviewList);
-//    }
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("{reviewId}")
+    public ResponseEntity<ReviewDTO> updateReview(@PathVariable UUID reviewId, @RequestBody ReviewDTO reviewDTO) throws ParseException {
+        ReviewDTO responseReview = reviewService.updateReview(reviewId, reviewDTO);
+        return ResponseEntity.ok(responseReview);
+    }
 
 
 //    get review by id -- check

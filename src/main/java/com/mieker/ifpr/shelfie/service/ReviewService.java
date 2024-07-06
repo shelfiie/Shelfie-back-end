@@ -103,4 +103,12 @@ public class ReviewService {
         }
         return reviewList;
     }
+
+    public ReviewDTO updateReview(UUID reviewId, ReviewDTO reviewDTO) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new NotFoundException("Review not found with id: " + reviewId));
+        review.setReview(reviewDTO.getReview());
+        review.setRating(reviewDTO.getRating());
+        reviewRepository.save(review);
+        return rMapper.reviewToReviewDTO(review);
+    }
 }
