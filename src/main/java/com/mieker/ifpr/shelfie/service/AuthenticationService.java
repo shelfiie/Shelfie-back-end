@@ -38,7 +38,7 @@ public class AuthenticationService {
             throw new LoginException("Email já cadastrado.");
         }
 
-        if (userRepository.existsByUsernome(input.getUsernome())) {
+        if (userRepository.existsByNickname(input.getNickname())) {
             throw new LoginException("Nome de usuário já cadastrado.");
         }
 
@@ -50,7 +50,7 @@ public class AuthenticationService {
         user.setName(input.getName());
         user.setEmail(input.getEmail());
         user.setPassword(passwordEncoder.encode(input.getPassword()));
-        user.setUsernome(input.getUsernome());
+        user.setNickname(input.getNickname());
         user.setRole(UserRoles.ROLE_READER);
         return userRepository.save(user);
     }
