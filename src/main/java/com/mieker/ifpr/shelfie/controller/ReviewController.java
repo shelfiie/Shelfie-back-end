@@ -78,6 +78,6 @@ public class ReviewController {
     @DeleteMapping("{reviewId}")
     public ResponseEntity<String> deleteReview(@PathVariable UUID reviewId) throws AccessDeniedException {
         String message = reviewService.deleteReview(reviewId);
-        return ResponseEntity.status(204).body(message);
+        return ResponseEntity.status(202).body(message);
     }
 }
