@@ -37,7 +37,7 @@ public class MyBooksController {
     public ResponseEntity<MyBooksDTO> createMyBooks(@PathVariable String googleId, @PathVariable BookStatus bookStatus) throws ParseException {
 
         MyBooksDTO myBooksDTO = myBookService.create(googleId, bookStatus);
-        return ResponseEntity.ok(myBooksDTO);
+        return ResponseEntity.status(201).body(myBooksDTO);
     }
 
 //    rota dos admins

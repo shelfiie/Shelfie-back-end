@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<User> register(@RequestBody RegisterUserDTO signUpDTO) throws LoginException {
         User registeredUser = authenticationService.signUp(signUpDTO);
-        return ResponseEntity.ok(registeredUser);
+        return ResponseEntity.status(201).body(registeredUser);
     }
 
     @PostMapping("/login")

@@ -63,9 +63,15 @@ public class GlobalExceptionHandler extends Throwable {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), exception.getMessage());
             errorDetail.setProperty("description", "Erro desconhecido.");
         }
+
         if (exception instanceof NotFoundException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), exception.getMessage());
             errorDetail.setProperty("description", "Não tem usuário associado ao livro.");
+        }
+
+        if (exception instanceof IdNotFoundException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), exception.getMessage());
+            errorDetail.setProperty("description", "Esse id não existe.");
         }
 
         if (exception instanceof NoResourceFoundException) {

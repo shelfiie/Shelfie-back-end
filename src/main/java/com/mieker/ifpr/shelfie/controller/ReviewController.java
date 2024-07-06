@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +28,8 @@ public class ReviewController {
     @PostMapping("{booksId}")
     public ResponseEntity<ReviewDTO> createReview(@PathVariable UUID booksId, @RequestBody ReviewDTO reviewDTO) throws ParseException {
         ReviewDTO responseReview = reviewService.createReview(booksId, reviewDTO);
-        return ResponseEntity.ok(responseReview);
+//        return ResponseEntity.ok(responseReview);
+        return ResponseEntity.status(201).body(responseReview);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -39,44 +41,43 @@ public class ReviewController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("mine")
-    public ResponseEntity<List<ResponseReviewDTO>> getMyReviews() throws ParseException {
+    public ResponseEntity<List<ResponseReviewDTO>> getMyReviews() {
         List<ResponseReviewDTO> responseReviewList = reviewService.getMyReviews();
         return ResponseEntity.ok(responseReviewList);
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("review/{reviewId}")
-    public ResponseEntity<ResponseReviewDTO> getReviewById(@PathVariable UUID reviewId) throws ParseException {
+    public ResponseEntity<ResponseReviewDTO> getReviewById(@PathVariable UUID reviewId) {
         ResponseReviewDTO responseReview = reviewService.getReviewById(reviewId);
         return ResponseEntity.ok(responseReview);
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("book/{bookId}")
-    public ResponseEntity<List<ResponseReviewDTO>> getReviewByBookId(@PathVariable UUID bookId) throws ParseException {
+    public ResponseEntity<List<ResponseReviewDTO>> getReviewByBookId(@PathVariable UUID bookId) {
         List<ResponseReviewDTO> responseReviewList = reviewService.getReviewByBookId(bookId);
         return ResponseEntity.ok(responseReviewList);
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("user/{userId}")
-    public ResponseEntity<List<ResponseReviewDTO>> getReviewByUserId(@PathVariable UUID userId) throws ParseException {
+    public ResponseEntity<List<ResponseReviewDTO>> getReviewByUserId(@PathVariable UUID userId) {
         List<ResponseReviewDTO> responseReviewList = reviewService.getReviewByUserId(userId);
         return ResponseEntity.ok(responseReviewList);
     }
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping("{reviewId}")
-    public ResponseEntity<ReviewDTO> updateReview(@PathVariable UUID reviewId, @RequestBody ReviewDTO reviewDTO) throws ParseException {
+    public ResponseEntity<ReviewDTO> updateReview(@PathVariable UUID reviewId, @RequestBody ReviewDTO reviewDTO) throws AccessDeniedException {
         ReviewDTO responseReview = reviewService.updateReview(reviewId, reviewDTO);
         return ResponseEntity.ok(responseReview);
     }
 
-
-//    get review by id -- check
-//    get review by user id - esse pega o id do token - check
-//    get review by book id - check
-//    update review
-//          atualizar o banco de dados, para ter um updated at
-//    delete review (esse é delete mesmo, feito pelo dono)
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("{reviewId}")
+    public ResponseEntity<String> deleteReview(@PathVariable UUID reviewId) throws AccessDeniedException {
+        String message = reviewService.deleteReview(reviewId);
+        return ResponseEntity.status(204).body(message);
+    }
 }

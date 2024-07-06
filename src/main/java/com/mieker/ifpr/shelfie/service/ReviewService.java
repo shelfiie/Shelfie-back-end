@@ -6,6 +6,7 @@ import com.mieker.ifpr.shelfie.dto.Review.ReviewDTO;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.Review;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
+import com.mieker.ifpr.shelfie.exception.IdNotFoundException;
 import com.mieker.ifpr.shelfie.exception.NotFoundException;
 import com.mieker.ifpr.shelfie.mapper.ReviewMapper;
 import com.mieker.ifpr.shelfie.repository.MyBooksRepository;
@@ -13,6 +14,7 @@ import com.mieker.ifpr.shelfie.repository.ReviewRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,7 @@ public class ReviewService {
     private final ReviewMapper rMapper;
     private Validation userValidation;
 
-    public ReviewDTO createReview(UUID booksId, ReviewDTO reviewDTO) throws ParseException {
+    public ReviewDTO createReview(UUID booksId, ReviewDTO reviewDTO) {
         UUID userId = userValidation.userAuthenticator();
         MyBooks myBooks = mbRepository.findMyBooksByBookIdAndUserId(booksId, userId);
         Review review = new Review();
@@ -104,11 +106,25 @@ public class ReviewService {
         return reviewList;
     }
 
-    public ReviewDTO updateReview(UUID reviewId, ReviewDTO reviewDTO) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new NotFoundException("Review not found with id: " + reviewId));
+    public ReviewDTO updateReview(UUID reviewId, ReviewDTO reviewDTO) throws AccessDeniedException {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new NotFoundException("Review com esse id não existe: " + reviewId));
+        this.isUserAuthorized(review);
         review.setReview(reviewDTO.getReview());
         review.setRating(reviewDTO.getRating());
         reviewRepository.save(review);
         return rMapper.reviewToReviewDTO(review);
+    }
+
+    public String deleteReview(UUID reviewId) throws AccessDeniedException {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new IdNotFoundException("Review com esse id não existe: " + reviewId));
+        this.isUserAuthorized(review);
+        reviewRepository.delete(review);
+        return "Deletado com sucesso";
+    }
+
+    private void isUserAuthorized(Review review) throws AccessDeniedException {
+        if (!review.getMyBooks().getUser().getId().equals(userValidation.userAuthenticator())) {
+            throw new AccessDeniedException("You are not authorized to delete this review");
+        }
     }
 }

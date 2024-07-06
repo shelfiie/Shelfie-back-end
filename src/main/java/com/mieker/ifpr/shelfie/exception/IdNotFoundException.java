@@ -1,16 +1,11 @@
-//package com.mieker.ifpr.shelfie.exception;
-//
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.ControllerAdvice;
-//import org.springframework.web.bind.annotation.ExceptionHandler;
-//
-//@ControllerAdvice
-//public class IdNotFoundException {
-//    @ExceptionHandler(IdNotFoundException.class)
-//    public ResponseEntity handleIdNotFoundException(IdNotFoundException notFound) {
-//        return ResponseEntity.notFound().build();
-//    }
-//}
+package com.mieker.ifpr.shelfie.exception;
 
-// TODO
-// make exceptions customised
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class IdNotFoundException extends RuntimeException {
+    public IdNotFoundException(String message) {
+        super(message);
+    }
+}
