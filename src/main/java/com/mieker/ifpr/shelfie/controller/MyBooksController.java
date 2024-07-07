@@ -25,11 +25,6 @@ import java.util.UUID;
 public class MyBooksController {
 
     private final MyBookService myBookService;
-    private final ModelMapper mapper;
-
-//    todo:
-//    editar aq, n precisa passar o usuario como parametro
-//    pegar ele do token
 
 //    rota que associa um usuário reader a um livro
     @PreAuthorize("isAuthenticated()")
