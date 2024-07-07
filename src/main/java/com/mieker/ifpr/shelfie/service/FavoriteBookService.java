@@ -1,6 +1,7 @@
 package com.mieker.ifpr.shelfie.service;
 
 import com.mieker.ifpr.shelfie.config.Validation;
+import com.mieker.ifpr.shelfie.dto.Book.FavoriteBookDTO;
 import com.mieker.ifpr.shelfie.dto.Review.ReviewDTO;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.Review;
@@ -10,6 +11,7 @@ import com.mieker.ifpr.shelfie.repository.MyBooksRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,4 +33,16 @@ public class FavoriteBookService {
     }
 
 
+    public List<FavoriteBookDTO> getMyFavoriteBooks() {
+        UUID userId = userValidation.userAuthenticator();
+        List<MyBooks> myBooksList = mbRepository.findMyBooksByUserIdAndFavorite(userId, true);
+        return myBooksList.stream().map(
+                myBooks -> {
+                    FavoriteBookDTO fbDTO = new FavoriteBookDTO();
+                    fbDTO.setBookId(myBooks.getBook().getId());
+                    fbDTO.setTitle(myBooks.getBook().getTitle());
+                    return fbDTO;
+                }
+        ).toList();
+    }
 }
