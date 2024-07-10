@@ -24,10 +24,10 @@ public class FavoriteBookController {
 
     // rota para favoritar livros
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("{bookId}")
+    @PutMapping("{bookId}")
     public ResponseEntity<String> favoriteBook(@PathVariable UUID bookId) {
-        String message = favoriteBookService.create(bookId);
-        return ResponseEntity.status(201).body(message);
+        String message = favoriteBookService.favoriteBook(bookId);
+        return ResponseEntity.status(200).body(message);
     }
 
     // rota para pegar os livros favoritos do usuário logado
@@ -38,6 +38,22 @@ public class FavoriteBookController {
         return ResponseEntity.status(200).body(favoriteBookList);
     }
 
+    // rota para desfavoritar livros
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("{bookId}")
+    public ResponseEntity<String> unfavoriteBook(@PathVariable UUID bookId) {
+        String message = favoriteBookService.unfavoriteBook(bookId);
+        return ResponseEntity.status(200).body(message);
+    }
+
+//    todo
+//    rotas :
+//        uma rota que pega todos os livros favoritados do usuário
+//        uma rota que pega todos os usuarios que favoritaram x livro
+//        rota para desfavoritar livro - ok
+//        rota que retorna se o livro ta favoritado ou não
+//        rota que retorna toda a relação de livros favoritados (livro x usuario)
+//        rota que contabiliza a quantidade de favoritos do livro
 
 // TODO
 // fazer essa rota, ver o que quero que retorne

@@ -20,7 +20,7 @@ public class FavoriteBookService {
     private final MyBooksRepository mbRepository;
     private Validation userValidation;
 
-    public String create(UUID bookId) {
+    public String favoriteBook(UUID bookId) {
         UUID userId = userValidation.userAuthenticator();
         MyBooks myBooks = mbRepository.findMyBooksByBookIdAndUserId(bookId, userId);
         if (myBooks == null) {
@@ -44,5 +44,17 @@ public class FavoriteBookService {
                     return fbDTO;
                 }
         ).toList();
+    }
+
+    public String unfavoriteBook(UUID bookId) {
+        UUID userId = userValidation.userAuthenticator();
+        MyBooks myBooks = mbRepository.findMyBooksByBookIdAndUserId(bookId, userId);
+        if (myBooks == null) {
+            throw new NotFoundException("Para desfavoritar um livro é necessário adiciona-lo a sua biblioteca.");
+        } else {
+            myBooks.setFavorite(false);
+            mbRepository.save(myBooks);
+        }
+        return "Livro desfavoritado com sucesso!";
     }
 }
