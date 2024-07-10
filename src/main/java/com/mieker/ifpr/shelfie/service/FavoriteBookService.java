@@ -61,4 +61,14 @@ public class FavoriteBookService {
                 }
         ).toList();
     }
+
+    public boolean isFavorited(UUID bookId) {
+        UUID userId = userValidation.userAuthenticator();
+        MyBooks myBooks = mbRepository.findMyBooksByBookIdAndUserId(bookId, userId);
+        if (myBooks == null) {
+            return false;
+        } else {
+            return myBooks.isFavorite();
+        }
+    }
 }

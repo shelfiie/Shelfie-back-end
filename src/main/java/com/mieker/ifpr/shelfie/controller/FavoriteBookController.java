@@ -1,8 +1,6 @@
 package com.mieker.ifpr.shelfie.controller;
 
 import com.mieker.ifpr.shelfie.dto.Book.FavoriteBookDTO;
-import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksDTO;
-import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import com.mieker.ifpr.shelfie.service.FavoriteBookService;
 import com.mieker.ifpr.shelfie.service.MyBookService;
 import lombok.AllArgsConstructor;
@@ -10,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,6 +48,13 @@ public class FavoriteBookController {
     public ResponseEntity<List<FavoriteBookDTO>> getFavoriteBooksByUserId(@PathVariable UUID userId) {
         List<FavoriteBookDTO> favoriteBookList = favoriteBookService.getFavoriteBooksByUserId(userId);
         return ResponseEntity.status(200).body(favoriteBookList);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("{bookId}")
+    public ResponseEntity<Boolean> isFavorited(@PathVariable UUID bookId) {
+        boolean isFavorited = favoriteBookService.isFavorited(bookId);
+        return ResponseEntity.status(200).body(isFavorited);
     }
 
 //    todo
