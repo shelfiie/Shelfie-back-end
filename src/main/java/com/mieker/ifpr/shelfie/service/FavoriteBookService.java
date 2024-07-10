@@ -35,15 +35,7 @@ public class FavoriteBookService {
 
     public List<FavoriteBookDTO> getMyFavoriteBooks() {
         UUID userId = userValidation.userAuthenticator();
-        List<MyBooks> myBooksList = mbRepository.findMyBooksByUserIdAndFavorite(userId, true);
-        return myBooksList.stream().map(
-                myBooks -> {
-                    FavoriteBookDTO fbDTO = new FavoriteBookDTO();
-                    fbDTO.setBookId(myBooks.getBook().getId());
-                    fbDTO.setTitle(myBooks.getBook().getTitle());
-                    return fbDTO;
-                }
-        ).toList();
+        return this.getFavoriteBooksByUserId(userId);
     }
 
     public String unfavoriteBook(UUID bookId) {
@@ -56,5 +48,17 @@ public class FavoriteBookService {
             mbRepository.save(myBooks);
         }
         return "Livro desfavoritado com sucesso!";
+    }
+
+    public List<FavoriteBookDTO> getFavoriteBooksByUserId(UUID userId) {
+        List<MyBooks> myBooksList = mbRepository.findMyBooksByUserIdAndFavorite(userId, true);
+        return myBooksList.stream().map(
+                myBooks -> {
+                    FavoriteBookDTO fbDTO = new FavoriteBookDTO();
+                    fbDTO.setBookId(myBooks.getBook().getId());
+                    fbDTO.setTitle(myBooks.getBook().getTitle());
+                    return fbDTO;
+                }
+        ).toList();
     }
 }
