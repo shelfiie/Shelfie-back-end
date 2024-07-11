@@ -23,31 +23,27 @@ public class FavoriteBookService {
     public String favoriteBook(UUID bookId) {
         UUID userId = userValidation.userAuthenticator();
         MyBooks myBooks = mbRepository.findMyBooksByBookIdAndUserId(bookId, userId);
+        String message;
         if (myBooks == null) {
             throw new NotFoundException("Para favoritar um livro é necessário adiciona-lo a sua biblioteca.");
         } else {
-            myBooks.setFavorite(true);
-            mbRepository.save(myBooks);
+            if (myBooks.isFavorite()) {
+                myBooks.setFavorite(false);
+                mbRepository.save(myBooks);
+                message = "Livro desfavoritado com sucesso!";
+            } else {
+                myBooks.setFavorite(true);
+                mbRepository.save(myBooks);
+                message = "Livro favoritado com sucesso!";
+            }
         }
-        return "Livro favoritado com sucesso!";
+        return message;
     }
 
 
     public List<FavoriteBookDTO> getMyFavoriteBooks() {
         UUID userId = userValidation.userAuthenticator();
         return this.getFavoriteBooksByUserId(userId);
-    }
-
-    public String unfavoriteBook(UUID bookId) {
-        UUID userId = userValidation.userAuthenticator();
-        MyBooks myBooks = mbRepository.findMyBooksByBookIdAndUserId(bookId, userId);
-        if (myBooks == null) {
-            throw new NotFoundException("Para desfavoritar um livro é necessário adiciona-lo a sua biblioteca.");
-        } else {
-            myBooks.setFavorite(false);
-            mbRepository.save(myBooks);
-        }
-        return "Livro desfavoritado com sucesso!";
     }
 
     public List<FavoriteBookDTO> getFavoriteBooksByUserId(UUID userId) {
@@ -65,10 +61,10 @@ public class FavoriteBookService {
     public boolean isFavorited(UUID bookId) {
         UUID userId = userValidation.userAuthenticator();
         MyBooks myBooks = mbRepository.findMyBooksByBookIdAndUserId(bookId, userId);
-        if (myBooks == null) {
-            return false;
-        } else {
+        if (myBooks != null) {
             return myBooks.isFavorite();
+        } else {
+            return false;
         }
     }
 }

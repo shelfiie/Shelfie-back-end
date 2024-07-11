@@ -30,7 +30,7 @@ public class MyBooks {
     @Column(name = "my_books_enabled", nullable = false)
     private boolean enabled = true;
     @Column(name = "my_books_favorite", nullable = false)
-    private boolean favorite = false;
+    private boolean favorite;
     @CreationTimestamp(source = SourceType.DB)
     @Column(name = "my_books_created_at", nullable = false, updatable = false)
     private LocalDate createdAt;
