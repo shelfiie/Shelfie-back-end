@@ -31,12 +31,12 @@ public class MyBookService {
     private final BookApiService bookApiService;
     private final BookService bookService;
     private final MyBooksMapper myBooksMapper;
-    private Validation userValidation;
+    private Validation validation;
 
 
     //    criar associação do livro ao usuário
     public MyBooksDTO create(String googleId, BookStatus bookStatus) throws ParseException {
-        UUID userId = userValidation.userAuthenticator();
+        UUID userId = validation.userAuthenticator();
         Optional<Book> optionalBook = bookRepository.findByGoogleId(googleId);
         MyBooks myBook = optionalBook.isPresent() ? addBookToUser(optionalBook.get().getId(), userId, bookStatus) : createBookAndAddToUser(googleId, userId, bookStatus);
         return myBooksMapper.myBookToMyBookDTO(myBook);
@@ -96,7 +96,7 @@ public class MyBookService {
 
 //    pega todos mybooks de um usuario
     public List<MyBooksDTO> getMyBooksByUserId() {
-        UUID userId = userValidation.userAuthenticator();
+        UUID userId = validation.userAuthenticator();
         List<MyBooks> myBooks = myBooksRepository.findAllByUserIdAndEnabledTrue(userId);
         return myBooks.stream().map(myBooksMapper::myBookToMyBookDTO).collect(Collectors.toList());
     }
@@ -108,7 +108,7 @@ public class MyBookService {
     }
 
     public List<MyBooksDTO> getMyBooksByStatus(BookStatus bookStatus) {
-        UUID userId = userValidation.userAuthenticator();
+        UUID userId = validation.userAuthenticator();
         List<MyBooks> myBooks = myBooksRepository.findAllByUserIdAndBookStatus(userId, bookStatus);
         return myBooks.stream().map(myBooksMapper::myBookToMyBookDTO).collect(Collectors.toList());
     }

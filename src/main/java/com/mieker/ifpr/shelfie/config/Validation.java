@@ -1,21 +1,23 @@
 package com.mieker.ifpr.shelfie.config;
 
 import com.mieker.ifpr.shelfie.entity.User;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 import java.util.regex.Pattern;
 
 // TODO:
 //  Implementar validação de senha
+@Component
 public class Validation {
 
     public static boolean emailValidation(String emailAddress) {
-//        String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9\\+_-]+(\\.[A-Za-z0-9\\+_-]+)*@[^-][A-Za-z0-9\\+-]+(\\.[A-Za-z0-9\\+-]+)*(\\.[A-Za-z]{2,})$";
         String regexPattern = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
-
         return Pattern.compile(regexPattern)
                 .matcher(emailAddress)
                 .matches();

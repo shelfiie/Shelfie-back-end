@@ -1,0 +1,1 @@
+ALTER TABLE IF EXISTS tb_review ALTER COLUMN review_review TYPE VARCHAR(2000);

@@ -23,7 +23,7 @@ public class AdminController {
     public ResponseEntity<User> createAdmin(@RequestBody RegisterUserDTO registerUserDTO) {
         User createAdmin = userService.createAdministrator(registerUserDTO);
 
-        return ResponseEntity.ok(createAdmin);
+        return ResponseEntity.status(201).body(createAdmin);
     }
 }
 

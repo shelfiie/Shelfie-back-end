@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.UUID;
@@ -25,6 +26,9 @@ public class Review {
     private String review;
     @Column(name = "review_enabled")
     private boolean enabled = true;
+    @UpdateTimestamp(source = SourceType.DB)
+    @Column(name = "review_updated_at")
+    private Date updatedAt;
     @CreationTimestamp(source = SourceType.DB)
     @Column(name = "review_created_at", nullable = false, updatable = false)
     private Date createdAt;
