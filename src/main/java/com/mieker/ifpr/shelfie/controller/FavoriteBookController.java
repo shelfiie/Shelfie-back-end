@@ -58,10 +58,17 @@ public class FavoriteBookController {
         return ResponseEntity.status(200).body(favoriteBookList);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/all")
+    public ResponseEntity<List<ListUserFavoriteBookDTO>> getAllFavoriteBooksAndUsersList() {
+        List<ListUserFavoriteBookDTO> favoriteBookList = favoriteBookService.getAllFavoriteBooks();
+        return ResponseEntity.status(200).body(favoriteBookList);
+    }
+
 //    todo
 //    rotas :
 //        uma rota que pega todos os livros favoritados do usuário - ok
-//        uma rota que pega todos os usuarios que favoritaram x livro
+//        uma rota que pega todos os usuarios que favoritaram x livro - ok
 //        rota que retorna se o livro ta favoritado ou não - ok
 //        rota que retorna toda a relação de livros favoritados (livro x usuario)
 //        rota que contabiliza a quantidade de favoritos do livro

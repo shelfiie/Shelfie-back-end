@@ -81,6 +81,24 @@ public class FavoriteBookService {
                     listUserDTO.setUserId(user.getId());
                     listUserDTO.setName(user.getName());
                     listUserDTO.setUserImage(user.getImage());
+                    listUserDTO.setBookId(bookId);
+                    listUserDTO.setTitle(myBooks.getBook().getTitle());
+                    return listUserDTO;
+                }
+        ).toList();
+    }
+
+    public List<ListUserFavoriteBookDTO> getAllFavoriteBooks() {
+        List<MyBooks> myBooksList = mbRepository.findMyBooksByFavorite(true);
+        return myBooksList.stream().map(
+                myBooks -> {
+                    ListUserFavoriteBookDTO listUserDTO = new ListUserFavoriteBookDTO();
+                    User user = userRepository.findById(myBooks.getUser().getId()).get();
+                    listUserDTO.setUserId(user.getId());
+                    listUserDTO.setName(user.getName());
+                    listUserDTO.setUserImage(user.getImage());
+                    listUserDTO.setBookId(myBooks.getBook().getId());
+                    listUserDTO.setTitle(myBooks.getBook().getTitle());
                     return listUserDTO;
                 }
         ).toList();

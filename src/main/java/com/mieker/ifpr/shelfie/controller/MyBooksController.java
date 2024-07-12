@@ -86,7 +86,11 @@ public class MyBooksController {
 //    pega todos os mybooks do usuário que estão enabled
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mine")
-    public ResponseEntity<List<MyBooksDTO>> getMyBooksByUserId(@PathVariable UUID userId) {
+//    todo
+//    investigar essa rota
+//    ver se ela precisa que passe um parametro
+//    talvez criar uma nova rota q passa o id como parâmetro
+    public ResponseEntity<List<MyBooksDTO>> getMyBooksByUserId() {
         List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByUserId();
         return ResponseEntity.ok(myBooksDTO);
     }
