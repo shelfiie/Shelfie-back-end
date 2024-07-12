@@ -1,6 +1,7 @@
 package com.mieker.ifpr.shelfie.controller;
 
 import com.mieker.ifpr.shelfie.dto.Book.FavoriteBookDTO;
+import com.mieker.ifpr.shelfie.dto.Book.ListUserFavoriteBookDTO;
 import com.mieker.ifpr.shelfie.service.FavoriteBookService;
 import com.mieker.ifpr.shelfie.service.MyBookService;
 import lombok.AllArgsConstructor;
@@ -48,6 +49,13 @@ public class FavoriteBookController {
     public ResponseEntity<Boolean> isFavorited(@PathVariable UUID bookId) {
         boolean isFavorited = favoriteBookService.isFavorited(bookId);
         return ResponseEntity.status(200).body(isFavorited);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/books/{bookId}")
+    public ResponseEntity<List<ListUserFavoriteBookDTO>> getFavoriteBooksByBookId(@PathVariable UUID bookId) {
+        List<ListUserFavoriteBookDTO> favoriteBookList = favoriteBookService.getFavoriteBooksByBookId(bookId);
+        return ResponseEntity.status(200).body(favoriteBookList);
     }
 
 //    todo

@@ -32,7 +32,6 @@ public class User implements UserDetails {
     private String name;
     @Column(name = "user_nickname", unique = true, nullable = false)
     private String nickname;
-//    @Getter
     @Column(name = "user_password", nullable = false, updatable = false)
     private String password;
     @Column(name = "user_email", unique = true, nullable = false, updatable = false)

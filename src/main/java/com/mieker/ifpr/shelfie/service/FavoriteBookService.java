@@ -2,12 +2,15 @@ package com.mieker.ifpr.shelfie.service;
 
 import com.mieker.ifpr.shelfie.config.Validation;
 import com.mieker.ifpr.shelfie.dto.Book.FavoriteBookDTO;
+import com.mieker.ifpr.shelfie.dto.Book.ListUserFavoriteBookDTO;
 import com.mieker.ifpr.shelfie.dto.Review.ReviewDTO;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.Review;
+import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import com.mieker.ifpr.shelfie.exception.NotFoundException;
 import com.mieker.ifpr.shelfie.repository.MyBooksRepository;
+import com.mieker.ifpr.shelfie.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class FavoriteBookService {
     private final MyBooksRepository mbRepository;
+    private final UserRepository userRepository;
     private Validation userValidation;
 
     public String favoriteBook(UUID bookId) {
@@ -66,5 +70,19 @@ public class FavoriteBookService {
         } else {
             return false;
         }
+    }
+
+    public List<ListUserFavoriteBookDTO> getFavoriteBooksByBookId(UUID bookId) {
+        List<MyBooks> myBooksList = mbRepository.findMyBooksByBookIdAndFavorite(bookId, true);
+        return myBooksList.stream().map(
+                myBooks -> {
+                    ListUserFavoriteBookDTO listUserDTO = new ListUserFavoriteBookDTO();
+                    User user = userRepository.findById(myBooks.getUser().getId()).get();
+                    listUserDTO.setUserId(user.getId());
+                    listUserDTO.setName(user.getName());
+                    listUserDTO.setUserImage(user.getImage());
+                    return listUserDTO;
+                }
+        ).toList();
     }
 }
