@@ -28,4 +28,10 @@ public interface MyBooksRepository extends JpaRepository<MyBooks, UUID> {
     List<MyBooks> findByUserId(UUID id);
 
     List<MyBooks> findAllByUserId(UUID userId);
+
+    List<MyBooks> findMyBooksByUserIdAndFavorite(UUID userId, boolean isFavorite);
+
+    List<MyBooks> findMyBooksByBookIdAndFavorite(UUID bookId, boolean isFavorite);
+
+    List<MyBooks> findMyBooksByFavorite(boolean isFavorite);
 }

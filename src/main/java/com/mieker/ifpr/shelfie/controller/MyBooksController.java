@@ -25,11 +25,6 @@ import java.util.UUID;
 public class MyBooksController {
 
     private final MyBookService myBookService;
-    private final ModelMapper mapper;
-
-//    todo:
-//    editar aq, n precisa passar o usuario como parametro
-//    pegar ele do token
 
 //    rota que associa um usuário reader a um livro
     @PreAuthorize("isAuthenticated()")
@@ -91,7 +86,11 @@ public class MyBooksController {
 //    pega todos os mybooks do usuário que estão enabled
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mine")
-    public ResponseEntity<List<MyBooksDTO>> getMyBooksByUserId(@PathVariable UUID userId) {
+//    todo
+//    investigar essa rota
+//    ver se ela precisa que passe um parametro
+//    talvez criar uma nova rota q passa o id como parâmetro
+    public ResponseEntity<List<MyBooksDTO>> getMyBooksByUserId() {
         List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByUserId();
         return ResponseEntity.ok(myBooksDTO);
     }
@@ -102,57 +101,6 @@ public class MyBooksController {
         List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(booksStatus);
         return ResponseEntity.ok(myBooksDTO);
     }
-
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/em-espera")
-//    public ResponseEntity<List<MyBooksDTO>> getMyBooksByStatusEmEspera () {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User currentUser = (User) authentication.getPrincipal();
-//        UUID userId = currentUser.getId();
-//        System.out.println(userId);
-//        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(userId, BookStatus.EM_ESPERA);
-//        return ResponseEntity.ok(myBooksDTO);
-//    }
-//
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/abandonado")
-//    public ResponseEntity<List<MyBooksDTO>> getMyBooksByStatusAbandonado () {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User currentUser = (User) authentication.getPrincipal();
-//        UUID userId = currentUser.getId();
-//        System.out.println(userId);
-//        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(userId, BookStatus.ABANDONADO);
-//        return ResponseEntity.ok(myBooksDTO);
-//    }
-//
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/lido")
-//    public ResponseEntity<List<MyBooksDTO>> getMyBooksByStatusLido () {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User currentUser = (User) authentication.getPrincipal();
-//        UUID userId = currentUser.getId();
-//        System.out.println(userId);
-//        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(BookStatus.LIDO);
-//        return ResponseEntity.ok(myBooksDTO);
-//    }
-//
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/quero-ler")
-//    public ResponseEntity<List<MyBooksDTO>> getMyBooksByStatusQueroLer () {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User currentUser = (User) authentication.getPrincipal();
-//        UUID userId = currentUser.getId();
-//        System.out.println(userId);
-//        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(userId, BookStatus.QUERO_LER);
-//        return ResponseEntity.ok(myBooksDTO);
-//    }
-//
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/lendo")
-//    public ResponseEntity<List<MyBooksDTO>> getMyBooksByStatusLendo () {
-//        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(BookStatus.LENDO);
-//        return ResponseEntity.ok(myBooksDTO);
-//    }
 
 //    rota para retornar todos os mybooks de um livro
     @PreAuthorize("hasRole('ROLE_ADMIN')")
