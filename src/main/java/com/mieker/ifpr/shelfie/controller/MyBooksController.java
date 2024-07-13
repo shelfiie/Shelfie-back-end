@@ -1,6 +1,7 @@
 package com.mieker.ifpr.shelfie.controller;
 
 import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksDTO;
+import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksEnabledDTO;
 import com.mieker.ifpr.shelfie.dto.MyBooks.UpdateMyBooksDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
@@ -100,6 +101,13 @@ public class MyBooksController {
     public ResponseEntity<List<MyBooksDTO>> getMyBooksByStatus (@PathVariable BookStatus booksStatus) {
         List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(booksStatus);
         return ResponseEntity.ok(myBooksDTO);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/is-enabled/{googleId}")
+    public ResponseEntity<MyBooksEnabledDTO> isEnabled (@PathVariable String googleId) {
+        MyBooksEnabledDTO isEnabled = myBookService.isEnabled(googleId);
+        return ResponseEntity.ok(isEnabled);
     }
 
 //    rota para retornar todos os mybooks de um livro
