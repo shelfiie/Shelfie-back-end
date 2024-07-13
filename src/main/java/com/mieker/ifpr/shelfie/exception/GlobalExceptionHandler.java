@@ -1,6 +1,7 @@
 package com.mieker.ifpr.shelfie.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import org.apache.coyote.BadRequestException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -54,9 +55,19 @@ public class GlobalExceptionHandler extends Throwable {
             errorDetail.setProperty("description", "Ocorreu um erro de violação de integridade de dados.");
         }
 
+        if (exception instanceof ExceededPageLimitException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), exception.getMessage());
+            errorDetail.setProperty("description", "A quantidade de páginas adicionadas é maior que a quantidade total de páginas do livro.");
+        }
+
         if (exception instanceof MethodArgumentTypeMismatchException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), exception.getMessage());
             errorDetail.setProperty("description", "O parâmetro passado é inválido.");
+        }
+
+        if (exception instanceof BadRequestException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), exception.getMessage());
+            errorDetail.setProperty("description", "Bad request.");
         }
 
         if (exception instanceof RuntimeException) {

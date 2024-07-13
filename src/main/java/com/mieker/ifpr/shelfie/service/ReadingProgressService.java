@@ -10,12 +10,14 @@ import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.ReadingProgress;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
+import com.mieker.ifpr.shelfie.exception.ExceededPageLimitException;
 import com.mieker.ifpr.shelfie.mapper.MyBooksMapper;
 import com.mieker.ifpr.shelfie.mapper.ReadingProgressMapper;
 import com.mieker.ifpr.shelfie.repository.BookRepository;
 import com.mieker.ifpr.shelfie.repository.MyBooksRepository;
 import com.mieker.ifpr.shelfie.repository.ReadingProgressRepository;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +38,7 @@ public class ReadingProgressService {
     private final MyBooksMapper myBooksMapper;
     private final ReadingProgressMapper rpMapper;
 
-    public String create (ReadingProgressDTO rpDTO) {
+    public String create (ReadingProgressDTO rpDTO) throws BadRequestException {
         ReadingProgress rp = new ReadingProgress();
         MyBooksDTO mbDTO = myBookService.getMyBooksById(rpDTO.getMyBooksId());
         MyBooks myBooks = myBooksMapper.myBookDTOtoMyBook(mbDTO);
@@ -53,9 +55,9 @@ public class ReadingProgressService {
             rpRepository.save(rp);
             message = "Progresso de leitura criado com sucesso.";
         } else if (rpDTO.getPage() >= books.getPages()){
-            message = "Quantidades de páginas adicionadas acima da quantidade total de páginas do livro.";
+            throw new ExceededPageLimitException("Você não tem permissão para adicionar progresso de leitura a este livro.");
         } else {
-            message = "Não foi possível criar o progresso de leitura.";
+            throw new BadRequestException("Você não tem permissão para adicionar progresso de leitura a este livro.");
         }
         return message;
     }
