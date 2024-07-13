@@ -1,6 +1,7 @@
 package com.mieker.ifpr.shelfie.mapper;
 
 import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksDTO;
+import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksEnabledDTO;
 import com.mieker.ifpr.shelfie.dto.MyBooks.UpdateMyBooksDTO;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
 import org.modelmapper.ModelMapper;
@@ -39,6 +40,10 @@ public class MyBooksMapper {
         UpdateMyBooksDTO updateMyBooksDTO = mapper.map(myBooksToUpdate, UpdateMyBooksDTO.class);
         System.out.println("mapper" + updateMyBooksDTO);
         return updateMyBooksDTO;
+    }
+
+    public MyBooksEnabledDTO myBookToMyBookEnabledDTO(MyBooks myBooks) {
+        return mapper.map(myBooks, MyBooksEnabledDTO.class);
     }
 }
 

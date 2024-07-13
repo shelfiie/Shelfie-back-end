@@ -3,11 +3,14 @@ package com.mieker.ifpr.shelfie.service;
 import com.mieker.ifpr.shelfie.config.Validation;
 import com.mieker.ifpr.shelfie.dto.Book.BookDTO;
 import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksDTO;
+import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksEnabledDTO;
 import com.mieker.ifpr.shelfie.dto.MyBooks.UpdateMyBooksDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
+import com.mieker.ifpr.shelfie.exception.IdNotFoundException;
+import com.mieker.ifpr.shelfie.exception.NotFoundException;
 import com.mieker.ifpr.shelfie.mapper.MyBooksMapper;
 import com.mieker.ifpr.shelfie.repository.BookRepository;
 import com.mieker.ifpr.shelfie.repository.MyBooksRepository;
@@ -111,5 +114,17 @@ public class MyBookService {
         UUID userId = validation.userAuthenticator();
         List<MyBooks> myBooks = myBooksRepository.findAllByUserIdAndBookStatus(userId, bookStatus);
         return myBooks.stream().map(myBooksMapper::myBookToMyBookDTO).collect(Collectors.toList());
+    }
+
+    public MyBooksEnabledDTO isEnabled(String googleId) {
+        UUID userId = validation.userAuthenticator();
+        Book book = bookRepository.findByGoogleId(googleId).orElseThrow(() -> new IdNotFoundException("Não existe livro com esse googleId: " + googleId));
+        MyBooks myBooks = myBooksRepository.findByUserIdAndBookId(userId, book.getId());
+        if (myBooks != null) {
+            return myBooksMapper.myBookToMyBookEnabledDTO(myBooks);
+        } else {
+            throw new NotFoundException("Esse livro não está na biblioteca do usuário.");
+        }
+
     }
 }
