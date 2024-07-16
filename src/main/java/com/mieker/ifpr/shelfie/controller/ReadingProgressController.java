@@ -7,6 +7,7 @@ import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.exception.GlobalExceptionHandler;
 import com.mieker.ifpr.shelfie.service.ReadingProgressService;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,7 +30,7 @@ public class ReadingProgressController {
     @PostMapping
 //    todo:
 //    arrumar essa aqui q só usuários relacionados a mybooks podem adicionar leituras nela
-    public ResponseEntity<String> createReadingProgression(@RequestBody ReadingProgressDTO readingProgressDTO) {
+    public ResponseEntity<String> createReadingProgression(@RequestBody ReadingProgressDTO readingProgressDTO) throws BadRequestException {
         String message = rpService.create(readingProgressDTO);
         return ResponseEntity.status(201).body(message);
     }
