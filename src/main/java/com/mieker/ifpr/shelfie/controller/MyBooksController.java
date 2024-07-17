@@ -31,7 +31,6 @@ public class MyBooksController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("{googleId}/{bookStatus}")
     public ResponseEntity<MyBooksDTO> createMyBooks(@PathVariable String googleId, @PathVariable BookStatus bookStatus) throws ParseException {
-
         MyBooksDTO myBooksDTO = myBookService.create(googleId, bookStatus);
         return ResponseEntity.status(201).body(myBooksDTO);
     }
@@ -47,7 +46,6 @@ public class MyBooksController {
 
 //    rota do usuario reader
 //    retorna o mybooks do id passado como parâmetro
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<MyBooksDTO> getMyBooksById(@PathVariable UUID id) {
@@ -72,15 +70,16 @@ public class MyBooksController {
     }
 
 //    todo
-//    quando o user der disabled no mybooks apaga tudo, so fica o id do mybooks e do livro
+//    quando der disable no mybook dar disable na reading progression tbm
+
 
 //    TODO
 //    refletir sobre isso aqui !!!
 //    retorno só o id do livro e o status do livro ? dont knowrr
 //    rota para atualizar o status do livro
-    @PutMapping("/{id}/update/{bookStatus}")
-    public ResponseEntity<UpdateMyBooksDTO> updateMyBooks(@PathVariable UUID myBooksid, @PathVariable BookStatus bookStatus) {
-        UpdateMyBooksDTO updateMyBooksDTO = myBookService.updateMyBooks(myBooksid, bookStatus);
+    @PutMapping("/{bookId}/update/{bookStatus}")
+    public ResponseEntity<UpdateMyBooksDTO> updateMyBooks(@PathVariable UUID bookId, @PathVariable BookStatus bookStatus) {
+        UpdateMyBooksDTO updateMyBooksDTO = myBookService.updateMyBooks(bookId, bookStatus);
         return ResponseEntity.ok(updateMyBooksDTO);
     }
 

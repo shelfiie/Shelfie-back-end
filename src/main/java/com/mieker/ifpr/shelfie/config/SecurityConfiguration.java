@@ -44,14 +44,6 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-//    Exclude specific URLs from Spring Security to allow public access to Swagger UI and API documentation.
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return web -> web.ignoring().requestMatchers(
-//                "/swagger-ui/**", "/api-docs/**"
-//        );
-//    }
-
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
