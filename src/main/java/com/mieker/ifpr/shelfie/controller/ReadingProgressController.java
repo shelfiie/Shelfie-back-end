@@ -28,17 +28,16 @@ public class ReadingProgressController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping
-//    todo:
-//    arrumar essa aqui q só usuários relacionados a mybooks podem adicionar leituras nela
     public ResponseEntity<String> createReadingProgression(@RequestBody ReadingProgressDTO readingProgressDTO) throws BadRequestException {
         String message = rpService.create(readingProgressDTO);
         return ResponseEntity.status(201).body(message);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{myBooksId}")
-    public ResponseEntity<List<CollectionOfMyBooksDTO>> getReadingProgressByMyBooksId(@PathVariable UUID myBooksId) {
-        return ResponseEntity.ok(rpService.getReadingProgressByMyBooksId(myBooksId));
+    @GetMapping("/{bookId}")
+    public ResponseEntity<List<CollectionOfMyBooksDTO>> getReadingProgressByMyBooksId(@PathVariable UUID bookId) {
+        List<CollectionOfMyBooksDTO> rpList = rpService.getReadingProgressByBookId(bookId);
+        return ResponseEntity.ok(rpList);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -47,13 +46,12 @@ public class ReadingProgressController {
         return ResponseEntity.ok(rpService.getAllReadingProgress());
     }
 
+//    TODO
+//    ver se vai precisar de uma rota dessa passando o id do usuario
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<List<CollectionOfMyBooksDTO>> getReadingProgressByUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        UUID userId = currentUser.getId();
-        List<CollectionOfMyBooksDTO> rpList = rpService.getReadingProgressByUserId(userId);
+        List<CollectionOfMyBooksDTO> rpList = rpService.getReadingProgressByUserId();
         return ResponseEntity.ok(rpList);
     }
 
