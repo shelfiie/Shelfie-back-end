@@ -79,16 +79,18 @@ public class MyBookService {
     }
 
 //    esse é pra atualizar o status do livro
-    public UpdateMyBooksDTO updateMyBooks(UUID id, BookStatus bookStatus) {
-        MyBooks myBooksToUpdate = myBooksRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("MyBooks not found with id: " + id));
-        this.updateStatus(myBooksToUpdate, bookStatus);
-        return myBooksMapper.updateMyBooks(myBooksToUpdate);
-    }
-
-    public void updateStatus(MyBooks myBooks, BookStatus bookStatus) {
+    public UpdateMyBooksDTO updateMyBooks(UUID bookId, BookStatus bookStatus) {
+        UUID userId = validation.userAuthenticator();
+        MyBooks myBooks = myBooksRepository.findMyBooksByBookIdAndUserId(bookId, userId);
+        if (myBooks == null) {
+            throw new NotFoundException("Esse livro não está na biblioteca do usuário.");
+        }
+        if (!myBooks.isEnabled()) {
+            myBooks.setEnabled(true);
+        }
         myBooks.setBookStatus(bookStatus);
         myBooksRepository.save(myBooks);
+        return myBooksMapper.updateMyBooks(myBooks);
     }
 
 //    retorna a lista de todos os mybooks do banco
