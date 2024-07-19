@@ -27,6 +27,7 @@ public class BookService {
         } else {
             BookDTO bookDTO = bookApiService.getBookByGoogleId(googleId);
             book = bookMapper.bookDTOtoBook(bookDTO);
+            System.out.println(book);
             return bookRepository.save(book);
         }
     }
