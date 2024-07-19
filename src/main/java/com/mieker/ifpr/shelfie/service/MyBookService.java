@@ -79,8 +79,9 @@ public class MyBookService {
     }
 
 //    esse é pra atualizar o status do livro
-    public UpdateMyBooksDTO updateMyBooks(UUID bookId, BookStatus bookStatus) {
+    public UpdateMyBooksDTO updateMyBooks(String googleId, BookStatus bookStatus) {
         UUID userId = validation.userAuthenticator();
+        UUID bookId = bookRepository.findByGoogleId(googleId).orElseThrow(() -> new IdNotFoundException("Não existe livro com esse googleId: " + googleId)).getId();
         MyBooks myBooks = myBooksRepository.findMyBooksByBookIdAndUserId(bookId, userId);
         if (myBooks == null) {
             throw new NotFoundException("Esse livro não está na biblioteca do usuário.");
