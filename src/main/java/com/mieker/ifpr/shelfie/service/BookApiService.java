@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -18,8 +19,9 @@ public class BookApiService {
     public BookDTO getBookByGoogleId(String googleId) {
         String uri = "/" + googleId;
         BookApiResponse response = this.fetchBookDataFromAPI(uri);
-
+        System.out.println(response);
         assert response != null;
+        System.out.println(this.setBook(response));
         return this.setBook(response);
     }
 
@@ -38,23 +40,36 @@ public class BookApiService {
         book.setGoogleId(response.getId());
         book.setTitle(response.getVolumeInfo().getTitle());
         book.setPages(response.getVolumeInfo().getPageCount());
+//        System.out.println(response.getVolumeInfo().getAuthors() != null
+//                ? String.join(", ", response.getVolumeInfo().getAuthors()) // Junta os autores com ", "
+//                : "");
+        String author = response.getVolumeInfo().getAuthors() != null ? String.join(", ", response.getVolumeInfo().getAuthors()) : "";
+        System.out.println(author);
+        book.setAuthors(author);
+//        System.out.println(response.getVolumeInfo().getAuthors());
+        book.setSmallThumbnailUrl(response.getVolumeInfo().getImageLinks().getSmallThumbnail());
+        book.setThumbnailUrl(response.getVolumeInfo().getImageLinks().getThumbnail());
         setIsbnIdentifiers(book, response.getVolumeInfo().getIndustryIdentifiers());
         return book;
     }
 
     private void setIsbnIdentifiers(BookDTO book, List<BookApiResponse.VolumeInfo.IndustryIdentifier> identifiers) {
+        String isbn13 = "";
+        String isbn10 = "";
         if (identifiers != null) {
             for (BookApiResponse.VolumeInfo.IndustryIdentifier identifier : identifiers) {
                 switch (identifier.getType()) {
                     case "ISBN_13":
-                        book.setIsbn13(identifier.getIdentifier());
+                        isbn13 = identifier.getIdentifier();
                         break;
                     case "ISBN_10":
-                        book.setIsbn10(identifier.getIdentifier());
+                        isbn10 = identifier.getIdentifier();
                         break;
                 }
             }
         }
+        book.setIsbn13(isbn13);
+        book.setIsbn10(isbn10);
     }
 
     

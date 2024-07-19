@@ -1,0 +1,3 @@
+ALTER TABLE IF EXISTS tb_book ADD COLUMN book_author VARCHAR(3000);
+ALTER TABLE IF EXISTS tb_book ADD COLUMN book_small_thumbnail_url VARCHAR(3000);
+ALTER TABLE IF EXISTS tb_book ADD COLUMN book_thumbnail_url VARCHAR(3000);

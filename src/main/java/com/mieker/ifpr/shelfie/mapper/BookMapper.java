@@ -24,6 +24,9 @@ public class BookMapper {
         book.setPages(bookDTO.getPages());
         book.setIsbn13(bookDTO.getIsbn13());
         book.setIsbn10(bookDTO.getIsbn10());
+        book.setAuthors(bookDTO.getAuthors());
+        book.setSmallThumbnailUrl(bookDTO.getSmallThumbnailUrl());
+        book.setThumbnailUrl(bookDTO.getThumbnailUrl());
         return book;
 //        olhar aqui
 //        o mapper.map ta dando erro de conversão?
