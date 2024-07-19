@@ -77,9 +77,9 @@ public class MyBooksController {
 //    refletir sobre isso aqui !!!
 //    retorno só o id do livro e o status do livro ? dont knowrr
 //    rota para atualizar o status do livro
-    @PutMapping("/{bookId}/update/{bookStatus}")
-    public ResponseEntity<UpdateMyBooksDTO> updateMyBooks(@PathVariable UUID bookId, @PathVariable BookStatus bookStatus) {
-        UpdateMyBooksDTO updateMyBooksDTO = myBookService.updateMyBooks(bookId, bookStatus);
+    @PutMapping("/{googleId}/update/{bookStatus}")
+    public ResponseEntity<UpdateMyBooksDTO> updateMyBooks(@PathVariable String googleId, @PathVariable BookStatus bookStatus) {
+        UpdateMyBooksDTO updateMyBooksDTO = myBookService.updateMyBooks(googleId, bookStatus);
         return ResponseEntity.ok(updateMyBooksDTO);
     }
 
