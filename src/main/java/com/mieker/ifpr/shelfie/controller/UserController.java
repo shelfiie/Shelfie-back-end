@@ -67,16 +67,9 @@ public class UserController {
     }
 
 //    para fazer o delete do usuário, mas só alterando seu status para disabled
-    @PutMapping("/{id}/disable")
-    public ResponseEntity<String> disableUser(@PathVariable UUID id) {
-        try {
-            UserDTO userDTO = userService.updateUserDisable(id);
-            String message = String.format("User '%s' disabled successfully", userDTO.getName());
-            return ResponseEntity.ok(message);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    @PutMapping("/{userId}/disable")
+    public ResponseEntity<String> disableUser(@PathVariable UUID userId) {
+        String message = userService.updateUserDisable(userId);
+        return ResponseEntity.ok(message);
     }
 }
