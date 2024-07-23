@@ -27,6 +27,12 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+//    implementar paginometro
+    private int paginometro(UUID userId) {
+        return 1000;
+    }
+
+
 //    criar um user admin
     public User createAdministrator(RegisterUserDTO input) {
         User user = new User();
@@ -61,7 +67,10 @@ public class UserService {
     public UserDTO getUserById(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
-        return userMapper.userToUserDTO(user);
+        UserDTO userDTO = userMapper.userToUserDTO(user);
+        userDTO.setPaginometro(this.paginometro(user.getId()));
+        System.out.println(userDTO.getPaginometro());
+        return userDTO;
     }
 
 //    pegar todos os usuários

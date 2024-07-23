@@ -49,12 +49,6 @@ public class User implements UserDetails {
     @Column(name = "user_created_at", nullable = false, updatable = false)
     private LocalDate createdAt;
 
-//    todo
-//    transformas isso aq em atributo
-    @Transient
-//    não vai persistir essa tabela
-    private Long paginometro;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.toString());
