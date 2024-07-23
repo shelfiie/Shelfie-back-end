@@ -58,12 +58,12 @@ public class UserController {
 //    endpoint de consulta do próprio usuário
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
-    public ResponseEntity<User> authenticatedUser()  {
+    public ResponseEntity<UserDTO> authenticatedUser()  {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication);
         User currentUser = (User) authentication.getPrincipal();
-        System.out.println(currentUser);
-        return ResponseEntity.ok(currentUser);
+        UUID userId = currentUser.getId();
+        UserDTO userDTO = userService.getUserById(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
 //    para fazer o delete do usuário, mas só alterando seu status para disabled
