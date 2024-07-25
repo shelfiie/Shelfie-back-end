@@ -14,4 +14,8 @@ public interface ReadingProgressRepository extends JpaRepository<ReadingProgress
 
     @Query("SELECT rp FROM ReadingProgress rp WHERE rp.myBooks.id = :myBooksId")
     List<ReadingProgress> findByMyBooksId(UUID myBooksId);
+
+    @Query("SELECT MAX(rp.page) FROM ReadingProgress rp WHERE rp.myBooks.id = :myBooksId")
+    int findMaxProgressByMyBooksId(UUID myBooksId);
+
 }
