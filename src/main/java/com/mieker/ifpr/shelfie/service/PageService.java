@@ -1,17 +1,19 @@
 package com.mieker.ifpr.shelfie.service;
 
 import com.mieker.ifpr.shelfie.config.Validation;
+import com.mieker.ifpr.shelfie.dto.MyBooks.BookRelationDTO;
 import com.mieker.ifpr.shelfie.dto.ReadingProgress.PageDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
+import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import com.mieker.ifpr.shelfie.exception.NotFoundException;
 import com.mieker.ifpr.shelfie.repository.BookRepository;
 import com.mieker.ifpr.shelfie.repository.MyBooksRepository;
 import com.mieker.ifpr.shelfie.repository.ReadingProgressRepository;
+import com.mieker.ifpr.shelfie.repository.ReviewRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,10 +24,7 @@ public class PageService {
     private final Validation validation;
     private final MyBooksRepository mbRepository;
     private final BookRepository bookRepository;
-
-//    todo
-//    I need to get the last page of the book passed as a parameter
-//    get the greatest number page
+    private final ReviewRepository reviewRepository;
 
     public PageDTO getMyLastPage(UUID bookId) {
         UUID userId = validation.userAuthenticator();
@@ -47,6 +46,27 @@ public class PageService {
         pageDTO.setPorcentage(porcentage);
 
         return pageDTO;
-//        return null;
     }
+
+    public BookRelationDTO getBookStatus() {
+        UUID userId = validation.userAuthenticator();
+        int lido = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.LIDO);
+        int lendo = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.LENDO);
+        int queroLer = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.QUERO_LER);
+        int abandonado = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.ABANDONADO);
+        int favorite = mbRepository.countMyBooksByUserIdAndFavorite(userId, true);
+        int review = mbRepository.countReviewByUserId(userId);
+        BookRelationDTO bookStatusDTO = new BookRelationDTO();
+        bookStatusDTO.setLIDO(lido);
+        bookStatusDTO.setLENDO(lendo);
+        bookStatusDTO.setQUERO_LER(queroLer);
+        bookStatusDTO.setABANDONADO(abandonado);
+        bookStatusDTO.setReview(review);
+        bookStatusDTO.setFavorite(favorite);
+        return bookStatusDTO;
+    }
+
+//    private int countReviews(UUID userId) {
+//        return reviewRepository.countReviewsByUserId(userId);
+//    }
 }
