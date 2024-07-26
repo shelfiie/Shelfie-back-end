@@ -6,6 +6,7 @@ import com.mieker.ifpr.shelfie.dto.User.UserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import com.mieker.ifpr.shelfie.exception.GlobalExceptionHandler;
+import com.mieker.ifpr.shelfie.exception.IdNotFoundException;
 import com.mieker.ifpr.shelfie.mapper.UserMapper;
 import com.mieker.ifpr.shelfie.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -55,12 +56,13 @@ public class UserService {
     }
 
 //    atualizar o usuário para disable
-    public UserDTO updateUserDisable(UUID id) throws ParseException {
+    public String updateUserDisable(UUID id) {
         User userToUpdate = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new IdNotFoundException("User not found with id: " + id));
         userToUpdate.setEnabled(false);
         userRepository.save(userToUpdate);
-        return userMapper.updateUserDisabled(userToUpdate);
+        System.out.println(userToUpdate.getEnabled());
+        return "Usuário desativado com sucesso";
     }
 
 //    pegar o usuário pelo id
