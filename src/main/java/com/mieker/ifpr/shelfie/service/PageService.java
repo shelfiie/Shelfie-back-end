@@ -1,0 +1,72 @@
+package com.mieker.ifpr.shelfie.service;
+
+import com.mieker.ifpr.shelfie.config.Validation;
+import com.mieker.ifpr.shelfie.dto.MyBooks.BookRelationDTO;
+import com.mieker.ifpr.shelfie.dto.ReadingProgress.PageDTO;
+import com.mieker.ifpr.shelfie.entity.Book;
+import com.mieker.ifpr.shelfie.entity.MyBooks;
+import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
+import com.mieker.ifpr.shelfie.exception.NotFoundException;
+import com.mieker.ifpr.shelfie.repository.BookRepository;
+import com.mieker.ifpr.shelfie.repository.MyBooksRepository;
+import com.mieker.ifpr.shelfie.repository.ReadingProgressRepository;
+import com.mieker.ifpr.shelfie.repository.ReviewRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+@AllArgsConstructor
+public class PageService {
+    private final ReadingProgressRepository rpRepository;
+    private final Validation validation;
+    private final MyBooksRepository mbRepository;
+    private final BookRepository bookRepository;
+    private final ReviewRepository reviewRepository;
+
+    public PageDTO getMyLastPage(UUID bookId) {
+        UUID userId = validation.userAuthenticator();
+        MyBooks myBooks = mbRepository.findMyBooksByBookIdAndUserId(bookId, userId);
+        if (myBooks == null) {
+            throw new NotFoundException("Esse livro não está na biblioteca do usuário.");
+        }
+        int page = rpRepository.findMaxProgressByMyBooksId(myBooks.getId());
+
+        Optional<Book> book = bookRepository.findById(bookId);
+        int totalPages = book.get().getPages();
+
+//        quantidade de páginas lidas x 100 / total de páginas
+
+        int porcentage = (page * 100) / totalPages;
+
+        PageDTO pageDTO = new PageDTO();
+        pageDTO.setPage(page);
+        pageDTO.setPorcentage(porcentage);
+
+        return pageDTO;
+    }
+
+    public BookRelationDTO getBookStatus() {
+        UUID userId = validation.userAuthenticator();
+        int lido = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.LIDO);
+        int lendo = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.LENDO);
+        int queroLer = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.QUERO_LER);
+        int abandonado = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.ABANDONADO);
+        int favorite = mbRepository.countMyBooksByUserIdAndFavorite(userId, true);
+        int review = mbRepository.countReviewByUserId(userId);
+        BookRelationDTO bookStatusDTO = new BookRelationDTO();
+        bookStatusDTO.setLIDO(lido);
+        bookStatusDTO.setLENDO(lendo);
+        bookStatusDTO.setQUERO_LER(queroLer);
+        bookStatusDTO.setABANDONADO(abandonado);
+        bookStatusDTO.setReview(review);
+        bookStatusDTO.setFavorite(favorite);
+        return bookStatusDTO;
+    }
+
+//    private int countReviews(UUID userId) {
+//        return reviewRepository.countReviewsByUserId(userId);
+//    }
+}
