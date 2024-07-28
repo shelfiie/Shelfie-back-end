@@ -19,7 +19,7 @@ public class UserDTO {
     private String nickname;
     private String email;
     private String image;
-    private boolean enabled;
+    private Boolean enabled;
     private UserRoles role;
     private int paginometro;
     private Date createdAt;

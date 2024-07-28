@@ -43,15 +43,17 @@ public class BookApiService {
         String author = response.getVolumeInfo().getAuthors() != null ? String.join(", ", response.getVolumeInfo().getAuthors()) : "";
         System.out.println(author);
         book.setAuthors(author);
-//        System.out.println(response.getVolumeInfo().getAuthors());
-//        book.setSmallThumbnailUrl(response.getVolumeInfo().getImageLinks().getSmallThumbnail());
-//        book.setThumbnailUrl(response.getVolumeInfo().getImageLinks().getThumbnail());
-        book.setSmallThumbnailUrl(response.getVolumeInfo().getImageLinks().getSmallThumbnail() != null
-                ? response.getVolumeInfo().getImageLinks().getSmallThumbnail()
-                : "https://centrodametropole.fflch.usp.br/sites/centrodametropole.fflch.usp.br/files/user_files/livros/imagem/capa-no-book-cover.png");
-        book.setThumbnailUrl(response.getVolumeInfo().getImageLinks().getThumbnail() != null
-                ? response.getVolumeInfo().getImageLinks().getThumbnail()
-                : "https://centrodametropole.fflch.usp.br/sites/centrodametropole.fflch.usp.br/files/user_files/livros/imagem/capa-no-book-cover.png");
+        if (response.getVolumeInfo().getImageLinks() == null) {
+            book.setSmallThumbnailUrl("https://centrodametropole.fflch.usp.br/sites/centrodametropole.fflch.usp.br/files/user_files/livros/imagem/capa-no-book-cover.png");
+            book.setThumbnailUrl("https://centrodametropole.fflch.usp.br/sites/centrodametropole.fflch.usp.br/files/user_files/livros/imagem/capa-no-book-cover.png");
+        } else {
+            book.setSmallThumbnailUrl(response.getVolumeInfo().getImageLinks().getSmallThumbnail() != null
+                    ? response.getVolumeInfo().getImageLinks().getSmallThumbnail()
+                    : "https://centrodametropole.fflch.usp.br/sites/centrodametropole.fflch.usp.br/files/user_files/livros/imagem/capa-no-book-cover.png");
+            book.setThumbnailUrl(response.getVolumeInfo().getImageLinks().getThumbnail() != null
+                    ? response.getVolumeInfo().getImageLinks().getThumbnail()
+                    : "https://centrodametropole.fflch.usp.br/sites/centrodametropole.fflch.usp.br/files/user_files/livros/imagem/capa-no-book-cover.png");
+        }
         setIsbnIdentifiers(book, response.getVolumeInfo().getIndustryIdentifiers());
         return book;
     }

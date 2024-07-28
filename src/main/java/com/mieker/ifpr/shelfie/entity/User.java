@@ -39,7 +39,7 @@ public class User implements UserDetails {
     @Column(name = "user_image")
     private String image;
     @Column(name = "user_enabled", nullable = false)
-    private boolean enabled = true;
+    private Boolean enabled = true;
 //    rota para ativar e rota para desativar
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false, updatable = false)
