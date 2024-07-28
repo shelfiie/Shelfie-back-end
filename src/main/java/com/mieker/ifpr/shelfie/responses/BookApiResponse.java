@@ -15,6 +15,7 @@ public class BookApiResponse {
         private String title;
         private List<String> authors;
         private Integer pageCount;
+        private String description;
         private List<IndustryIdentifier> industryIdentifiers;
         private ImageLinks imageLinks;
 

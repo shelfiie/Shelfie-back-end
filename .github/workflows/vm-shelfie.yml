@@ -42,6 +42,6 @@ jobs:
               kill "$PID"
             fi
             mvn package -Dmaven.test.skip=true
-            nohup java -jar target/shelfie-0.0.1-SNAPSHOT.jar > log.txt 2>&1 &
+            java -jar target/shelfie-0.0.1-SNAPSHOT.jar & > log.txt 2>&1
 
 

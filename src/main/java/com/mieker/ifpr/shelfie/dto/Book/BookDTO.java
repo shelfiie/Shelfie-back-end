@@ -16,6 +16,7 @@ public class BookDTO {
     private String authors;
     private String smallThumbnailUrl;
     private String thumbnailUrl;
+    private String description;
     private Integer pages;
     private String isbn13;
     private String isbn10;
