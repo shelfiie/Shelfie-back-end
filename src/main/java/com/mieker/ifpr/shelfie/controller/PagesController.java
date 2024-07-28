@@ -32,4 +32,11 @@ public class PagesController {
         return ResponseEntity.status(200).body(bookStatusDTO);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/paginometer")
+    public ResponseEntity<PageDTO> getPaginometer() {
+        PageDTO paginometer = pageService.getPaginometer();
+        return ResponseEntity.status(200).body(paginometer);
+    }
+
 }

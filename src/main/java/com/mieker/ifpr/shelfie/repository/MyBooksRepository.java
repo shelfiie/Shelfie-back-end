@@ -35,12 +35,12 @@ public interface MyBooksRepository extends JpaRepository<MyBooks, UUID> {
 
     List<MyBooks> findMyBooksByFavorite(boolean isFavorite);
 
-    MyBooks findByUserIdAndBookId(UUID userId, UUID id);
-
     int countMyBooksByUserIdAndBookStatus(UUID userId, BookStatus bookStatus);
 
     int countMyBooksByUserIdAndFavorite(UUID userId, boolean b);
 
     @Query("SELECT COUNT(r) FROM Review r JOIN r.myBooks mb WHERE mb.user.id = :userId")
     int countReviewByUserId(UUID userId);
+
+    MyBooks findMyBooksById(UUID myBooksId);
 }

@@ -34,6 +34,7 @@ public class MyBookService {
     private final BookApiService bookApiService;
     private final BookService bookService;
     private final MyBooksMapper myBooksMapper;
+    private final ReadingProgressService rpService;
     private Validation validation;
 
 
@@ -42,6 +43,9 @@ public class MyBookService {
         UUID userId = validation.userAuthenticator();
         Optional<Book> optionalBook = bookRepository.findByGoogleId(googleId);
         MyBooks myBook = optionalBook.isPresent() ? addBookToUser(optionalBook.get().getId(), userId, bookStatus) : createBookAndAddToUser(googleId, userId, bookStatus);
+        if (BookStatus.LIDO.equals(bookStatus)) {
+            rpService.createReadingProgressionDisabled(myBook.getId());
+        }
         return myBooksMapper.myBookToMyBookDTO(myBook);
     }
 
@@ -90,6 +94,9 @@ public class MyBookService {
             myBooks.setEnabled(true);
         }
         myBooks.setBookStatus(bookStatus);
+        if (BookStatus.LIDO.equals(bookStatus)) {
+            rpService.createReadingProgressionDisabled(myBooks.getId());
+        }
         myBooksRepository.save(myBooks);
         return myBooksMapper.updateMyBooks(myBooks);
     }
@@ -122,7 +129,7 @@ public class MyBookService {
     public MyBooksEnabledDTO isEnabled(String googleId) {
         UUID userId = validation.userAuthenticator();
         Book book = bookRepository.findByGoogleId(googleId).orElseThrow(() -> new IdNotFoundException("Não existe livro com esse googleId: " + googleId));
-        MyBooks myBooks = myBooksRepository.findByUserIdAndBookId(userId, book.getId());
+        MyBooks myBooks = myBooksRepository.findMyBooksByBookIdAndUserId(book.getId(), userId);
         if (myBooks != null) {
             return myBooksMapper.myBookToMyBookEnabledDTO(myBooks);
         } else {
