@@ -31,6 +31,8 @@ public class Book {
     private String isbn10;
     @Column(name = "book_pages", nullable = false, updatable = false)
     private Integer pages;
+    @Column(name = "book_description", updatable = false)
+    private String description;
     @Column(name = "book_small_thumbnail_url")
     private String smallThumbnailUrl;
     @Column(name = "book_thumbnail_url")

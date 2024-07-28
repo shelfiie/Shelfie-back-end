@@ -17,7 +17,7 @@ public class BookMapper {
         this.mapper = mapper;
     }
 
-    public Book bookDTOtoBook(BookDTO bookDTO) throws ParseException {
+    public Book bookDTOtoBook(BookDTO bookDTO) {
         Book book = new Book();
         book.setGoogleId(bookDTO.getGoogleId());
         book.setTitle(bookDTO.getTitle());
@@ -25,12 +25,10 @@ public class BookMapper {
         book.setIsbn13(bookDTO.getIsbn13());
         book.setIsbn10(bookDTO.getIsbn10());
         book.setAuthors(bookDTO.getAuthors());
+        book.setDescription(bookDTO.getDescription());
         book.setSmallThumbnailUrl(bookDTO.getSmallThumbnailUrl());
         book.setThumbnailUrl(bookDTO.getThumbnailUrl());
         return book;
-//        olhar aqui
-//        o mapper.map ta dando erro de conversão?
-//        return mapper.map(bookDTO, Book.class);
     }
 
     public BookDTO bookToBookDTO(Book book) {

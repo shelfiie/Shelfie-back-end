@@ -54,6 +54,7 @@ public class BookApiService {
                     ? response.getVolumeInfo().getImageLinks().getThumbnail()
                     : "https://centrodametropole.fflch.usp.br/sites/centrodametropole.fflch.usp.br/files/user_files/livros/imagem/capa-no-book-cover.png");
         }
+        book.setDescription(response.getVolumeInfo().getDescription());
         setIsbnIdentifiers(book, response.getVolumeInfo().getIndustryIdentifiers());
         return book;
     }

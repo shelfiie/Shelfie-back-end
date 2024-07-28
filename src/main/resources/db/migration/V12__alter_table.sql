@@ -1,0 +1,1 @@
+ALTER TABLE IF EXISTS tb_book ADD COLUMN book_description VARCHAR(5000);
