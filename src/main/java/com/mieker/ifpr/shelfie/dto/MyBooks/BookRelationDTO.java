@@ -10,4 +10,5 @@ public class BookRelationDTO {
     private int ABANDONADO;
     private int review;
     private int favorite;
+    private int paginometer;
 }

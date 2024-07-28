@@ -14,6 +14,7 @@ import com.mieker.ifpr.shelfie.repository.ReviewRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -56,6 +57,7 @@ public class PageService {
         int abandonado = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.ABANDONADO);
         int favorite = mbRepository.countMyBooksByUserIdAndFavorite(userId, true);
         int review = mbRepository.countReviewByUserId(userId);
+        int paginometer = this.paginometerCounter(userId);
         BookRelationDTO bookStatusDTO = new BookRelationDTO();
         bookStatusDTO.setLIDO(lido);
         bookStatusDTO.setLENDO(lendo);
@@ -63,10 +65,32 @@ public class PageService {
         bookStatusDTO.setABANDONADO(abandonado);
         bookStatusDTO.setReview(review);
         bookStatusDTO.setFavorite(favorite);
+        bookStatusDTO.setPaginometer(paginometer);
         return bookStatusDTO;
     }
 
-//    private int countReviews(UUID userId) {
-//        return reviewRepository.countReviewsByUserId(userId);
-//    }
+    public PageDTO getPaginometer() {
+        UUID userId = validation.userAuthenticator();
+        int paginometer = this.paginometerCounter(userId);
+//        List<MyBooks> myBooksList = mbRepository.findAllByUserId(userId);
+//        int paginometer = 0;
+//        for (MyBooks myBooks : myBooksList) {
+//            int page = rpRepository.findMaxProgressByMyBooksId(myBooks.getId());
+//            paginometer += page;
+//        }
+        PageDTO pageDTO = new PageDTO();
+        pageDTO.setPage(paginometer);
+        return pageDTO;
+    }
+
+    private int paginometerCounter (UUID userId) {
+        List<MyBooks> myBooksList = mbRepository.findAllByUserId(userId);
+        int paginometer = 0;
+        for (MyBooks myBooks : myBooksList) {
+            int page = rpRepository.findMaxProgressByMyBooksId(myBooks.getId());
+            paginometer += page;
+        }
+        return paginometer;
+    }
+
 }
