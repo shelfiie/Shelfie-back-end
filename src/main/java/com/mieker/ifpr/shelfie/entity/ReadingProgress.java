@@ -24,6 +24,8 @@ public class ReadingProgress {
     private MyBooks myBooks;
     @Column(name = "reading_progress_commentary")
     private String commentary;
+    @Column(name = "reading_progress_enabled", nullable = false)
+    private Boolean enabled = true;
     @CreationTimestamp(source = SourceType.DB)
     @Column(name = "reading_progress_created_at", nullable = false, updatable = false)
     private LocalDate createdAt;

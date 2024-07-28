@@ -34,8 +34,6 @@ public class ReadingProgressService {
     private final ReadingProgressRepository rpRepository;
     private final MyBooksRepository mbRepository;
     private final BookRepository bookRepository;
-    private final MyBookService myBookService;
-    private final MyBooksMapper myBooksMapper;
     private final ReadingProgressMapper rpMapper;
 
     public String create (ReadingProgressDTO rpDTO) throws BadRequestException {
@@ -61,6 +59,16 @@ public class ReadingProgressService {
             throw new AccessDeniedException("Você não tem permissão para adicionar progresso de leitura a este livro.");
         }
         return message;
+    }
+
+    protected void createReadingProgressionDisabled (UUID myBooksId) {
+        MyBooks myBooks = mbRepository.findMyBooksById(myBooksId);
+        Book books = bookRepository.findById(myBooks.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + myBooks.getBook().getId()));
+        ReadingProgress rp = new ReadingProgress();
+        rp.setMyBooks(myBooks);
+        rp.setPage(books.getPages());
+        rp.setEnabled(false);
+        rpRepository.save(rp);
     }
 
 //    essa rota mostra os mybooks

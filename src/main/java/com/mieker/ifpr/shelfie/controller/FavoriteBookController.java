@@ -17,7 +17,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @RequestMapping("/api/books/favorite")
 public class FavoriteBookController {
-    private final MyBookService myBookService;
     private final FavoriteBookService favoriteBookService;
 
     // rota para favoritar livros
