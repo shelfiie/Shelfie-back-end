@@ -72,12 +72,6 @@ public class PageService {
     public PageDTO getPaginometer() {
         UUID userId = validation.userAuthenticator();
         int paginometer = this.paginometerCounter(userId);
-//        List<MyBooks> myBooksList = mbRepository.findAllByUserId(userId);
-//        int paginometer = 0;
-//        for (MyBooks myBooks : myBooksList) {
-//            int page = rpRepository.findMaxProgressByMyBooksId(myBooks.getId());
-//            paginometer += page;
-//        }
         PageDTO pageDTO = new PageDTO();
         pageDTO.setPage(paginometer);
         return pageDTO;

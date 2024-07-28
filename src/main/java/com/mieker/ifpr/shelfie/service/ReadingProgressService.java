@@ -115,7 +115,7 @@ public class ReadingProgressService {
 
     //    rota do admin
     public List<CollectionOfMyBooksDTO> getAllReadingProgress() {
-        List<ReadingProgress> rpList = rpRepository.findAll();
+        List<ReadingProgress> rpList = rpRepository.findAllAndEnabled();
         return rpList.stream()
                 .map( rp -> {
                     CollectionOfMyBooksDTO dto = rpMapper.readingProgressToCollectionOfMyBooks(rp);
