@@ -1,6 +1,7 @@
 package com.mieker.ifpr.shelfie.service;
 
 
+import com.mieker.ifpr.shelfie.config.Validation;
 import com.mieker.ifpr.shelfie.dto.ReadingProgress.CollectionOfMyBooksDTO;
 import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksDTO;
 import com.mieker.ifpr.shelfie.dto.ReadingProgress.ReadingProgressDTO;
@@ -35,10 +36,11 @@ public class ReadingProgressService {
     private final MyBooksRepository mbRepository;
     private final BookRepository bookRepository;
     private final ReadingProgressMapper rpMapper;
+    private Validation validation;
 
     public String create (ReadingProgressDTO rpDTO) throws BadRequestException {
         ReadingProgress rp = new ReadingProgress();
-        UUID userId = getUserId();
+        UUID userId = validation.userAuthenticator();
         MyBooks myBooks = mbRepository.findMyBooksByBookIdAndUserId(rpDTO.getBookId(), userId);
         Book books = bookRepository.findById(myBooks.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + myBooks.getBook().getId()));
         if (!myBooks.getUser().getId().equals(userId)) {
@@ -74,14 +76,12 @@ public class ReadingProgressService {
 //    essa rota mostra os mybooks
 //    então como os mybooks o id ta relacionado
     public List<CollectionOfMyBooksDTO> getReadingProgressByUserId() {
-        UUID userId = getUserId();
+        UUID userId = validation.userAuthenticator();
         List<MyBooks> myBooksList = mbRepository.findByUserId(userId);
         List<CollectionOfMyBooksDTO> resultList = new ArrayList<>(); // Lista para armazenar os resultados
 
         for (MyBooks mb : myBooksList) {
             List<ReadingProgress> rpList = rpRepository.findByMyBooksId(mb.getId());
-            System.out.println(mb.getId());
-            System.out.println(rpList);
 
             // Mapeie e adicione os DTOs à lista de resultados
             resultList.addAll(rpList.stream()
@@ -89,6 +89,7 @@ public class ReadingProgressService {
                         CollectionOfMyBooksDTO dto = rpMapper.readingProgressToCollectionOfMyBooks(rp);
                         Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + mb.getBook().getId()));
                         dto.setGoogleId(book.getGoogleId());
+                        dto.setBookId(mb.getBook().getId());
                         return dto;
                     })
                     .toList());
@@ -128,7 +129,7 @@ public class ReadingProgressService {
     }
 
     public List<CollectionOfMyBooksDTO> getReadingProgressByBookId(UUID bookId) {
-        UUID userId = getUserId();
+        UUID userId = validation.userAuthenticator();
         MyBooks mb = mbRepository.findMyBooksByBookIdAndUserId(bookId, userId);
         Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + mb.getBook().getId()));
         String googleId = book.getGoogleId();
@@ -148,17 +149,10 @@ public class ReadingProgressService {
 
     private void checkPermission(UUID myBooksId) {
         MyBooks mb = mbRepository.findById(myBooksId).orElseThrow();
-        UUID userId = getUserId();
+        UUID userId = validation.userAuthenticator();
         if (!mb.getUser().getId().equals(userId)) {
             throw new AccessDeniedException("Você não tem permissão para acessar este progresso de leitura.");
         }
     }
-
-    private UUID getUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        return currentUser.getId();
-    }
-
 
 }

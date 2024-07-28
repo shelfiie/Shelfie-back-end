@@ -25,7 +25,6 @@ public class PageService {
     private final Validation validation;
     private final MyBooksRepository mbRepository;
     private final BookRepository bookRepository;
-    private final ReviewRepository reviewRepository;
 
     public PageDTO getMyLastPage(UUID bookId) {
         UUID userId = validation.userAuthenticator();

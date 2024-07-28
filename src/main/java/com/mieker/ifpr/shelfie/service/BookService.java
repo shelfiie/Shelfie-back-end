@@ -19,7 +19,6 @@ public class BookService {
     private final BookMapper bookMapper;
     private final BookApiService bookApiService;
 
-
     public Book createBook(String googleId) throws ParseException {
         Book book = bookRepository.findByGoogleId(googleId).orElse(null);
         if (book != null) {

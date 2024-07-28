@@ -7,6 +7,7 @@ import java.util.UUID;
 @Data
 public class CollectionOfMyBooksDTO {
     private UUID id;
+    private UUID bookId;
     private String googleId;
     private Integer page;
     private String commentary;

@@ -21,6 +21,5 @@ public class UserDTO {
     private String image;
     private Boolean enabled;
     private UserRoles role;
-    private int paginometro;
     private Date createdAt;
 }
