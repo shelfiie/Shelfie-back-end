@@ -53,6 +53,13 @@ public class MyBooksController {
         return ResponseEntity.ok(myBooksDTO);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/google/{googleId}")
+    public ResponseEntity<List<MyBooksDTO>> getMyBooksByGoogleId(@PathVariable String googleId) {
+        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByGoogleId(googleId);
+        return ResponseEntity.ok(myBooksDTO);
+    }
+
 //    rota authenticated
 //    rota para desativar um my books
     @PreAuthorize("isAuthenticated()")
@@ -110,11 +117,10 @@ public class MyBooksController {
     }
 
 //    rota para retornar todos os mybooks de um livro
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{bookId}/list")
     public ResponseEntity<List<MyBooksDTO>> getMyBooksByBookId(@PathVariable UUID bookId) {
         List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByBookId(bookId);
         return ResponseEntity.ok(myBooksDTO);
     }
-
 }
