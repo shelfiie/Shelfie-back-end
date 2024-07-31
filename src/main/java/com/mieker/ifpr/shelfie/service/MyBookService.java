@@ -138,11 +138,10 @@ public class MyBookService {
 
     }
 
-    public List<MyBooksDTO> getMyBooksByGoogleId(String googleId) {
+    public MyBooksDTO getMyBooksByGoogleId(String googleId) {
         UUID userId = validation.userAuthenticator();
         Book book = bookRepository.findByGoogleId(googleId).orElseThrow(() -> new IdNotFoundException("Não existe livro com esse googleId: " + googleId));
-        List<MyBooks> myBooks = myBooksRepository.findAllByBookId(book.getId());
-        return myBooks.stream().map(myBooksMapper::myBookToMyBookDTO).collect(Collectors.toList());
-
+        MyBooks myBooks = myBooksRepository.findMyBooksByBookIdAndUserId(book.getId(), userId);
+        return myBooksMapper.myBookToMyBookDTO(myBooks);
     }
 }

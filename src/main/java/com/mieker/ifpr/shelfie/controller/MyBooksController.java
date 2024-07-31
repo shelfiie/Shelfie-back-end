@@ -53,12 +53,20 @@ public class MyBooksController {
         return ResponseEntity.ok(myBooksDTO);
     }
 
+    //    retorna o mybooks do id passado como parâmetro
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/google/{googleId}")
-    public ResponseEntity<List<MyBooksDTO>> getMyBooksByGoogleId(@PathVariable String googleId) {
-        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByGoogleId(googleId);
+    public ResponseEntity<MyBooksDTO> getMyBooksByGoogleId(@PathVariable String googleId) {
+        MyBooksDTO myBooksDTO = myBookService.getMyBooksByGoogleId(googleId);
         return ResponseEntity.ok(myBooksDTO);
     }
+
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/google/{googleId}")
+//    public ResponseEntity<List<MyBooksDTO>> getMyBooksByGoogleId(@PathVariable String googleId) {
+//        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByGoogleId(googleId);
+//        return ResponseEntity.ok(myBooksDTO);
+//    }
 
 //    rota authenticated
 //    rota para desativar um my books
