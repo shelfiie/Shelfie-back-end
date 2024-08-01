@@ -19,9 +19,16 @@ public class PagesController {
 
     //    retorna a ultima página
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{bookId}")
+    @GetMapping("/book/{bookId}")
     public ResponseEntity<PageDTO> getMyLastPage(@PathVariable UUID bookId) {
         PageDTO pageDTO = pageService.getMyLastPage(bookId);
+        return ResponseEntity.status(200).body(pageDTO);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/rp/{rpId}")
+    public ResponseEntity<PageDTO> getMyProgressionPage(@PathVariable UUID rpId) {
+        PageDTO pageDTO = pageService.getMyProgressionPage(rpId);
         return ResponseEntity.status(200).body(pageDTO);
     }
 

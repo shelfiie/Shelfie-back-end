@@ -5,6 +5,7 @@ import com.mieker.ifpr.shelfie.dto.MyBooks.BookRelationDTO;
 import com.mieker.ifpr.shelfie.dto.ReadingProgress.PageDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
+import com.mieker.ifpr.shelfie.entity.ReadingProgress;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import com.mieker.ifpr.shelfie.exception.NotFoundException;
 import com.mieker.ifpr.shelfie.repository.BookRepository;
@@ -35,6 +36,26 @@ public class PageService {
         int page = rpRepository.findMaxProgressByMyBooksId(myBooks.getId());
 
         Optional<Book> book = bookRepository.findById(bookId);
+        int totalPages = book.get().getPages();
+
+//        quantidade de páginas lidas x 100 / total de páginas
+
+        int porcentage = (page * 100) / totalPages;
+
+        PageDTO pageDTO = new PageDTO();
+        pageDTO.setPage(page);
+        pageDTO.setPorcentage(porcentage);
+
+        return pageDTO;
+    }
+
+    public PageDTO getMyProgressionPage(UUID rpId) {
+        ReadingProgress rp = rpRepository.findById(rpId).orElseThrow(() -> new NotFoundException("Progresso de leitura não encontrado."));
+        MyBooks myBooks = mbRepository.findMyBooksById(rp.getMyBooks().getId());
+
+        int page = rpRepository.findMaxProgressByMyBooksId(myBooks.getId());
+
+        Optional<Book> book = bookRepository.findById(myBooks.getBook().getId());
         int totalPages = book.get().getPages();
 
 //        quantidade de páginas lidas x 100 / total de páginas
@@ -85,5 +106,4 @@ public class PageService {
         }
         return paginometer;
     }
-
 }
