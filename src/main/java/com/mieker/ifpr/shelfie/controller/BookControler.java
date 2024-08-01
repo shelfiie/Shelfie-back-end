@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,10 +32,17 @@ public class BookControler {
 
     //    pegar livro pelo id do google na api do google
 //    only admin tem acesso a essa rota
+//    @GetMapping("/google/{googleId}")
+//    public ResponseEntity<BookDTO> getBookByGoogleId(@PathVariable String googleId) {
+////        System.out.println(googleId);
+//        BookDTO book = bookApiService.getBookByGoogleId(googleId);
+//        return ResponseEntity.ok(book);
+//    }
+
     @GetMapping("/google/{googleId}")
     public ResponseEntity<BookDTO> getBookByGoogleId(@PathVariable String googleId) {
-        System.out.println(googleId);
-        BookDTO book = bookApiService.getBookByGoogleId(googleId);
+//        System.out.println(googleId);
+        BookDTO book = bookService.getBookByGoogleId(googleId);
         return ResponseEntity.ok(book);
     }
 
@@ -48,13 +56,8 @@ public class BookControler {
 
 //    only admin tem acesso a essa rota
     @PostMapping("/create/{googleId}")
-    public ResponseEntity<String> createBook(@PathVariable String googleId) {
-        try {
-            bookService.createBook(googleId);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Livro criado com sucesso.");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<String> createBook(@PathVariable String googleId) throws ParseException {
+        bookService.createBook(googleId);
+        return ResponseEntity.status(201).body("Livro criado com sucesso.");
     }
 }
