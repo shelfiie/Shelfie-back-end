@@ -11,6 +11,7 @@ import java.util.UUID;
 @Data
 public class BookDTO {
 //    private UUID id;
+    private UUID bookId;
     private String googleId;
     private String title;
     private String authors;

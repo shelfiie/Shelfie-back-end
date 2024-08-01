@@ -31,6 +31,11 @@ public class BookService {
         }
     }
 
+    public BookDTO getBookByGoogleId(String googleId) {
+        Book book = bookRepository.findByGoogleId(googleId).orElseThrow(() -> new RuntimeException("Book not found with googleId: " + googleId));
+        return bookMapper.bookToBookDTO(book);
+    }
+
     public BookDTO getBookById(UUID id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("MyBooks not found with id: " + id));
         return bookMapper.bookToBookDTO(book);
