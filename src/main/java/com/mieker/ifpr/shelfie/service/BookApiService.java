@@ -17,7 +17,7 @@ public class BookApiService {
     private static final String GOOGLE_API_URL = "https://www.googleapis.com/books/v1/volumes/";
 
     public BookDTO getBookByGoogleId(String googleId) {
-        String uri = "/" + googleId;
+        String uri = "/" + googleId + "?key=AIzaSyAakwvEoZaVEPjVf56W4lYQ_xhPo2wk2e8";
         BookApiResponse response = this.fetchBookDataFromAPI(uri);
         System.out.println(response);
         assert response != null;
