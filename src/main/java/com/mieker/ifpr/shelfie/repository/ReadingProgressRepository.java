@@ -20,4 +20,7 @@ public interface ReadingProgressRepository extends JpaRepository<ReadingProgress
 
     @Query("SELECT rp FROM ReadingProgress rp WHERE rp.enabled = true")
     List<ReadingProgress> findAllAndEnabled();
+
+    @Query("SELECT rp FROM ReadingProgress rp WHERE rp.myBooks.id = :id and rp.enabled = true")
+    List<ReadingProgress> findByMyBooksIdAndIsEnabled(UUID id);
 }

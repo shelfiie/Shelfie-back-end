@@ -133,7 +133,7 @@ public class ReadingProgressService {
         MyBooks mb = mbRepository.findMyBooksByBookIdAndUserId(bookId, userId);
         Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + mb.getBook().getId()));
         String googleId = book.getGoogleId();
-        List<ReadingProgress> rpList = rpRepository.findByMyBooksId(mb.getId());
+        List<ReadingProgress> rpList = rpRepository.findByMyBooksIdAndIsEnabled(mb.getId());
         return rpList.stream()
                 .map( rp -> {
                     CollectionOfMyBooksDTO dto = rpMapper.readingProgressToCollectionOfMyBooks(rp);
@@ -152,6 +152,14 @@ public class ReadingProgressService {
         UUID userId = validation.userAuthenticator();
         if (!mb.getUser().getId().equals(userId)) {
             throw new AccessDeniedException("Você não tem permissão para acessar este progresso de leitura.");
+        }
+    }
+
+    protected void disableReadingProgress(UUID myBooksId) {
+        List<ReadingProgress> rpList = rpRepository.findByMyBooksId(myBooksId);
+        for (ReadingProgress rp : rpList) {
+            rp.setEnabled(false);
+            rpRepository.save(rp);
         }
     }
 

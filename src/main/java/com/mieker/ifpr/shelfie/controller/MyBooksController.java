@@ -71,17 +71,11 @@ public class MyBooksController {
 //    rota authenticated
 //    rota para desativar um my books
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("/{id}/disable")
-    public ResponseEntity<String> deleteMyBooks(@PathVariable("id") UUID id) {
-        try {
-//            não sei se esse eu retorno alguma coisa ou não
-            MyBooksDTO myBooks = myBookService.updateMyBooksDisable(id);
-//            System.out.println(myBooks);
-            return ResponseEntity.ok("Livro apagado com sucesso.");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    @PutMapping("/{myBooksId}/disable")
+    public ResponseEntity<String> deleteMyBooks(@PathVariable UUID myBooksId) {
+        String message = myBookService.disableMyBooks(myBooksId);
+        return ResponseEntity.status(200).body(message);
+
     }
 
 //    todo

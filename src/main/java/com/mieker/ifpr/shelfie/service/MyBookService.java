@@ -74,12 +74,13 @@ public class MyBookService {
     }
 
 //  atualizar o livro como disabled
-    public MyBooksDTO updateMyBooksDisable(UUID id) {
+    public String disableMyBooks(UUID id) {
         MyBooks myBooksToUpdate = myBooksRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("MyBooks not found with id: " + id));
         myBooksToUpdate.setEnabled(false);
         myBooksRepository.save(myBooksToUpdate);
-        return myBooksMapper.updateMyBooksDisabled(myBooksToUpdate);
+        rpService.disableReadingProgress(myBooksToUpdate.getId());
+        return "Livro detelado com sucesso.";
     }
 
 //    esse é pra atualizar o status do livro
