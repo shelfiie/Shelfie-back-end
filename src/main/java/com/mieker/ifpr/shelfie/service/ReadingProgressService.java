@@ -81,7 +81,7 @@ public class ReadingProgressService {
         List<CollectionOfMyBooksDTO> resultList = new ArrayList<>(); // Lista para armazenar os resultados
 
         for (MyBooks mb : myBooksList) {
-            List<ReadingProgress> rpList = rpRepository.findByMyBooksId(mb.getId());
+            List<ReadingProgress> rpList = rpRepository.findByMyBooksIdAndEnabled(mb.getId());
 
             // Mapeie e adicione os DTOs à lista de resultados
             resultList.addAll(rpList.stream()
@@ -158,7 +158,7 @@ public class ReadingProgressService {
     protected void disableReadingProgress(UUID myBooksId) {
         List<ReadingProgress> rpList = rpRepository.findByMyBooksId(myBooksId);
         for (ReadingProgress rp : rpList) {
-            rp.setEnabled(false);
+            rp.setEnabled(!rp.getEnabled());
             rpRepository.save(rp);
         }
     }
