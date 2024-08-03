@@ -6,11 +6,8 @@ import lombok.Data;
 import java.util.List;
 import java.util.UUID;
 
-// todo
-// adicionar atributos que serão retornados na requisição
 @Data
 public class BookDTO {
-//    private UUID id;
     private UUID bookId;
     private String googleId;
     private String title;

@@ -92,7 +92,9 @@ public class MyBookService {
             throw new NotFoundException("Esse livro não está na biblioteca do usuário.");
         }
         if (!myBooks.isEnabled()) {
+            System.out.println("Livro desabilitado");
             myBooks.setEnabled(true);
+            rpService.disableReadingProgress(myBooks.getId());
         }
         myBooks.setBookStatus(bookStatus);
         if (BookStatus.LIDO.equals(bookStatus)) {
