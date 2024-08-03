@@ -32,16 +32,16 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /root/Shelfie-back-end || git clone git@github.com:shelfiie/Shelfie-back-end.git
+#            cd /root/Shelfie-back-end || git clone git@github.com:shelfiie/Shelfie-back-end.git
             cd /root/Shelfie-back-end
             git checkout gms--back-api
             git pull
             rm -rf /target
-            PID=$(pgrep -f "shelfie-0.0.1-SNAPSHOT.jar")
+            PID=$(pgrep -f "shelfie-0.0.1-SNAPSHOT.jar") > log.txt 2>&1
             if [ -n "$PID" ]; then
-              kill "$PID" > log.txt 2>&1
+              kill "$PID" >> log.txt 2>&1
             fi
             mvn package -Dmaven.test.skip=true
-            java -jar target/shelfie-0.0.1-SNAPSHOT.jar & > log.txt 2>&1
+            java -jar target/shelfie-0.0.1-SNAPSHOT.jar & >> log.txt 2>&1
 
 
