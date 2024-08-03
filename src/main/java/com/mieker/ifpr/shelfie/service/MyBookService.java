@@ -80,7 +80,7 @@ public class MyBookService {
         myBooksToUpdate.setEnabled(false);
         myBooksRepository.save(myBooksToUpdate);
         rpService.disableReadingProgress(myBooksToUpdate.getId());
-        return "Livro detelado com sucesso.";
+        return "Livro desabilitadp com sucesso.";
     }
 
 //    esse é pra atualizar o status do livro
