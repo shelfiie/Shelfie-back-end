@@ -11,7 +11,6 @@ import com.mieker.ifpr.shelfie.exception.NotFoundException;
 import com.mieker.ifpr.shelfie.repository.BookRepository;
 import com.mieker.ifpr.shelfie.repository.MyBooksRepository;
 import com.mieker.ifpr.shelfie.repository.ReadingProgressRepository;
-import com.mieker.ifpr.shelfie.repository.ReviewRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +33,7 @@ public class PageService {
             throw new NotFoundException("Esse livro não está na biblioteca do usuário.");
         }
         int page = rpRepository.findMaxProgressByMyBooksId(myBooks.getId());
+        System.out.println(page);
 
         Optional<Book> book = bookRepository.findById(bookId);
         int totalPages = book.get().getPages();
@@ -71,13 +71,13 @@ public class PageService {
 
     public BookRelationDTO getBookStatus() {
         UUID userId = validation.userAuthenticator();
-        int lido = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.LIDO);
-        int lendo = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.LENDO);
-        int queroLer = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.QUERO_LER);
-        int abandonado = mbRepository.countMyBooksByUserIdAndBookStatus(userId, BookStatus.ABANDONADO);
-        int favorite = mbRepository.countMyBooksByUserIdAndFavorite(userId, true);
+        int lido = mbRepository.countMyBooksByUserIdAndBookStatusAndEnabled(userId, BookStatus.LIDO, true);
+        int lendo = mbRepository.countMyBooksByUserIdAndBookStatusAndEnabled(userId, BookStatus.LENDO, true);
+        int queroLer = mbRepository.countMyBooksByUserIdAndBookStatusAndEnabled(userId, BookStatus.QUERO_LER, true);
+        int abandonado = mbRepository.countMyBooksByUserIdAndBookStatusAndEnabled(userId, BookStatus.ABANDONADO, true);
+        int favorite = mbRepository.countMyBooksByUserIdAndFavoriteAndEnabled(userId, true, true);
         int review = mbRepository.countReviewByUserId(userId);
-        int paginometer = this.paginometerCounter(userId);
+        Integer paginometer = this.paginometerCounter(userId);
         BookRelationDTO bookStatusDTO = new BookRelationDTO();
         bookStatusDTO.setLIDO(lido);
         bookStatusDTO.setLENDO(lendo);
@@ -98,10 +98,14 @@ public class PageService {
     }
 
     private int paginometerCounter (UUID userId) {
-        List<MyBooks> myBooksList = mbRepository.findAllByUserId(userId);
-        int paginometer = 0;
+        List<MyBooks> myBooksList = mbRepository.findAllByUserIdAndEnabled(userId, true);
+        Integer paginometer = 0;
         for (MyBooks myBooks : myBooksList) {
-            int page = rpRepository.findMaxProgressByMyBooksId(myBooks.getId());
+            System.out.println(rpRepository.findMaxProgressByMyBooksId(myBooks.getId()));
+            Integer page = rpRepository.findMaxProgressByMyBooksId(myBooks.getId());
+            if (page == null) {
+                page = 0;
+            }
             paginometer += page;
         }
         return paginometer;

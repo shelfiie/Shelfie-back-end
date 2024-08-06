@@ -89,6 +89,7 @@ public class ReadingProgressService {
                         CollectionOfMyBooksDTO dto = rpMapper.readingProgressToCollectionOfMyBooks(rp);
                         Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + mb.getBook().getId()));
                         dto.setGoogleId(book.getGoogleId());
+                        System.out.println(rp.getEnabled());
                         dto.setBookId(mb.getBook().getId());
                         return dto;
                     })
