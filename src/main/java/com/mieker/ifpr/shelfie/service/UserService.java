@@ -75,4 +75,12 @@ public class UserService {
                 .map(userMapper::userToUserDTO)
                 .collect(Collectors.toList());
     }
+
+    public String changeRole(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        user.setRole(UserRoles.ROLE_ADMIN);
+        userRepository.save(user);
+        return "O usuário " + user.getName() + " agora é um administrador";
+    }
 }
