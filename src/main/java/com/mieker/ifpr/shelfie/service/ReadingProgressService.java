@@ -77,7 +77,7 @@ public class ReadingProgressService {
 //    então como os mybooks o id ta relacionado
     public List<CollectionOfMyBooksDTO> getReadingProgressByUserId() {
         UUID userId = validation.userAuthenticator();
-        List<MyBooks> myBooksList = mbRepository.findByUserId(userId);
+        List<MyBooks> myBooksList = mbRepository.findAllByUserIdAndEnabled(userId, true);
         List<CollectionOfMyBooksDTO> resultList = new ArrayList<>(); // Lista para armazenar os resultados
 
         for (MyBooks mb : myBooksList) {
@@ -89,6 +89,7 @@ public class ReadingProgressService {
                         CollectionOfMyBooksDTO dto = rpMapper.readingProgressToCollectionOfMyBooks(rp);
                         Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + mb.getBook().getId()));
                         dto.setGoogleId(book.getGoogleId());
+                        System.out.println(rp.getEnabled());
                         dto.setBookId(mb.getBook().getId());
                         return dto;
                     })

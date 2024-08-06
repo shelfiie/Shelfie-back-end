@@ -78,13 +78,13 @@ public class ReviewService {
     }
 
     public List<ResponseReviewDTO> getReviewByUserId(UUID userId) {
-        List<MyBooks> myBooksList = mbRepository.findAllByUserId(userId);
+        List<MyBooks> myBooksList = mbRepository.findAllByUserIdAndEnabled(userId, true);
         return this.getReviewList(userId, myBooksList);
     }
 
     public List<ResponseReviewDTO> getMyReviews() {
         UUID userId = userValidation.userAuthenticator();
-        List<MyBooks> myBooksList = mbRepository.findAllByUserId(userId);
+        List<MyBooks> myBooksList = mbRepository.findAllByUserIdAndEnabled(userId, true);
         return this.getReviewList(userId, myBooksList);
     }
 
