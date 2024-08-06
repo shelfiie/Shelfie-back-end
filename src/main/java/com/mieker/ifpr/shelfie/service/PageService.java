@@ -53,7 +53,7 @@ public class PageService {
         ReadingProgress rp = rpRepository.findById(rpId).orElseThrow(() -> new NotFoundException("Progresso de leitura não encontrado."));
         MyBooks myBooks = mbRepository.findMyBooksById(rp.getMyBooks().getId());
 
-        int page = rpRepository.findMaxProgressByMyBooksId(myBooks.getId());
+        int page = rp.getPage();
 
         Optional<Book> book = bookRepository.findById(myBooks.getBook().getId());
         int totalPages = book.get().getPages();
