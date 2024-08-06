@@ -77,7 +77,7 @@ public class ReadingProgressService {
 //    então como os mybooks o id ta relacionado
     public List<CollectionOfMyBooksDTO> getReadingProgressByUserId() {
         UUID userId = validation.userAuthenticator();
-        List<MyBooks> myBooksList = mbRepository.findByUserId(userId);
+        List<MyBooks> myBooksList = mbRepository.findAllByUserIdAndEnabled(userId, true);
         List<CollectionOfMyBooksDTO> resultList = new ArrayList<>(); // Lista para armazenar os resultados
 
         for (MyBooks mb : myBooksList) {
