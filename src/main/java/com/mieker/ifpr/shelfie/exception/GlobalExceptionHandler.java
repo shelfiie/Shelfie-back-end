@@ -26,7 +26,7 @@ public class GlobalExceptionHandler extends Throwable {
 
         if (exception instanceof BadCredentialsException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), exception.getMessage());
-            errorDetail.setProperty("description", "O email ou a senha estão incorretos.");
+            errorDetail.setProperty("description", message);
 
             return errorDetail;
         }
@@ -36,9 +36,9 @@ public class GlobalExceptionHandler extends Throwable {
             errorDetail.setProperty("description", "A conta está bloqueada");
         }
 
-        if (exception instanceof AccessDeniedException) {
+        if (exception instanceof AccessForbiddenException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
-            errorDetail.setProperty("description", "Você não tem permissão para acessar este recurso.");
+            errorDetail.setProperty("description", message);
         }
 
         if (exception instanceof SignatureException) {
