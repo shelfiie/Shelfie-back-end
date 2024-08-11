@@ -1,5 +1,6 @@
 package com.mieker.ifpr.shelfie.mapper;
 
+import com.mieker.ifpr.shelfie.dto.User.ImageLinkDTO;
 import com.mieker.ifpr.shelfie.dto.User.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.dto.User.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.dto.User.UserDTO;
@@ -42,5 +43,9 @@ public class UserMapper {
 
     public UserDTO userToUserDTO(User user) {
         return this.mapper.map(user, UserDTO.class);
+    }
+
+    public ImageLinkDTO userToImageLinkDTO(User userToUpdate) {
+        return mapper.map(userToUpdate, ImageLinkDTO.class);
     }
 }

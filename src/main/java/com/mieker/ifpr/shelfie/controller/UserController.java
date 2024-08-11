@@ -1,5 +1,6 @@
 package com.mieker.ifpr.shelfie.controller;
 
+import com.mieker.ifpr.shelfie.dto.User.ImageLinkDTO;
 import com.mieker.ifpr.shelfie.dto.User.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.dto.User.UserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
@@ -79,5 +80,12 @@ public class UserController {
     public ResponseEntity<String> disableUser() {
         String message = userService.disableUser();
         return ResponseEntity.ok(message);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/upload-image")
+    public ResponseEntity<ImageLinkDTO> uploadImage(@RequestBody ImageLinkDTO link) {
+        ImageLinkDTO linkImage = userService.uploadImage(link);
+        return ResponseEntity.status(200).body(linkImage);
     }
 }
