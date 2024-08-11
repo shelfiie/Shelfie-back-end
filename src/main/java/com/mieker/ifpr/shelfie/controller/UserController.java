@@ -67,9 +67,17 @@ public class UserController {
     }
 
 //    para fazer o delete do usuário, mas só alterando seu status para disabled
-    @PutMapping("/{userId}/disable")
-    public ResponseEntity<String> disableUser(@PathVariable UUID userId) {
-        String message = userService.updateUserDisable(userId);
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PutMapping("/admin/{userId}/disable")
+    public ResponseEntity<String> disableAndEnableUser(@PathVariable UUID userId) {
+        String message = userService.disableAndEnableUser(userId);
+        return ResponseEntity.ok(message);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/disable")
+    public ResponseEntity<String> disableUser() {
+        String message = userService.disableUser();
         return ResponseEntity.ok(message);
     }
 }
