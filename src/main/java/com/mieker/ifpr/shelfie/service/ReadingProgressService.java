@@ -11,6 +11,7 @@ import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.ReadingProgress;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
+import com.mieker.ifpr.shelfie.exception.AccessForbiddenException;
 import com.mieker.ifpr.shelfie.exception.ExceededPageLimitException;
 import com.mieker.ifpr.shelfie.mapper.MyBooksMapper;
 import com.mieker.ifpr.shelfie.mapper.ReadingProgressMapper;
@@ -43,23 +44,35 @@ public class ReadingProgressService {
         UUID userId = validation.userAuthenticator();
         MyBooks myBooks = mbRepository.findMyBooksByBookIdAndUserId(rpDTO.getBookId(), userId);
         Book books = bookRepository.findById(myBooks.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + myBooks.getBook().getId()));
+
         if (!myBooks.getUser().getId().equals(userId)) {
             throw new AccessDeniedException("Você não tem permissão para adicionar progresso de leitura a este livro.");
         }
+
         String message = "";
-        if (myBooks.getBookStatus() == BookStatus.LENDO && myBooks.isEnabled() && rpDTO.getPage() <= books.getPages()) {
-            rp.setMyBooks(myBooks);
-            rp.setPage(rpDTO.getPage());
-            rp.setCommentary(rpDTO.getCommentary());
-            rpRepository.save(rp);
-            message = "Progresso de leitura criado com sucesso.";
-        } else if (rpDTO.getPage() >= books.getPages()){
-            throw new ExceededPageLimitException("Você não tem permissão para adicionar progresso de leitura a este livro.");
-        } else if (myBooks.getBookStatus() != BookStatus.LENDO){
-            throw new BadRequestException("O status do livro tem que ser LENDO.");
+
+        if (myBooks.getBookStatus() == BookStatus.LENDO) {
+            if (myBooks.isEnabled() && rpDTO.getPage() < books.getPages()) {
+                rp.setMyBooks(myBooks);
+                rp.setPage(rpDTO.getPage());
+                rp.setCommentary(rpDTO.getCommentary());
+                rpRepository.save(rp);
+                message = "Progresso de leitura criado com sucesso.";
+            } else if (myBooks.isEnabled() && rpDTO.getPage().equals(books.getPages())) {
+                rp.setMyBooks(myBooks);
+                rp.setPage(rpDTO.getPage());
+                rp.setCommentary(rpDTO.getCommentary());
+                rpRepository.save(rp);
+                myBooks.setBookStatus(BookStatus.LIDO);
+                mbRepository.save(myBooks);
+                message = "Progresso de leitura criado com sucesso.";
+            } else if (rpDTO.getPage() >= books.getPages()){
+                throw new ExceededPageLimitException("O número da página não pode ser maior que o número total de páginas do livro.");
+            }
         } else {
-            throw new AccessDeniedException("Você não tem permissão para adicionar progresso de leitura a este livro.");
+            throw new AccessForbiddenException("O status do livro tem que ser LENDO.");
         }
+
         return message;
     }
 
