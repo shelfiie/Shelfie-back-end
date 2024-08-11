@@ -2,9 +2,6 @@ package com.mieker.ifpr.shelfie.controller;
 
 import com.mieker.ifpr.shelfie.dto.Like.LikeDTO;
 import com.mieker.ifpr.shelfie.dto.Like.UserLikeDTO;
-import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksDTO;
-import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
-import com.mieker.ifpr.shelfie.service.FavoriteBookService;
 import com.mieker.ifpr.shelfie.service.LikeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +37,8 @@ public class LikeController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("{reviewId}")
 //    nessa da pra retornar o nome do usuario
-    public ResponseEntity<List<LikeDTO>> getReviewLikes(@PathVariable UUID reviewId) {
-        List<LikeDTO> likeDTOList = likeService.getReviewLikes(reviewId);
+    public ResponseEntity<LikeDTO> getReviewLikes(@PathVariable UUID reviewId) {
+        LikeDTO likeDTOList = likeService.getReviewLikes(reviewId);
         return ResponseEntity.status(200).body(likeDTOList);
     }
 
@@ -51,10 +48,4 @@ public class LikeController {
         List<UserLikeDTO> userLikeDTOList = likeService.getUserLikes();
         return ResponseEntity.status(200).body(userLikeDTOList);
     }
-
-//    @GetMapping("/user/{userId}")
-//    public ResponseEntity<List<UserLikeDTO>> getUserLikes(@PathVariable UUID reviewId) {
-//        String message = likeService.create(reviewId);
-//        return ResponseEntity.status(201).body(message);
-//    }
 }

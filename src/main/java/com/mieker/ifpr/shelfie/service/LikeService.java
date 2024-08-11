@@ -38,14 +38,32 @@ public class LikeService {
         return "Review curtida com sucesso!";
     }
 
-    public List<LikeDTO> getReviewLikes(UUID reviewId) {
+//    public List<LikeDTO> getReviewLikes(UUID reviewId) {
+//        List<Like> likeList = likeRepository.findByReviewId(reviewId);
+//        return likeList.stream().map(like -> {
+//            LikeDTO likeDTO = new LikeDTO();
+//            likeDTO.setUserId(like.getUser().getId());
+//            likeDTO.setNickname(like.getUser().getNickname());
+//            return likeDTO;
+//        }).toList();
+//    }
+
+    public LikeDTO getReviewLikes(UUID reviewId) {
+        int likeQuantity = likeRepository.findByReviewId(reviewId).size();
         List<Like> likeList = likeRepository.findByReviewId(reviewId);
-        return likeList.stream().map(like -> {
-            LikeDTO likeDTO = new LikeDTO();
-            likeDTO.setUserId(like.getUser().getId());
-            likeDTO.setNickname(like.getUser().getNickname());
-            return likeDTO;
+
+        List<LikeDTO.UserLikes> userLikesList = likeList.stream().map(like -> {
+            LikeDTO.UserLikes userLikes = new LikeDTO.UserLikes();
+            userLikes.setUserId(like.getUser().getId());
+            userLikes.setNickname(like.getUser().getNickname());
+            return userLikes;
         }).toList();
+
+        LikeDTO likeDTO = new LikeDTO();
+        likeDTO.setQuantity(likeQuantity);
+        likeDTO.setUserLikes(userLikesList);
+
+        return likeDTO;
     }
 
     public String delete(UUID reviewId) {
