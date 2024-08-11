@@ -1,6 +1,7 @@
 package com.mieker.ifpr.shelfie.service;
 
 import com.mieker.ifpr.shelfie.config.Validation;
+import com.mieker.ifpr.shelfie.dto.User.ImageLinkDTO;
 import com.mieker.ifpr.shelfie.dto.User.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.dto.User.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.dto.User.UserDTO;
@@ -104,5 +105,15 @@ public class UserService {
         }
         userRepository.save(userToUpdate);
         return message;
+    }
+
+    public ImageLinkDTO uploadImage(ImageLinkDTO linkImage) {
+        UUID userId = validation.userAuthenticator();
+        User userToUpdate = userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException("User not found with id: " + userId));
+        userToUpdate.setImage(linkImage.getImage());
+        userRepository.save(userToUpdate);
+        System.out.println(userToUpdate.getImage());
+        return userMapper.userToImageLinkDTO(userToUpdate);
     }
 }
