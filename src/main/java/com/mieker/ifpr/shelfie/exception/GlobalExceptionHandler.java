@@ -20,6 +20,7 @@ public class GlobalExceptionHandler extends Throwable {
     @ExceptionHandler({Exception.class, DataIntegrityViolationException.class})
     public ProblemDetail handleSecurityException(Exception exception) {
         ProblemDetail errorDetail = null;
+        String message = exception.getMessage();
 
         exception.printStackTrace();
 
@@ -77,7 +78,7 @@ public class GlobalExceptionHandler extends Throwable {
 
         if (exception instanceof NotFoundException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), exception.getMessage());
-            errorDetail.setProperty("description", "Não tem usuário associado ao livro.");
+            errorDetail.setProperty("description", message);
         }
 
         if (exception instanceof IdNotFoundException) {

@@ -1,5 +1,6 @@
 package com.mieker.ifpr.shelfie.service;
 
+import com.mieker.ifpr.shelfie.config.Validation;
 import com.mieker.ifpr.shelfie.dto.User.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.dto.User.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.dto.User.UserDTO;
@@ -27,8 +28,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private Validation validation;
 
-//    criar um user admin
+    //    criar um user admin
     public User createAdministrator(RegisterUserDTO input) {
         User user = new User();
         user.setName(input.getName());
@@ -50,9 +52,14 @@ public class UserService {
     }
 
 //    atualizar o usuário para disable
-    public String updateUserDisable(UUID id) {
-        User userToUpdate = userRepository.findById(id)
-                .orElseThrow(() -> new IdNotFoundException("User not found with id: " + id));
+    public String disableUser() {
+        UUID userId = validation.userAuthenticator();
+
+        User userToUpdate = userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException("User not found with id: " + userId));
+
+        userToUpdate.setEnabled(false);
+
         userToUpdate.setEnabled(false);
         userRepository.save(userToUpdate);
         System.out.println(userToUpdate.getEnabled());
@@ -82,5 +89,20 @@ public class UserService {
         user.setRole(UserRoles.ROLE_ADMIN);
         userRepository.save(user);
         return "O usuário " + user.getName() + " agora é um administrador";
+    }
+
+    public String disableAndEnableUser(UUID userId) {
+        User userToUpdate = userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException("User not found with id: " + userId));
+        String message = "";
+        if (!userToUpdate.getEnabled()) {
+            userToUpdate.setEnabled(true);
+            message = "Usuário ativado com sucesso";
+        } else {
+            userToUpdate.setEnabled(false);
+            message = "Usuário desativado com sucesso";
+        }
+        userRepository.save(userToUpdate);
+        return message;
     }
 }
