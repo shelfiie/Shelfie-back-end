@@ -47,11 +47,19 @@ public class ReadingProgressService {
             throw new AccessDeniedException("Você não tem permissão para adicionar progresso de leitura a este livro.");
         }
         String message = "";
-        if (myBooks.getBookStatus() == BookStatus.LENDO && myBooks.isEnabled() && rpDTO.getPage() <= books.getPages()) {
+        if (myBooks.getBookStatus() == BookStatus.LENDO && myBooks.isEnabled() && rpDTO.getPage() < books.getPages()) {
             rp.setMyBooks(myBooks);
             rp.setPage(rpDTO.getPage());
             rp.setCommentary(rpDTO.getCommentary());
             rpRepository.save(rp);
+            message = "Progresso de leitura criado com sucesso.";
+        } else if (myBooks.getBookStatus() == BookStatus.LENDO && myBooks.isEnabled() && rpDTO.getPage().equals(books.getPages())) {
+            rp.setMyBooks(myBooks);
+            rp.setPage(rpDTO.getPage());
+            rp.setCommentary(rpDTO.getCommentary());
+            rpRepository.save(rp);
+            myBooks.setBookStatus(BookStatus.LIDO);
+            mbRepository.save(myBooks);
             message = "Progresso de leitura criado com sucesso.";
         } else if (rpDTO.getPage() >= books.getPages()){
             throw new ExceededPageLimitException("Você não tem permissão para adicionar progresso de leitura a este livro.");
