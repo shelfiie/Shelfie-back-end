@@ -1,6 +1,8 @@
 package com.mieker.ifpr.shelfie.controller;
 
+import com.mieker.ifpr.shelfie.dto.Report.ListReportDTO;
 import com.mieker.ifpr.shelfie.dto.Review.ReviewDTO;
+import com.mieker.ifpr.shelfie.entity.enumeration.ReportStatus;
 import com.mieker.ifpr.shelfie.service.ReadingProgressService;
 import com.mieker.ifpr.shelfie.service.ReportService;
 import lombok.AllArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin(origins = "*")
@@ -25,17 +28,37 @@ public class ReportController {
     @PostMapping("{reviewId}")
     public ResponseEntity<String> createReport(@PathVariable UUID reviewId) {
         String message = reportService.createReport(reviewId);
-//        return ResponseEntity.ok(responseReview);
         return ResponseEntity.status(201).body(message);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("{bookId}")
+    public ResponseEntity<List<ListReportDTO>> getReportListByBookId(@PathVariable UUID bookId) {
+        List<ListReportDTO> listReportDTO = reportService.getReportListByBookId(bookId);
+        return ResponseEntity.status(200).body(listReportDTO);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/admin/all")
+    public ResponseEntity<List<ListReportDTO>> getAllReports() {
+        List<ListReportDTO> listReportDTO = reportService.getAllReports();
+        return ResponseEntity.status(200).body(listReportDTO);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/admin/{reportId}/{reportStatus}")
+    public ResponseEntity<ListReportDTO> changeStatusReport(@PathVariable UUID reportId, @PathVariable ReportStatus reportStatus) {
+        ListReportDTO listReportDTO = reportService.changeReportStatus(reportId, reportStatus);
+        return ResponseEntity.status(200).body(listReportDTO);
     }
 }
 
 // rotas necessárias:
-// criar report de review
-// pegar todos os reports
+// criar report de review xxx
+// pegar todos os reports xxx
 // pegar report por review
 // pegar report por usuario
 // pegar report por livro
-// desabilitar report
-// desabilitar review
+// desabilitar report - mudar status para recusadp
+// desabilitar review - mudar status para resolvido
 

@@ -50,6 +50,7 @@ public class UserController {
     }
 
 //    Update user
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{id}/update")
     public ResponseEntity<UpdateUserDTO> updateUser(@PathVariable("id") UUID id, @RequestBody UpdateUserDTO userUpdateDTO) throws ParseException, GlobalExceptionHandler {
         UpdateUserDTO updateUserDTO = userService.updateUser(id, userUpdateDTO);
