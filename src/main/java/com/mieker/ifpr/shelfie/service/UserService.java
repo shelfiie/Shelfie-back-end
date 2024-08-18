@@ -7,6 +7,7 @@ import com.mieker.ifpr.shelfie.dto.User.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.dto.User.UserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
+import com.mieker.ifpr.shelfie.exception.AccessForbiddenException;
 import com.mieker.ifpr.shelfie.exception.GlobalExceptionHandler;
 import com.mieker.ifpr.shelfie.exception.IdNotFoundException;
 import com.mieker.ifpr.shelfie.mapper.UserMapper;
@@ -46,6 +47,10 @@ public class UserService {
     public UpdateUserDTO updateUser(UUID id, UpdateUserDTO userUpdateDTO) throws ParseException, GlobalExceptionHandler {
         User userToUpdate = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+        UUID userId = validation.userAuthenticator();
+        if (!userId.equals(id)) {
+            throw new AccessForbiddenException("Você não tem permissão para atualizar esse usuário");
+        }
         userToUpdate.setNickname(userUpdateDTO.getNickname());
         userToUpdate.setName(userUpdateDTO.getName());
         userRepository.save(userToUpdate);
