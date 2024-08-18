@@ -1,5 +1,6 @@
 package com.mieker.ifpr.shelfie.controller;
 
+import com.mieker.ifpr.shelfie.dto.Like.IsReviewLikedDTO;
 import com.mieker.ifpr.shelfie.dto.Like.LikeDTO;
 import com.mieker.ifpr.shelfie.dto.Like.UserLikeDTO;
 import com.mieker.ifpr.shelfie.service.LikeService;
@@ -47,5 +48,12 @@ public class LikeController {
     public ResponseEntity<List<UserLikeDTO>> getUserLikes() {
         List<UserLikeDTO> userLikeDTOList = likeService.getUserLikes();
         return ResponseEntity.status(200).body(userLikeDTOList);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("is-liked/{reviewId}")
+    public ResponseEntity<IsReviewLikedDTO> isReviewLiked(@PathVariable UUID reviewId) {
+        IsReviewLikedDTO isReviewLiked = likeService.isReviewLiked(reviewId);
+        return ResponseEntity.status(200).body(isReviewLiked);
     }
 }
