@@ -58,14 +58,5 @@ public class ReportController {
         List<ListReportDTO> listReportDTO = reportService.getReportListByUserId(userId);
         return ResponseEntity.status(200).body(listReportDTO);
     }
+
 }
-
-// rotas necessárias:
-// criar report de review xxx
-// pegar todos os reports xxx
-// pegar report por review
-// pegar report por usuario
-// pegar report por livro
-// desabilitar report - mudar status para recusadp xxx
-// desabilitar review - mudar status para resolvido xxx
-

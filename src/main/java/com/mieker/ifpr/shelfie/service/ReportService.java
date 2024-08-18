@@ -41,8 +41,10 @@ public class ReportService {
     public List<ListReportDTO> getAllReports() {
         List<Report> reportList = reportRepository.findAll();
         ListReportDTO listReportDTO = new ListReportDTO();
-        System.out.println(reportList.stream().toList());
-        return reportList.stream().map(report -> getListReportDTO(report, listReportDTO)).toList();
+        System.out.println(reportList);
+//        System.out.println(reportList.stream().toList());
+        return reportList.stream().map(report -> getListReportDTO(report, new ListReportDTO()))
+                .toList();
     }
 
     public ListReportDTO changeReportStatus(UUID reportId, ReportStatus reportStatus) {
@@ -72,16 +74,13 @@ public class ReportService {
 
     public List<ListReportDTO> getReportListByReviewId(UUID reviewId) {
         List<Report> reportList = reportRepository.findByReviewId(reviewId);
-        ListReportDTO listReportDTO = new ListReportDTO();
-
-        return reportList.stream().map(report -> getListReportDTO(report, listReportDTO)).toList();
+        return reportList.stream().map(report -> getListReportDTO(report, new ListReportDTO())).toList();
     }
 
     public List<ListReportDTO> getReportListByUserId(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow();
         List<Report> reportList = reportRepository.findByUserId(user.getId());
         System.out.println(reportList.stream().toList());
-        ListReportDTO listReportDTO = new ListReportDTO();
-        return reportList.stream().map(report -> getListReportDTO(report, listReportDTO)).toList();
+        return reportList.stream().map(report -> getListReportDTO(report, new ListReportDTO())).toList();
     }
 }
