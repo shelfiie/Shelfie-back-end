@@ -6,7 +6,6 @@ import com.mieker.ifpr.shelfie.dto.User.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import com.mieker.ifpr.shelfie.exception.NotFoundException;
-import com.mieker.ifpr.shelfie.mapper.UserMapper;
 import com.mieker.ifpr.shelfie.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.LoginException;
-import java.util.regex.Pattern;
 
 @Service
 public class AuthenticationService {
@@ -45,6 +43,7 @@ public class AuthenticationService {
         User user = new User();
         user.setName(input.getName());
         user.setEmail(input.getEmail());
+        user.setImage("https://imgur.com/FTj8i7I.png");
         user.setPassword(passwordEncoder.encode(input.getPassword()));
         user.setNickname(input.getNickname());
         user.setRole(UserRoles.ROLE_READER);
@@ -54,9 +53,6 @@ public class AuthenticationService {
     public User authenticate (LoginDTO input) {
 
         User user = userRepository.findByEmail(input.getEmail()).orElseThrow();
-        if (!user.getEnabled()) {
-            throw new NotFoundException("Usuário desabilitado. Contate o administrador.");
-        }
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -64,6 +60,10 @@ public class AuthenticationService {
                         input.getPassword()
                 )
         );
+
+        if (!user.getEnabled()) {
+            throw new NotFoundException("Usuário desabilitado. Contate o administrador.");
+        }
 
         return userRepository.findByEmail(input.getEmail()).orElseThrow();
     }
