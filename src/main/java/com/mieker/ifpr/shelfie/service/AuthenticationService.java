@@ -45,6 +45,7 @@ public class AuthenticationService {
         User user = new User();
         user.setName(input.getName());
         user.setEmail(input.getEmail());
+        user.setImage("https://imgur.com/FTj8i7I.png");
         user.setPassword(passwordEncoder.encode(input.getPassword()));
         user.setNickname(input.getNickname());
         user.setRole(UserRoles.ROLE_READER);
