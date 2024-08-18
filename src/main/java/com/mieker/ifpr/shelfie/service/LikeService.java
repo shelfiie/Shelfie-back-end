@@ -1,6 +1,7 @@
 package com.mieker.ifpr.shelfie.service;
 
 import com.mieker.ifpr.shelfie.config.Validation;
+import com.mieker.ifpr.shelfie.dto.Like.IsReviewLikedDTO;
 import com.mieker.ifpr.shelfie.dto.Like.LikeDTO;
 import com.mieker.ifpr.shelfie.dto.Like.UserLikeDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
@@ -82,5 +83,21 @@ public class LikeService {
             userLikeDTO.setBookId(like.getReview().getMyBooks().getBook().getId());
             return userLikeDTO;
         }).toList();
+    }
+
+    public IsReviewLikedDTO isReviewLiked(UUID reviewId) {
+        UUID userId = userValidation.userAuthenticator();
+
+        IsReviewLikedDTO isReviewLikedDTO = new IsReviewLikedDTO();
+
+        Like isLiked = likeRepository.findByReviewIdAndUserId(reviewId, userId);
+
+        if (isLiked == null) {
+            isReviewLikedDTO.setLiked(false);
+        } else {
+            isReviewLikedDTO.setLiked(isLiked.isEnabled());
+        }
+
+        return isReviewLikedDTO;
     }
 }
