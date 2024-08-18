@@ -31,10 +31,10 @@ public class ReportController {
         return ResponseEntity.status(201).body(message);
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("{bookId}")
-    public ResponseEntity<List<ListReportDTO>> getReportListByBookId(@PathVariable UUID bookId) {
-        List<ListReportDTO> listReportDTO = reportService.getReportListByBookId(bookId);
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/admin/review/{reviewId}")
+    public ResponseEntity<List<ListReportDTO>> getReportListByReviewId(@PathVariable UUID reviewId) {
+        List<ListReportDTO> listReportDTO = reportService.getReportListByReviewId(reviewId);
         return ResponseEntity.status(200).body(listReportDTO);
     }
 
@@ -51,6 +51,13 @@ public class ReportController {
         ListReportDTO listReportDTO = reportService.changeReportStatus(reportId, reportStatus);
         return ResponseEntity.status(200).body(listReportDTO);
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/admin/user/{userId}")
+    public ResponseEntity<List<ListReportDTO>> getReportListByUserId(@PathVariable UUID userId) {
+        List<ListReportDTO> listReportDTO = reportService.getReportListByUserId(userId);
+        return ResponseEntity.status(200).body(listReportDTO);
+    }
 }
 
 // rotas necessárias:
@@ -59,6 +66,6 @@ public class ReportController {
 // pegar report por review
 // pegar report por usuario
 // pegar report por livro
-// desabilitar report - mudar status para recusadp
-// desabilitar review - mudar status para resolvido
+// desabilitar report - mudar status para recusadp xxx
+// desabilitar review - mudar status para resolvido xxx
 

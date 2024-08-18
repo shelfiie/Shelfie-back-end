@@ -38,14 +38,10 @@ public class ReportService {
         return "Report criado com sucesso!";
     }
 
-    public List<ListReportDTO> getReportListByBookId(UUID bookId) {
-        return null;
-    }
-
     public List<ListReportDTO> getAllReports() {
         List<Report> reportList = reportRepository.findAll();
         ListReportDTO listReportDTO = new ListReportDTO();
-
+        System.out.println(reportList.stream().toList());
         return reportList.stream().map(report -> getListReportDTO(report, listReportDTO)).toList();
     }
 
@@ -72,5 +68,20 @@ public class ReportService {
         listReportDTO.setReview(report.getReview().getReview());
         listReportDTO.setReportStatus(report.getReportStatus());
         return listReportDTO;
+    }
+
+    public List<ListReportDTO> getReportListByReviewId(UUID reviewId) {
+        List<Report> reportList = reportRepository.findByReviewId(reviewId);
+        ListReportDTO listReportDTO = new ListReportDTO();
+
+        return reportList.stream().map(report -> getListReportDTO(report, listReportDTO)).toList();
+    }
+
+    public List<ListReportDTO> getReportListByUserId(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        List<Report> reportList = reportRepository.findByUserId(user.getId());
+        System.out.println(reportList.stream().toList());
+        ListReportDTO listReportDTO = new ListReportDTO();
+        return reportList.stream().map(report -> getListReportDTO(report, listReportDTO)).toList();
     }
 }
