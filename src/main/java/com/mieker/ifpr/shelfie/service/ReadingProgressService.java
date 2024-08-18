@@ -13,6 +13,7 @@ import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
 import com.mieker.ifpr.shelfie.exception.AccessForbiddenException;
 import com.mieker.ifpr.shelfie.exception.ExceededPageLimitException;
+import com.mieker.ifpr.shelfie.exception.IdNotFoundException;
 import com.mieker.ifpr.shelfie.mapper.MyBooksMapper;
 import com.mieker.ifpr.shelfie.mapper.ReadingProgressMapper;
 import com.mieker.ifpr.shelfie.repository.BookRepository;
@@ -43,7 +44,7 @@ public class ReadingProgressService {
         ReadingProgress rp = new ReadingProgress();
         UUID userId = validation.userAuthenticator();
         MyBooks myBooks = mbRepository.findMyBooksByBookIdAndUserId(rpDTO.getBookId(), userId);
-        Book books = bookRepository.findById(myBooks.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + myBooks.getBook().getId()));
+        Book books = bookRepository.findById(myBooks.getBook().getId()).orElseThrow(() -> new IdNotFoundException("Não encontrado Book com id: " + myBooks.getBook().getId()));
 
         if (!myBooks.getUser().getId().equals(userId)) {
             throw new AccessDeniedException("Você não tem permissão para adicionar progresso de leitura a este livro.");
@@ -78,7 +79,7 @@ public class ReadingProgressService {
 
     protected void createReadingProgressionDisabled (UUID myBooksId) {
         MyBooks myBooks = mbRepository.findMyBooksById(myBooksId);
-        Book books = bookRepository.findById(myBooks.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + myBooks.getBook().getId()));
+        Book books = bookRepository.findById(myBooks.getBook().getId()).orElseThrow(() -> new IdNotFoundException("Não encontrado Book com id: " + myBooks.getBook().getId()));
         ReadingProgress rp = new ReadingProgress();
         rp.setMyBooks(myBooks);
         rp.setPage(books.getPages());
@@ -100,7 +101,7 @@ public class ReadingProgressService {
             resultList.addAll(rpList.stream()
                     .map(rp -> {
                         CollectionOfMyBooksDTO dto = rpMapper.readingProgressToCollectionOfMyBooks(rp);
-                        Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + mb.getBook().getId()));
+                        Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new IdNotFoundException("Não encontrado Book com id: " + mb.getBook().getId()));
                         dto.setGoogleId(book.getGoogleId());
                         System.out.println(rp.getEnabled());
                         dto.setBookId(mb.getBook().getId());
@@ -134,8 +135,8 @@ public class ReadingProgressService {
         return rpList.stream()
                 .map( rp -> {
                     CollectionOfMyBooksDTO dto = rpMapper.readingProgressToCollectionOfMyBooks(rp);
-                    MyBooks mb = mbRepository.findById(rp.getMyBooks().getId()).orElseThrow(() -> new RuntimeException("Não encontrado MyBooks com id: " + rp.getMyBooks().getId()));
-                    Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + mb.getBook().getId()));
+                    MyBooks mb = mbRepository.findById(rp.getMyBooks().getId()).orElseThrow(() -> new IdNotFoundException("Não encontrado MyBooks com id: " + rp.getMyBooks().getId()));
+                    Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new IdNotFoundException("Não encontrado Book com id: " + mb.getBook().getId()));
                     dto.setGoogleId(book.getGoogleId());
                     return dto;
                 })
@@ -145,7 +146,7 @@ public class ReadingProgressService {
     public List<CollectionOfMyBooksDTO> getReadingProgressByBookId(UUID bookId) {
         UUID userId = validation.userAuthenticator();
         MyBooks mb = mbRepository.findMyBooksByBookIdAndUserId(bookId, userId);
-        Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new RuntimeException("Não encontrado Book com id: " + mb.getBook().getId()));
+        Book book = bookRepository.findById(mb.getBook().getId()).orElseThrow(() -> new IdNotFoundException("Não encontrado Book com id: " + mb.getBook().getId()));
         String googleId = book.getGoogleId();
         List<ReadingProgress> rpList = rpRepository.findByMyBooksIdAndIsEnabled(mb.getId());
         return rpList.stream()
@@ -158,7 +159,7 @@ public class ReadingProgressService {
     }
 
     private ReadingProgress getReadingProgressById(UUID id) {
-        return rpRepository.findById(id).orElseThrow(() -> new RuntimeException("Não encontrado ReadingProgress com id: " + id));
+        return rpRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Não encontrado ReadingProgress com id: " + id));
     }
 
     private void checkPermission(UUID myBooksId) {

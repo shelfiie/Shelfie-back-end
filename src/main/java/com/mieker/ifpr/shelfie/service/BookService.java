@@ -3,6 +3,7 @@ package com.mieker.ifpr.shelfie.service;
 import com.mieker.ifpr.shelfie.dto.Book.BookDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
+import com.mieker.ifpr.shelfie.exception.IdNotFoundException;
 import com.mieker.ifpr.shelfie.mapper.BookMapper;
 import com.mieker.ifpr.shelfie.repository.BookRepository;
 import lombok.AllArgsConstructor;
@@ -32,12 +33,12 @@ public class BookService {
     }
 
     public BookDTO getBookByGoogleId(String googleId) {
-        Book book = bookRepository.findByGoogleId(googleId).orElseThrow(() -> new RuntimeException("Book not found with googleId: " + googleId));
+        Book book = bookRepository.findByGoogleId(googleId).orElseThrow(() -> new IdNotFoundException("Book not found with googleId: " + googleId));
         return bookMapper.bookToBookDTO(book);
     }
 
     public BookDTO getBookById(UUID id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("MyBooks not found with id: " + id));
+        Book book = bookRepository.findById(id).orElseThrow(() -> new IdNotFoundException("MyBooks not found with id: " + id));
         return bookMapper.bookToBookDTO(book);
     }
 

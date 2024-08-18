@@ -52,8 +52,8 @@ public class MyBookService {
 //    adicionar o livro no banco
     public MyBooks addBookToUser(UUID bookId, UUID userId, BookStatus bookStatus) {
         MyBooks myBooks = new MyBooks();
-        User user =  userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found with id: " + bookId));
+        User user =  userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException("User not found with id: " + userId));
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new IdNotFoundException("Book not found with id: " + bookId));
         myBooks.setBook(book);
         myBooks.setUser(user);
         myBooks.setBookStatus(bookStatus);
@@ -69,14 +69,14 @@ public class MyBookService {
 
 //    pegar o livro pelo id
     public MyBooksDTO getMyBooksById(UUID id) {
-        MyBooks myBooks = myBooksRepository.findById(id).orElseThrow(() -> new RuntimeException("MyBooks not found with id: " + id));
+        MyBooks myBooks = myBooksRepository.findById(id).orElseThrow(() -> new IdNotFoundException("MyBooks not found with id: " + id));
         return myBooksMapper.myBookToMyBookDTO(myBooks);
     }
 
 //  atualizar o livro como disabled
     public String disableMyBooks(UUID id) {
         MyBooks myBooksToUpdate = myBooksRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("MyBooks not found with id: " + id));
+                .orElseThrow(() -> new IdNotFoundException("MyBooks não encontrado com esse: " + id));
         myBooksToUpdate.setEnabled(false);
         myBooksRepository.save(myBooksToUpdate);
         rpService.disableReadingProgress(myBooksToUpdate.getId());

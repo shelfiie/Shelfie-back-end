@@ -56,7 +56,7 @@ public class ReviewService {
         return reviewList.stream().map(
                 review -> {
                     ResponseReviewDTO rrDTO = rMapper.reviewToResponseReviewDTO(review);
-                    MyBooks mb = mbRepository.findById(review.getMyBooks().getId()).orElseThrow(() -> new RuntimeException("MyBooks not found with id: " + review.getMyBooks().getId()));
+                    MyBooks mb = mbRepository.findById(review.getMyBooks().getId()).orElseThrow(() -> new IdNotFoundException("MyBooks not found with id: " + review.getMyBooks().getId()));
                     rrDTO.setBookId(mb.getBook().getId());
                     rrDTO.setUserId(mb.getUser().getId());
                     return rrDTO;
@@ -97,7 +97,7 @@ public class ReviewService {
             reviewList.addAll(rList.stream()
                     .map(review -> {
                         ResponseReviewDTO rrDTO = rMapper.reviewToResponseReviewDTO(review);
-                        MyBooks mb = mbRepository.findById(review.getMyBooks().getId()).orElseThrow(() -> new RuntimeException("MyBooks not found with id: " + review.getMyBooks().getId()));
+                        MyBooks mb = mbRepository.findById(review.getMyBooks().getId()).orElseThrow(() -> new IdNotFoundException("MyBooks not found with id: " + review.getMyBooks().getId()));
                         rrDTO.setBookId(mb.getBook().getId());
                         rrDTO.setUserId(mb.getUser().getId());
                         return rrDTO;
