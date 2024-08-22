@@ -46,7 +46,7 @@ public class ReportController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @GetMapping("/admin/{reportId}/{reportStatus}")
+    @PutMapping("/admin/{reportId}/{reportStatus}")
     public ResponseEntity<ListReportDTO> changeStatusReport(@PathVariable UUID reportId, @PathVariable ReportStatus reportStatus) {
         ListReportDTO listReportDTO = reportService.changeReportStatus(reportId, reportStatus);
         return ResponseEntity.status(200).body(listReportDTO);
