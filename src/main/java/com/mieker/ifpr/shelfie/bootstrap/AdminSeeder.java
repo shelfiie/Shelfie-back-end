@@ -47,6 +47,7 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
         user.setEmail(registerUserDTO.getEmail());
         user.setPassword(passwordEncoder.encode(registerUserDTO.getPassword()));
         user.setNickname(registerUserDTO.getNickname());
+        user.setImage("https://imgur.com/FTj8i7I.png");
         user.setBookBadge(BookBadge.NONE);
         user.setReviewBadge(ReviewBadge.NONE);
         user.setPaginometerBadge(PaginometerBadge.NONE);

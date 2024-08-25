@@ -86,11 +86,12 @@ public class PageService {
         int abandonado = mbRepository.countMyBooksByUserIdAndBookStatusAndEnabled(userId, BookStatus.ABANDONADO, true);
         int favorite = mbRepository.countMyBooksByUserIdAndFavoriteAndEnabled(userId, true, true);
         int review = mbRepository.countReviewByUserId(userId);
+        Integer paginometer = this.paginometerCounter(userId);
 
         this.setReviewBadge(userId, review);
         this.setBookBadge(userId, lido);
+        this.setPaginometerBadge(userId, paginometer);
 
-        Integer paginometer = this.paginometerCounter(userId);
         BookRelationDTO bookStatusDTO = new BookRelationDTO();
         bookStatusDTO.setLIDO(lido);
         bookStatusDTO.setLENDO(lendo);
@@ -134,31 +135,34 @@ public class PageService {
         } else {
             user.get().setPaginometerBadge(PaginometerBadge.LOT_OF_PAGES);
         }
+        userRepository.save(user.get());
     }
 
     private void setBookBadge(UUID userId, int lido) { // 1 5 15 30
         Optional<User> user = userRepository.findById(userId);
-        if (lido == 1) {
+        if (lido >= 1 && lido < 5) {
             user.get().setBookBadge(BookBadge.READER);
-        } else if (lido == 5 ) {
+        } else if (lido >= 5 && lido < 15 ) {
             user.get().setBookBadge(BookBadge.BOOKWORM);
-        } else if (lido == 15 ) {
+        } else if (lido >= 15 && lido < 30 ) {
             user.get().setBookBadge(BookBadge.BIBLIOPHILE);
-        } else if (lido == 30 ) {
+        } else if (lido > 30 ) {
             user.get().setBookBadge(BookBadge.BIBLIOMANIAC);
         }
+        userRepository.save(user.get());
     }
 
     private void setReviewBadge(UUID userId, int review) { // 1 3 10 +20
         Optional<User> user = userRepository.findById(userId);
-        if (review == 1) {
+        if (review >= 1 && review < 3) {
             user.get().setReviewBadge(ReviewBadge.NOVICE);
-        } else if (review == 3 ) {
+        } else if (review >= 3 && review < 10 ) {
             user.get().setReviewBadge(ReviewBadge.CRITIC);
-        } else if (review == 10 ) {
+        } else if (review >= 10 && review < 20 ) {
             user.get().setReviewBadge(ReviewBadge.EXPERT);
-        } else if (review == 20 ) {
+        } else if (review > 20 ) {
             user.get().setReviewBadge(ReviewBadge.CONNOISSEUR);
         }
+        userRepository.save(user.get());
     }
 }
