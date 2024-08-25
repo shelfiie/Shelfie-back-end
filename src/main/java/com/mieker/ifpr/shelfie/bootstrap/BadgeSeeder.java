@@ -20,41 +20,41 @@ public class BadgeSeeder implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private void createBadges() {
-        String none = "https://www.shutterstock.com/image-vector/prohibited-signs-isolated-on-white-260nw-1890653254.jpg";
+        String none = "";
 
-//        book badges
-        String beginner = "https://www.clipartmax.com/png/small/53-531308_keys-clip-art-download-jg-300.png";
-        String intermediate = "https://www.onlygfx.com/wp-content/uploads/2021/02/6-pixel-heart-1-300x300.png";
-        String advanced = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5NdYu0PxHRgx7vmWVFxI7Vhb1VR6k3JkoNA&s.png";
-        String expert = "https://pngfre.com/wp-content/uploads/orange-75-300x300.png";
+//        review badges
+        String novice = "https://i.imgur.com/ASDWRTR.png";
+        String critic = "https://i.imgur.com/4SS7r6J.png";
+        String expert = "https://i.imgur.com/URZ2ZWE.png";
+        String connoisseur = "https://i.imgur.com/BbSCVwU.png";
 
 //        paginometer badges
-        String hundredPages = "https://www.onlygfx.com/wp-content/uploads/2021/02/6-pixel-heart-1-300x300.png";
-        String thousandPages = "https://www.clipartmax.com/png/small/53-531308_keys-clip-art-download-jg-300.png";
-        String lotOfPages = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5NdYu0PxHRgx7vmWVFxI7Vhb1VR6k3JkoNA&s.png";
+        String hundredPages = "https://i.imgur.com/WZkFQjW.png";
+        String thousandPages = "https://i.imgur.com/RMABMHU.png";
+        String lotOfPages = "https://i.imgur.com/6Q2MuSH.png";
 
 //        na verdade esses poderiam ser em relação a quantidade de livros livros
-//        reading progression badge
-        String reader = "https://www.clipartmax.com/png/small/53-531308_keys-clip-art-download-jg-300.png";
-        String bookworm = "https://www.onlygfx.com/wp-content/uploads/2021/02/6-pixel-heart-1-300x300.png";
-        String bibliophile = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5NdYu0PxHRgx7vmWVFxI7Vhb1VR6k3JkoNA&s.png";
-        String bibliomaniac = "https://pngfre.com/wp-content/uploads/orange-75-300x300.png";
+//        book badges
+        String reader = "https://i.imgur.com/HHomZVo.png";
+        String bookworm = "https://i.imgur.com/O0Q15dz.png";
+        String bibliophile = "https://i.imgur.com/XCybLSc.png";
+        String bibliomaniac = "https://i.imgur.com/qTZOmbr.png";
 
 
-
+//        'NOVICE','CRITIC','EXPERT','CONNOISSEUR'
         String[][] badgeData = {
-                {"NONE", none},
-                {"BEGINNER", beginner},
-                {"INTERMEDIATE", intermediate},
-                {"ADVANCED", advanced},
-                {"EXPERT", expert},
-                {"HUNDRED_PAGES", hundredPages},
-                {"THOUSAND_PAGES", thousandPages},
-                {"LOT_OF_PAGES", lotOfPages},
-                {"READER", reader},
-                {"BOOKWORM", bookworm},
-                {"BIBLIOPHILE", bibliophile},
-                {"BIBLIOMANIAC", bibliomaniac}
+                {"NONE", none, "Não conseguiu essa badge ainda? :("},
+                {"NOVICE", novice, "Crítica construtiva (ou nem tanto)"},
+                {"CRITIC", critic, "O crítico nasceu"},
+                {"CONNOISSEUR", connoisseur, "Connoisseur de livros"},
+                {"EXPERT", expert, "Mestre das análises"},
+                {"HUNDRED_PAGES", hundredPages, "Primeiras páginas"},
+                {"THOUSAND_PAGES", thousandPages, "Mil e uma noites"},
+                {"LOT_OF_PAGES", lotOfPages, "Morando na biblioteca"},
+                {"READER", reader, "Batizado nas letras"},
+                {"BOOKWORM", bookworm, "Leitor Júnior"},
+                {"BIBLIOPHILE", bibliophile, "Livros são a minha vibe"},
+                {"BIBLIOMANIAC", bibliomaniac, "Livro? Sim! Sono? Talvez... depois!"}
         };
 
         for (String[] badgeEntry : badgeData) {
@@ -62,7 +62,7 @@ public class BadgeSeeder implements ApplicationListener<ContextRefreshedEvent> {
                 Badge badge = new Badge();
                 badge.setName(badgeEntry[0]);
                 badge.setImage(badgeEntry[1]);
-                badge.setDescription("Badge " + badgeEntry[0].toLowerCase());
+                badge.setDescription(badgeEntry[2]);
                 badgeRepository.save(badge);
             }
         }

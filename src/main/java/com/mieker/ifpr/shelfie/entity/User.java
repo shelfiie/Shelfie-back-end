@@ -1,9 +1,10 @@
 package com.mieker.ifpr.shelfie.entity;
 
+import com.mieker.ifpr.shelfie.entity.enumeration.BookBadge;
+import com.mieker.ifpr.shelfie.entity.enumeration.PaginometerBadge;
+import com.mieker.ifpr.shelfie.entity.enumeration.ReviewBadge;
 import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,6 +49,18 @@ public class User implements UserDetails {
 //    rota para ativar e rota para desativar
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "user_badge_paginometer", nullable = false)
+    private PaginometerBadge paginometerBadge;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_badge_book", nullable = false)
+    private BookBadge bookBadge;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_badge_review", nullable = false)
+    private ReviewBadge reviewBadge;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false)
     private UserRoles role;
 
@@ -56,9 +68,6 @@ public class User implements UserDetails {
     @CreationTimestamp(source = SourceType.DB)
     @Column(name = "user_created_at", nullable = false, updatable = false)
     private LocalDate createdAt;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserBadge userBadge;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
