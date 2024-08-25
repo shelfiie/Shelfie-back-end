@@ -76,6 +76,7 @@ public class UserController {
         return ResponseEntity.ok(message);
     }
 
+//    auto disable do usuario
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/disable")
     public ResponseEntity<String> disableUser() {
@@ -83,6 +84,7 @@ public class UserController {
         return ResponseEntity.ok(message);
     }
 
+//    fazer upload da imagem
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/upload-image")
     public ResponseEntity<ImageLinkDTO> uploadImage(@RequestBody ImageLinkDTO link) {

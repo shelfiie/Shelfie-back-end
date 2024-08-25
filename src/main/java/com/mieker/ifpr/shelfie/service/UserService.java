@@ -64,11 +64,16 @@ public class UserService {
         User userToUpdate = userRepository.findById(userId)
                 .orElseThrow(() -> new IdNotFoundException("User not found with id: " + userId));
 
-        userToUpdate.setEnabled(false);
+        this.onlyAdmin(userToUpdate);
+//        if (userToUpdate.getRole().equals(UserRoles.ROLE_ADMIN)) {
+//            int adminCount = userRepository.countByRole(UserRoles.ROLE_ADMIN);
+//            if (adminCount == 1) {
+//                throw new AccessForbiddenException("Não é possível desativar o único administrador");
+//            }
+//        }
 
         userToUpdate.setEnabled(false);
         userRepository.save(userToUpdate);
-        System.out.println(userToUpdate.getEnabled());
         return "Usuário desativado com sucesso";
     }
 
@@ -84,7 +89,7 @@ public class UserService {
         List<User> users = userRepository.findAll();
 //        o stream faz uma sequencia dos objetos retornados para que cada objeto seja mapeado individualmente
         return users.stream()
-//                referências de método
+//                referências de metodo
                 .map(userMapper::userToUserDTO)
                 .collect(Collectors.toList());
     }
@@ -121,4 +126,14 @@ public class UserService {
         System.out.println(userToUpdate.getImage());
         return userMapper.userToImageLinkDTO(userToUpdate);
     }
+
+    private void onlyAdmin(User userToUpdate) {
+        if (userToUpdate.getRole().equals(UserRoles.ROLE_ADMIN)) {
+            int adminCount = userRepository.countByRole(UserRoles.ROLE_ADMIN);
+            if (adminCount == 1) {
+                throw new AccessForbiddenException("Não é possível desativar o único administrador");
+            }
+        }
+    }
+
 }
