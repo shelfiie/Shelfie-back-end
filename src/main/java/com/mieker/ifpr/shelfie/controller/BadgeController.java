@@ -1,6 +1,7 @@
 package com.mieker.ifpr.shelfie.controller;
 
 import com.mieker.ifpr.shelfie.dto.Badge.BadgeDTO;
+import com.mieker.ifpr.shelfie.dto.Badge.UserBadgeDTO;
 import com.mieker.ifpr.shelfie.entity.Badge;
 import com.mieker.ifpr.shelfie.service.BadgeService;
 import lombok.AllArgsConstructor;
@@ -31,5 +32,12 @@ public class BadgeController {
     public ResponseEntity<Badge> updateBadge(@PathVariable UUID badgeId, @RequestBody BadgeDTO badgeDTO) {
         Badge badge = badgeService.updateBadge(badgeId, badgeDTO);
         return ResponseEntity.ok(badge);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/user")
+    public ResponseEntity<UserBadgeDTO> getUserBadge() {
+        UserBadgeDTO userBadge = badgeService.getUserBadges();
+        return ResponseEntity.ok(userBadge);
     }
 }
