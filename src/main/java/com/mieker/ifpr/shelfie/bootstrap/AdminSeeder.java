@@ -2,6 +2,9 @@ package com.mieker.ifpr.shelfie.bootstrap;
 
 import com.mieker.ifpr.shelfie.dto.User.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
+import com.mieker.ifpr.shelfie.entity.enumeration.BookBadge;
+import com.mieker.ifpr.shelfie.entity.enumeration.PaginometerBadge;
+import com.mieker.ifpr.shelfie.entity.enumeration.ReviewBadge;
 import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import com.mieker.ifpr.shelfie.repository.UserRepository;
 import org.springframework.context.ApplicationListener;
@@ -44,6 +47,10 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
         user.setEmail(registerUserDTO.getEmail());
         user.setPassword(passwordEncoder.encode(registerUserDTO.getPassword()));
         user.setNickname(registerUserDTO.getNickname());
+        user.setImage("https://imgur.com/FTj8i7I.png");
+        user.setBookBadge(BookBadge.NONE);
+        user.setReviewBadge(ReviewBadge.NONE);
+        user.setPaginometerBadge(PaginometerBadge.NONE);
         user.setRole(UserRoles.ROLE_ADMIN);
         user.setEnabled(true);
 

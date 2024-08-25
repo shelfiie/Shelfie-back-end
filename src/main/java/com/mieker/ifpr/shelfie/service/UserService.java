@@ -65,12 +65,6 @@ public class UserService {
                 .orElseThrow(() -> new IdNotFoundException("User not found with id: " + userId));
 
         this.onlyAdmin(userToUpdate);
-//        if (userToUpdate.getRole().equals(UserRoles.ROLE_ADMIN)) {
-//            int adminCount = userRepository.countByRole(UserRoles.ROLE_ADMIN);
-//            if (adminCount == 1) {
-//                throw new AccessForbiddenException("Não é possível desativar o único administrador");
-//            }
-//        }
 
         userToUpdate.setEnabled(false);
         userRepository.save(userToUpdate);
@@ -106,6 +100,9 @@ public class UserService {
         User userToUpdate = userRepository.findById(userId)
                 .orElseThrow(() -> new IdNotFoundException("User not found with id: " + userId));
         String message = "";
+
+        this.onlyAdmin(userToUpdate);
+
         if (!userToUpdate.getEnabled()) {
             userToUpdate.setEnabled(true);
             message = "Usuário ativado com sucesso";
