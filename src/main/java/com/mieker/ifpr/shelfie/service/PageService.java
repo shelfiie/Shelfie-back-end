@@ -6,11 +6,16 @@ import com.mieker.ifpr.shelfie.dto.ReadingProgress.PageDTO;
 import com.mieker.ifpr.shelfie.entity.Book;
 import com.mieker.ifpr.shelfie.entity.MyBooks;
 import com.mieker.ifpr.shelfie.entity.ReadingProgress;
+import com.mieker.ifpr.shelfie.entity.User;
+import com.mieker.ifpr.shelfie.entity.enumeration.BookBadge;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
+import com.mieker.ifpr.shelfie.entity.enumeration.PaginometerBadge;
+import com.mieker.ifpr.shelfie.entity.enumeration.ReviewBadge;
 import com.mieker.ifpr.shelfie.exception.NotFoundException;
 import com.mieker.ifpr.shelfie.repository.BookRepository;
 import com.mieker.ifpr.shelfie.repository.MyBooksRepository;
 import com.mieker.ifpr.shelfie.repository.ReadingProgressRepository;
+import com.mieker.ifpr.shelfie.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +30,7 @@ public class PageService {
     private final Validation validation;
     private final MyBooksRepository mbRepository;
     private final BookRepository bookRepository;
+    private final UserRepository userRepository;
 
     public PageDTO getMyLastPage(UUID bookId) {
         UUID userId = validation.userAuthenticator();
@@ -38,7 +44,10 @@ public class PageService {
         Optional<Book> book = bookRepository.findById(bookId);
         int totalPages = book.get().getPages();
 
+        this.setPaginometerBadge(userId, totalPages);
+
 //        quantidade de páginas lidas x 100 / total de páginas
+
 
         int porcentage = (page * 100) / totalPages;
 
@@ -77,6 +86,10 @@ public class PageService {
         int abandonado = mbRepository.countMyBooksByUserIdAndBookStatusAndEnabled(userId, BookStatus.ABANDONADO, true);
         int favorite = mbRepository.countMyBooksByUserIdAndFavoriteAndEnabled(userId, true, true);
         int review = mbRepository.countReviewByUserId(userId);
+
+        this.setReviewBadge(userId, review);
+        this.setBookBadge(userId, lido);
+
         Integer paginometer = this.paginometerCounter(userId);
         BookRelationDTO bookStatusDTO = new BookRelationDTO();
         bookStatusDTO.setLIDO(lido);
@@ -88,6 +101,7 @@ public class PageService {
         bookStatusDTO.setPaginometer(paginometer);
         return bookStatusDTO;
     }
+
 
     public PageDTO getPaginometer() {
         UUID userId = validation.userAuthenticator();
@@ -109,5 +123,42 @@ public class PageService {
             paginometer += page;
         }
         return paginometer;
+    }
+
+    private void setPaginometerBadge(UUID userId, int badge) {
+        Optional<User> user = userRepository.findById(userId);
+        if (100 <=badge && badge < 1000) {
+            user.get().setPaginometerBadge(PaginometerBadge.HUNDRED_PAGES);
+        } else if (1000 <=badge && badge < 5000) {
+            user.get().setPaginometerBadge(PaginometerBadge.THOUSAND_PAGES);
+        } else {
+            user.get().setPaginometerBadge(PaginometerBadge.LOT_OF_PAGES);
+        }
+    }
+
+    private void setBookBadge(UUID userId, int lido) { // 1 5 15 30
+        Optional<User> user = userRepository.findById(userId);
+        if (lido == 1) {
+            user.get().setBookBadge(BookBadge.READER);
+        } else if (lido == 5 ) {
+            user.get().setBookBadge(BookBadge.BOOKWORM);
+        } else if (lido == 15 ) {
+            user.get().setBookBadge(BookBadge.BIBLIOPHILE);
+        } else if (lido == 30 ) {
+            user.get().setBookBadge(BookBadge.BIBLIOMANIAC);
+        }
+    }
+
+    private void setReviewBadge(UUID userId, int review) { // 1 3 10 +20
+        Optional<User> user = userRepository.findById(userId);
+        if (review == 1) {
+            user.get().setReviewBadge(ReviewBadge.NOVICE);
+        } else if (review == 3 ) {
+            user.get().setReviewBadge(ReviewBadge.CRITIC);
+        } else if (review == 10 ) {
+            user.get().setReviewBadge(ReviewBadge.EXPERT);
+        } else if (review == 20 ) {
+            user.get().setReviewBadge(ReviewBadge.CONNOISSEUR);
+        }
     }
 }

@@ -49,15 +49,15 @@ public class User implements UserDetails {
 //    rota para ativar e rota para desativar
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_badge_paginometer", nullable = false)
+    @Column(name = "user_badge_paginometer")
     private PaginometerBadge paginometerBadge;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_badge_book", nullable = false)
+    @Column(name = "user_badge_book")
     private BookBadge bookBadge;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_badge_review", nullable = false)
+    @Column(name = "user_badge_review")
     private ReviewBadge reviewBadge;
 
     @Enumerated(EnumType.STRING)
