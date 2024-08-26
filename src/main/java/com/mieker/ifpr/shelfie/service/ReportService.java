@@ -40,9 +40,6 @@ public class ReportService {
 
     public List<ListReportDTO> getAllReports() {
         List<Report> reportList = reportRepository.findAll();
-        ListReportDTO listReportDTO = new ListReportDTO();
-        System.out.println(reportList);
-//        System.out.println(reportList.stream().toList());
         return reportList.stream().map(report -> getListReportDTO(report, new ListReportDTO()))
                 .toList();
     }
@@ -64,6 +61,7 @@ public class ReportService {
     @NotNull
     private ListReportDTO getListReportDTO(Report report, ListReportDTO listReportDTO) {
         listReportDTO.setReportId(report.getId());
+        listReportDTO.setCreatedAt(report.getCreatedAt());
         listReportDTO.setUserId(report.getUser().getId());
         listReportDTO.setReviewId(report.getReview().getId());
         listReportDTO.setBookId(report.getReview().getMyBooks().getId());
