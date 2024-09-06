@@ -1,7 +1,7 @@
 CREATE TABLE tb_user (
                          user_id UUID NOT NULL,
                          user_name VARCHAR(255) NOT NULL,
-                         user_username VARCHAR(255) NOT NULL UNIQUE,
+                         user_nickname VARCHAR(255) NOT NULL UNIQUE,
                          user_email VARCHAR(255) NOT NULL UNIQUE,
                          user_password VARCHAR(255) NOT NULL,
                          user_image VARCHAR(255),

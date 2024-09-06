@@ -12,6 +12,18 @@ import java.util.UUID;
 public interface ReadingProgressRepository extends JpaRepository<ReadingProgress, UUID>  {
     Optional<ReadingProgress> findById(UUID id);
 
+    @Query("SELECT rp FROM ReadingProgress rp WHERE rp.myBooks.id = :myBooksId and rp.enabled = true")
+    List<ReadingProgress> findByMyBooksIdAndEnabled(UUID myBooksId);
+
     @Query("SELECT rp FROM ReadingProgress rp WHERE rp.myBooks.id = :myBooksId")
     List<ReadingProgress> findByMyBooksId(UUID myBooksId);
+
+    @Query("SELECT MAX(rp.page) FROM ReadingProgress rp WHERE rp.myBooks.id = :myBooksId")
+    Integer findMaxProgressByMyBooksId(UUID myBooksId);
+
+    @Query("SELECT rp FROM ReadingProgress rp WHERE rp.enabled = true")
+    List<ReadingProgress> findAllAndEnabled();
+
+    @Query("SELECT rp FROM ReadingProgress rp WHERE rp.myBooks.id = :id and rp.enabled = true")
+    List<ReadingProgress> findByMyBooksIdAndIsEnabled(UUID id);
 }

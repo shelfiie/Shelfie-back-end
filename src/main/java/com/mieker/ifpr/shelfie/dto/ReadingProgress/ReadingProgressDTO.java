@@ -7,6 +7,6 @@ import java.util.UUID;
 @Data
 public class ReadingProgressDTO {
     private Integer page;
-    private UUID myBooksId;
+    private UUID bookId;
     private String commentary;
 }

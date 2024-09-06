@@ -1,5 +1,6 @@
 package com.mieker.ifpr.shelfie.controller;
 
+import com.mieker.ifpr.shelfie.dto.User.ImageLinkDTO;
 import com.mieker.ifpr.shelfie.dto.User.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.dto.User.UserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
@@ -49,6 +50,7 @@ public class UserController {
     }
 
 //    Update user
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{id}/update")
     public ResponseEntity<UpdateUserDTO> updateUser(@PathVariable("id") UUID id, @RequestBody UpdateUserDTO userUpdateDTO) throws ParseException, GlobalExceptionHandler {
         UpdateUserDTO updateUserDTO = userService.updateUser(id, userUpdateDTO);
@@ -58,25 +60,35 @@ public class UserController {
 //    endpoint de consulta do próprio usuário
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
-    public ResponseEntity<User> authenticatedUser()  {
+    public ResponseEntity<UserDTO> authenticatedUser()  {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication);
         User currentUser = (User) authentication.getPrincipal();
-        System.out.println(currentUser);
-        return ResponseEntity.ok(currentUser);
+        UUID userId = currentUser.getId();
+        UserDTO userDTO = userService.getUserById(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
 //    para fazer o delete do usuário, mas só alterando seu status para disabled
-    @PutMapping("/{id}/disable")
-    public ResponseEntity<String> disableUser(@PathVariable UUID id) {
-        try {
-            UserDTO userDTO = userService.updateUserDisable(id);
-            String message = String.format("User '%s' disabled successfully", userDTO.getName());
-            return ResponseEntity.ok(message);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PutMapping("/admin/{userId}/disable")
+    public ResponseEntity<String> disableAndEnableUser(@PathVariable UUID userId) {
+        String message = userService.disableAndEnableUser(userId);
+        return ResponseEntity.ok(message);
+    }
+
+//    auto disable do usuario
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/disable")
+    public ResponseEntity<String> disableUser() {
+        String message = userService.disableUser();
+        return ResponseEntity.ok(message);
+    }
+
+//    fazer upload da imagem
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/upload-image")
+    public ResponseEntity<ImageLinkDTO> uploadImage(@RequestBody ImageLinkDTO link) {
+        ImageLinkDTO linkImage = userService.uploadImage(link);
+        return ResponseEntity.status(200).body(linkImage);
     }
 }

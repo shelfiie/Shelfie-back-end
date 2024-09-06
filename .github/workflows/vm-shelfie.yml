@@ -1,19 +1,20 @@
 name: deploy-rest-api-shelfie
 
 on:
-#  push:
-#    branches:
-#      - main
-  pull_request:
+  push:
     branches:
+      - gms--back-api
       - main
-  workflow_dispatch:
 
 jobs:
-  deployment:
+  build:
     runs-on: ubuntu-latest
-    environment: production
+    environment: development
+
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Deploy to DigitalOcean
         uses: appleboy/ssh-action@master
         with:
@@ -21,10 +22,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          script: |
-            git clone git@github.com:shelfiie/Shelfie-back-end.git
-            cd /root/Shelfie-back-end
-            git pull origin main
-            mvn package -Dmaven.test.skip=true
-#            java -jar target/shelfie-0.0.1-SNAPSHOT.jar
-            # Comandos adicionais de implantação
+          script:
+            ./deploy.sh
+
+

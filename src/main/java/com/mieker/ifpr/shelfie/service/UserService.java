@@ -1,11 +1,15 @@
 package com.mieker.ifpr.shelfie.service;
 
+import com.mieker.ifpr.shelfie.config.Validation;
+import com.mieker.ifpr.shelfie.dto.User.ImageLinkDTO;
 import com.mieker.ifpr.shelfie.dto.User.RegisterUserDTO;
 import com.mieker.ifpr.shelfie.dto.User.UpdateUserDTO;
 import com.mieker.ifpr.shelfie.dto.User.UserDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
+import com.mieker.ifpr.shelfie.exception.AccessForbiddenException;
 import com.mieker.ifpr.shelfie.exception.GlobalExceptionHandler;
+import com.mieker.ifpr.shelfie.exception.IdNotFoundException;
 import com.mieker.ifpr.shelfie.mapper.UserMapper;
 import com.mieker.ifpr.shelfie.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,14 +30,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private Validation validation;
 
-//    criar um user admin
+    //    criar um user admin
     public User createAdministrator(RegisterUserDTO input) {
         User user = new User();
         user.setName(input.getName());
         user.setEmail(input.getEmail());
         user.setPassword(passwordEncoder.encode(input.getPassword()));
-        user.setUsernome(input.getUsernome());
+        user.setNickname(input.getNickname());
         user.setRole(UserRoles.ROLE_ADMIN);
         return userRepository.save(user);
     }
@@ -42,19 +47,28 @@ public class UserService {
     public UpdateUserDTO updateUser(UUID id, UpdateUserDTO userUpdateDTO) throws ParseException, GlobalExceptionHandler {
         User userToUpdate = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
-        userToUpdate.setUsernome(userUpdateDTO.getUsernome());
+        UUID userId = validation.userAuthenticator();
+        if (!userId.equals(id)) {
+            throw new AccessForbiddenException("Você não tem permissão para atualizar esse usuário");
+        }
+        userToUpdate.setNickname(userUpdateDTO.getNickname());
         userToUpdate.setName(userUpdateDTO.getName());
         userRepository.save(userToUpdate);
         return userMapper.userToUpdateUserDTO(userToUpdate);
     }
 
 //    atualizar o usuário para disable
-    public UserDTO updateUserDisable(UUID id) throws ParseException {
-        User userToUpdate = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+    public String disableUser() {
+        UUID userId = validation.userAuthenticator();
+
+        User userToUpdate = userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException("User not found with id: " + userId));
+
+        this.onlyAdmin(userToUpdate);
+
         userToUpdate.setEnabled(false);
         userRepository.save(userToUpdate);
-        return userMapper.updateUserDisabled(userToUpdate);
+        return "Usuário desativado com sucesso";
     }
 
 //    pegar o usuário pelo id
@@ -69,8 +83,54 @@ public class UserService {
         List<User> users = userRepository.findAll();
 //        o stream faz uma sequencia dos objetos retornados para que cada objeto seja mapeado individualmente
         return users.stream()
-//                referências de método
+//                referências de metodo
                 .map(userMapper::userToUserDTO)
                 .collect(Collectors.toList());
     }
+
+    public String changeRole(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        user.setRole(UserRoles.ROLE_ADMIN);
+        userRepository.save(user);
+        return "O usuário " + user.getName() + " agora é um administrador";
+    }
+
+    public String disableAndEnableUser(UUID userId) {
+        User userToUpdate = userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException("User not found with id: " + userId));
+        String message = "";
+
+        this.onlyAdmin(userToUpdate);
+
+        if (!userToUpdate.getEnabled()) {
+            userToUpdate.setEnabled(true);
+            message = "Usuário ativado com sucesso";
+        } else {
+            userToUpdate.setEnabled(false);
+            message = "Usuário desativado com sucesso";
+        }
+        userRepository.save(userToUpdate);
+        return message;
+    }
+
+    public ImageLinkDTO uploadImage(ImageLinkDTO linkImage) {
+        UUID userId = validation.userAuthenticator();
+        User userToUpdate = userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException("User not found with id: " + userId));
+        userToUpdate.setImage(linkImage.getImage());
+        userRepository.save(userToUpdate);
+        System.out.println(userToUpdate.getImage());
+        return userMapper.userToImageLinkDTO(userToUpdate);
+    }
+
+    private void onlyAdmin(User userToUpdate) {
+        if (userToUpdate.getRole().equals(UserRoles.ROLE_ADMIN)) {
+            int adminCount = userRepository.countByRole(UserRoles.ROLE_ADMIN);
+            if (adminCount == 1) {
+                throw new AccessForbiddenException("Não é possível desativar o único administrador");
+            }
+        }
+    }
+
 }

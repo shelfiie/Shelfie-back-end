@@ -1,0 +1,2 @@
+ALTER TABLE IF EXISTS tb_like ADD CONSTRAINT tb_like_fk1 FOREIGN KEY (review_id) REFERENCES tb_review;
+ALTER TABLE IF EXISTS tb_like ADD CONSTRAINT tb_like_fk2 FOREIGN KEY (user_id) REFERENCES tb_user;

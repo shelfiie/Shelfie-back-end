@@ -1,6 +1,7 @@
 package com.mieker.ifpr.shelfie.controller;
 
 import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksDTO;
+import com.mieker.ifpr.shelfie.dto.MyBooks.MyBooksEnabledDTO;
 import com.mieker.ifpr.shelfie.dto.MyBooks.UpdateMyBooksDTO;
 import com.mieker.ifpr.shelfie.entity.User;
 import com.mieker.ifpr.shelfie.entity.enumeration.BookStatus;
@@ -23,22 +24,15 @@ import java.util.UUID;
 @AllArgsConstructor
 @RequestMapping("/api/mybooks")
 public class MyBooksController {
-//    TODO
-//    testar todas essas rotas
 
     private final MyBookService myBookService;
-    private final ModelMapper mapper;
-
-//    todo:
-//    editar aq, n precisa passar o usuario como parametro
-//    pegar ele do token
 
 //    rota que associa um usuário reader a um livro
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/{userId}/{googleId}/{bookStatus}")
-    public ResponseEntity<MyBooksDTO> createMyBooks(@PathVariable UUID userId, @PathVariable String googleId, @PathVariable BookStatus bookStatus) throws ParseException {
-        MyBooksDTO myBooksDTO = myBookService.create(userId, googleId, bookStatus);
-        return ResponseEntity.ok(myBooksDTO);
+    @PostMapping("{googleId}/{bookStatus}")
+    public ResponseEntity<MyBooksDTO> createMyBooks(@PathVariable String googleId, @PathVariable BookStatus bookStatus) throws ParseException {
+        MyBooksDTO myBooksDTO = myBookService.create(googleId, bookStatus);
+        return ResponseEntity.status(201).body(myBooksDTO);
     }
 
 //    rota dos admins
@@ -52,7 +46,6 @@ public class MyBooksController {
 
 //    rota do usuario reader
 //    retorna o mybooks do id passado como parâmetro
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<MyBooksDTO> getMyBooksById(@PathVariable UUID id) {
@@ -60,115 +53,76 @@ public class MyBooksController {
         return ResponseEntity.ok(myBooksDTO);
     }
 
+    //    retorna o mybooks do id passado como parâmetro
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/google/{googleId}")
+    public ResponseEntity<MyBooksDTO> getMyBooksByGoogleId(@PathVariable String googleId) {
+        MyBooksDTO myBooksDTO = myBookService.getMyBooksByGoogleId(googleId);
+        return ResponseEntity.ok(myBooksDTO);
+    }
+
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/google/{googleId}")
+//    public ResponseEntity<List<MyBooksDTO>> getMyBooksByGoogleId(@PathVariable String googleId) {
+//        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByGoogleId(googleId);
+//        return ResponseEntity.ok(myBooksDTO);
+//    }
+
 //    rota authenticated
 //    rota para desativar um my books
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("/{id}/disable")
-    public ResponseEntity<String> deleteMyBooks(@PathVariable("id") UUID id) {
-        try {
-//            não sei se esse eu retorno alguma coisa ou não
-            MyBooksDTO myBooks = myBookService.updateMyBooksDisable(id);
-//            System.out.println(myBooks);
-            return ResponseEntity.ok("Livro apagado com sucesso.");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    @PutMapping("/{myBooksId}/disable")
+    public ResponseEntity<String> deleteMyBooks(@PathVariable UUID myBooksId) {
+        String message = myBookService.disableMyBooks(myBooksId);
+        return ResponseEntity.status(200).body(message);
+
     }
 
 //    todo
-//    quando o user der disabled no mybooks apaga tudo, so fica o id do mybooks e do livro
+//    quando der disable no mybook dar disable na reading progression tbm
+
 
 //    TODO
 //    refletir sobre isso aqui !!!
 //    retorno só o id do livro e o status do livro ? dont knowrr
 //    rota para atualizar o status do livro
-    @PutMapping("/{id}/update/{bookStatus}")
-    public ResponseEntity<UpdateMyBooksDTO> updateMyBooks(@PathVariable UUID id, @PathVariable BookStatus bookStatus) {
-        UpdateMyBooksDTO updateMyBooksDTO = myBookService.updateMyBooks(id, bookStatus);
+    @PutMapping("/{googleId}/update/{bookStatus}")
+    public ResponseEntity<UpdateMyBooksDTO> updateMyBooks(@PathVariable String googleId, @PathVariable BookStatus bookStatus) {
+        UpdateMyBooksDTO updateMyBooksDTO = myBookService.updateMyBooks(googleId, bookStatus);
         return ResponseEntity.ok(updateMyBooksDTO);
     }
 
 //    pega todos os mybooks do usuário que estão enabled
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{userId}/mine")
-    public ResponseEntity<List<MyBooksDTO>> getMyBooksByUserId(@PathVariable UUID userId) {
-        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByUserId(userId);
+    @GetMapping("/mine")
+//    todo
+//    investigar essa rota
+//    ver se ela precisa que passe um parametro
+//    talvez criar uma nova rota q passa o id como parâmetro
+    public ResponseEntity<List<MyBooksDTO>> getMyBooksByUserId() {
+        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByUserId();
         return ResponseEntity.ok(myBooksDTO);
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/status/{booksStatus}")
     public ResponseEntity<List<MyBooksDTO>> getMyBooksByStatus (@PathVariable BookStatus booksStatus) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        UUID userId = currentUser.getId();
-        System.out.println(userId);
-        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(userId, booksStatus);
+        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(booksStatus);
         return ResponseEntity.ok(myBooksDTO);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/em-espera")
-    public ResponseEntity<List<MyBooksDTO>> getMyBooksByStatusEmEspera () {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        UUID userId = currentUser.getId();
-        System.out.println(userId);
-        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(userId, BookStatus.EM_ESPERA);
-        return ResponseEntity.ok(myBooksDTO);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/abandonado")
-    public ResponseEntity<List<MyBooksDTO>> getMyBooksByStatusAbandonado () {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        UUID userId = currentUser.getId();
-        System.out.println(userId);
-        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(userId, BookStatus.ABANDONADO);
-        return ResponseEntity.ok(myBooksDTO);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/lido")
-    public ResponseEntity<List<MyBooksDTO>> getMyBooksByStatusLido () {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        UUID userId = currentUser.getId();
-        System.out.println(userId);
-        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(userId, BookStatus.LIDO);
-        return ResponseEntity.ok(myBooksDTO);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/quero-ler")
-    public ResponseEntity<List<MyBooksDTO>> getMyBooksByStatusQueroLer () {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        UUID userId = currentUser.getId();
-        System.out.println(userId);
-        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(userId, BookStatus.QUERO_LER);
-        return ResponseEntity.ok(myBooksDTO);
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/lendo")
-    public ResponseEntity<List<MyBooksDTO>> getMyBooksByStatusLendo () {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        UUID userId = currentUser.getId();
-        System.out.println(userId);
-        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByStatus(userId, BookStatus.LENDO);
-        return ResponseEntity.ok(myBooksDTO);
+    @GetMapping("/is-enabled/{googleId}")
+    public ResponseEntity<MyBooksEnabledDTO> isEnabled (@PathVariable String googleId) {
+        MyBooksEnabledDTO isEnabled = myBookService.isEnabled(googleId);
+        return ResponseEntity.ok(isEnabled);
     }
 
 //    rota para retornar todos os mybooks de um livro
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{bookId}/list")
     public ResponseEntity<List<MyBooksDTO>> getMyBooksByBookId(@PathVariable UUID bookId) {
         List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByBookId(bookId);
         return ResponseEntity.ok(myBooksDTO);
     }
-
 }

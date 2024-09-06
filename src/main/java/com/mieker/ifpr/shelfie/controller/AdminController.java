@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/admins")
+@RequestMapping("/api/admin")
 @RestController
 public class AdminController {
     private final UserService userService;
@@ -23,7 +25,16 @@ public class AdminController {
     public ResponseEntity<User> createAdmin(@RequestBody RegisterUserDTO registerUserDTO) {
         User createAdmin = userService.createAdministrator(registerUserDTO);
 
-        return ResponseEntity.ok(createAdmin);
+        return ResponseEntity.status(201).body(createAdmin);
+    }
+
+    @PostMapping("/change-role/{userId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    pra reforçar que o usuário precisa ser um admin para ter acesso a essa rota
+    public ResponseEntity<String> changeRole(@PathVariable UUID userId) {
+        String message = userService.changeRole(userId);
+
+        return ResponseEntity.status(200).body(message);
     }
 }
 
