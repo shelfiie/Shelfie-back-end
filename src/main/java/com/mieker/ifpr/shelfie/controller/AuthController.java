@@ -24,8 +24,6 @@ public class AuthController {
         this.authenticationService = authenticationService;
     }
 
-//    TODO
-//    ver o que retornar aqui
     @PostMapping("/signup")
     public ResponseEntity<User> register(@RequestBody RegisterUserDTO signUpDTO) throws LoginException {
         User registeredUser = authenticationService.signUp(signUpDTO);

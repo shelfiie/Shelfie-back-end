@@ -15,13 +15,7 @@ public class MyBooksMapper {
         this.mapper = mapper;
     }
 
-//    todo
-//    no mapper eu tenho que mapear que a string do googleId vai ser o googleId do book
-//    e o user vai ser o uuid do user
     public MyBooks myBookDTOtoMyBook(MyBooksDTO myBooksDTO) {
-//        MyBooks myBooks = new MyBooks();
-//        Book book = new Book();
-//        book.setGoogleId(myBooksDTO.getGoogleId());
         return mapper.map(myBooksDTO, MyBooks.class);
     }
 
@@ -29,11 +23,8 @@ public class MyBooksMapper {
         return mapper.map(myBooks, MyBooksDTO.class);
     }
 
-//    TODO
-//    refatorar o user disable lá
     public MyBooksDTO updateMyBooksDisabled(MyBooks myBooksToUpdate) {
         return  mapper.map(myBooksToUpdate, MyBooksDTO.class);
-//       myBooksToUpdate;
     }
 
     public UpdateMyBooksDTO updateMyBooks(MyBooks myBooksToUpdate) {
