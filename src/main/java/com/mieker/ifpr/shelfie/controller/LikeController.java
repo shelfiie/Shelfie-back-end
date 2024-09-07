@@ -37,7 +37,6 @@ public class LikeController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("{reviewId}")
-//    nessa da pra retornar o nome do usuario
     public ResponseEntity<LikeDTO> getReviewLikes(@PathVariable UUID reviewId) {
         LikeDTO likeDTOList = likeService.getReviewLikes(reviewId);
         return ResponseEntity.status(200).body(likeDTOList);

@@ -45,9 +45,6 @@ public class ReviewService {
                 throw new NotFoundException("O status do livro não está como LIDO ou ABANDONADO.");
             }
         }
-//        TODO
-//        ver o que retornar aqui
-//        criar um novo DTO para um response com id do usuario e do livro?
         return rMapper.reviewToReviewDTO(review);
     }
 

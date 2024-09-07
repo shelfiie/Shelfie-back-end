@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-// TODO:
-//  Implementar validação de senha
 @Component
 public class Validation {
 
