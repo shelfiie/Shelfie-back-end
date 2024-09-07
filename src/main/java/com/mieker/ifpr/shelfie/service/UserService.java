@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 // user controller -> service -> repository -> dto
@@ -102,7 +103,7 @@ public class UserService {
         String message = "";
 
         this.onlyAdmin(userToUpdate);
-
+        System.out.println(userToUpdate.getEnabled());
         if (!userToUpdate.getEnabled()) {
             userToUpdate.setEnabled(true);
             message = "Usuário ativado com sucesso";
@@ -125,11 +126,8 @@ public class UserService {
     }
 
     private void onlyAdmin(User userToUpdate) {
-        if (userToUpdate.getRole().equals(UserRoles.ROLE_ADMIN)) {
-            int adminCount = userRepository.countByRole(UserRoles.ROLE_ADMIN);
-            if (adminCount == 1) {
-                throw new AccessForbiddenException("Não é possível desativar o único administrador");
-            }
+        if (Objects.equals(userToUpdate.getNickname(), "admin")) {
+            throw new AccessForbiddenException("Não é possível desativar super administrador");
         }
     }
 

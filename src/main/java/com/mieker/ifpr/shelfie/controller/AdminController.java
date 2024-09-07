@@ -28,7 +28,7 @@ public class AdminController {
         return ResponseEntity.status(201).body(createAdmin);
     }
 
-    @PostMapping("/change-role/{userId}")
+    @PutMapping("/change-role/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
 //    pra reforçar que o usuário precisa ser um admin para ter acesso a essa rota
     public ResponseEntity<String> changeRole(@PathVariable UUID userId) {
@@ -37,7 +37,3 @@ public class AdminController {
         return ResponseEntity.status(200).body(message);
     }
 }
-
-// na admin controller tem que ter as rotas para:
-// disable reviews
-// disable user
