@@ -50,7 +50,7 @@ public class BookControler {
     //    only admin tem acesso a essa rota
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create/{googleId}")
-    public ResponseEntity<String> createBook(@PathVariable String googleId) throws ParseException {
+    public ResponseEntity<String> createBook(@PathVariable String googleId) {
         bookService.createBook(googleId);
         return ResponseEntity.status(201).body("Livro criado com sucesso.");
     }
