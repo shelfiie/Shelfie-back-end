@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -25,36 +26,29 @@ public class BookControler {
     private final BookApiService bookApiService;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<Book>> getAllBooks() {
         List<Book> book = bookService.getAllBooks();
         return ResponseEntity.ok(book);
     }
 
-    //    pegar livro pelo id do google na api do google
-//    only admin tem acesso a essa rota
-//    @GetMapping("/google/{googleId}")
-//    public ResponseEntity<BookDTO> getBookByGoogleId(@PathVariable String googleId) {
-////        System.out.println(googleId);
-//        BookDTO book = bookApiService.getBookByGoogleId(googleId);
-//        return ResponseEntity.ok(book);
-//    }
-
     @GetMapping("/google/{googleId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BookDTO> getBookByGoogleId(@PathVariable String googleId) {
-//        System.out.println(googleId);
         BookDTO book = bookService.getBookByGoogleId(googleId);
         return ResponseEntity.ok(book);
     }
 
     //    pegar livro pelo id do banco
     @GetMapping("{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BookDTO> getBookById(@PathVariable UUID id) {
-//        System.out.println(googleId);
         BookDTO book = bookService.getBookById(id);
         return ResponseEntity.ok(book);
     }
 
-//    only admin tem acesso a essa rota
+    //    only admin tem acesso a essa rota
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create/{googleId}")
     public ResponseEntity<String> createBook(@PathVariable String googleId) throws ParseException {
         bookService.createBook(googleId);
