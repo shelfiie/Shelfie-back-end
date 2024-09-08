@@ -82,10 +82,14 @@ public class UserService {
 //    pegar todos os usuários
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
-//        o stream faz uma sequencia dos objetos retornados para que cada objeto seja mapeado individualmente
+        users.forEach(user -> System.out.println("User: " + user.getNickname() + ", Enabled: " + user.getEnabled()));
+
         return users.stream()
-//                referências de metodo
-                .map(userMapper::userToUserDTO)
+                .map(user -> {
+                    UserDTO userDTO = userMapper.userToUserDTO(user);
+                    userDTO.setEnabled(user.getEnabled());
+                    return userDTO;
+                })
                 .collect(Collectors.toList());
     }
 
