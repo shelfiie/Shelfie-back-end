@@ -11,7 +11,9 @@ import com.mieker.ifpr.shelfie.entity.enumeration.UserRoles;
 import com.mieker.ifpr.shelfie.exception.NotFoundException;
 import com.mieker.ifpr.shelfie.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,14 +60,23 @@ public class AuthenticationService {
 
     public User authenticate (LoginDTO input) {
 
-        User user = userRepository.findByEmail(input.getEmail()).orElseThrow();
+        User user = userRepository.findByEmail(input.getEmail())
+                .orElseThrow(() -> new NotFoundException("Email ou senha incorretos."));
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        input.getEmail(),
-                        input.getPassword()
-                )
-        );
+        try {
+            // Authenticate the user
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            input.getEmail(),
+                            input.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            // Handle invalid email or password
+            throw new NotFoundException("Email ou senha incorretos.") {
+                // This is a custom exception with a message for invalid credentials
+            };
+        }
 
         if (!user.getEnabled()) {
             throw new NotFoundException("Usuário desabilitado. Contate o administrador.");
