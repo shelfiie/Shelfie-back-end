@@ -130,9 +130,9 @@ public class PageService {
         Optional<User> user = userRepository.findById(userId);
         if (badge < 100) {
             user.get().setPaginometerBadge(PaginometerBadge.NONE);
-        } else if (100 >= badge) {
+        } else if (100 <= badge && badge < 1000) {
             user.get().setPaginometerBadge(PaginometerBadge.HUNDRED_PAGES);
-        } else if (1000 <=badge && badge < 5000) {
+        } else if (1000 <= badge && badge < 5000) {
             user.get().setPaginometerBadge(PaginometerBadge.THOUSAND_PAGES);
         } else {
             user.get().setPaginometerBadge(PaginometerBadge.LOT_OF_PAGES);
