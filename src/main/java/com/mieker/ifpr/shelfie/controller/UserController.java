@@ -30,10 +30,6 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
-//    Admin endpoints
-
-//    TODO
-//    arrumar esse para retornar um DTO
 //    get user by id
     @GetMapping("{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable UUID id) {

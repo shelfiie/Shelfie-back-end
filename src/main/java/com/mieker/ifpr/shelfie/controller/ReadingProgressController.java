@@ -46,8 +46,6 @@ public class ReadingProgressController {
         return ResponseEntity.ok(rpService.getAllReadingProgress());
     }
 
-//    TODO
-//    ver se vai precisar de uma rota dessa passando o id do usuario
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<List<CollectionOfMyBooksDTO>> getReadingProgressByUser() {
@@ -69,7 +67,4 @@ public class ReadingProgressController {
         return ResponseEntity.status(200).body(message);
     }
 }
-
-// todo:
-// antes de passar para a review arrumar todos os todos
 

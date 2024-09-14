@@ -28,7 +28,6 @@ public class ReviewController {
     @PostMapping("{booksId}")
     public ResponseEntity<ReviewDTO> createReview(@PathVariable UUID booksId, @RequestBody ReviewDTO reviewDTO) throws ParseException {
         ReviewDTO responseReview = reviewService.createReview(booksId, reviewDTO);
-//        return ResponseEntity.ok(responseReview);
         return ResponseEntity.status(201).body(responseReview);
     }
 

@@ -153,6 +153,7 @@ public class ReadingProgressService {
                 .map( rp -> {
                     CollectionOfMyBooksDTO dto = rpMapper.readingProgressToCollectionOfMyBooks(rp);
                     dto.setGoogleId(googleId);
+                    dto.setBookId(book.getId());
                     return dto;
                 })
                 .collect(Collectors.toList());

@@ -61,13 +61,6 @@ public class MyBooksController {
         return ResponseEntity.ok(myBooksDTO);
     }
 
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/google/{googleId}")
-//    public ResponseEntity<List<MyBooksDTO>> getMyBooksByGoogleId(@PathVariable String googleId) {
-//        List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByGoogleId(googleId);
-//        return ResponseEntity.ok(myBooksDTO);
-//    }
-
 //    rota authenticated
 //    rota para desativar um my books
     @PreAuthorize("isAuthenticated()")
@@ -78,14 +71,6 @@ public class MyBooksController {
 
     }
 
-//    todo
-//    quando der disable no mybook dar disable na reading progression tbm
-
-
-//    TODO
-//    refletir sobre isso aqui !!!
-//    retorno só o id do livro e o status do livro ? dont knowrr
-//    rota para atualizar o status do livro
     @PutMapping("/{googleId}/update/{bookStatus}")
     public ResponseEntity<UpdateMyBooksDTO> updateMyBooks(@PathVariable String googleId, @PathVariable BookStatus bookStatus) {
         UpdateMyBooksDTO updateMyBooksDTO = myBookService.updateMyBooks(googleId, bookStatus);
@@ -95,10 +80,6 @@ public class MyBooksController {
 //    pega todos os mybooks do usuário que estão enabled
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mine")
-//    todo
-//    investigar essa rota
-//    ver se ela precisa que passe um parametro
-//    talvez criar uma nova rota q passa o id como parâmetro
     public ResponseEntity<List<MyBooksDTO>> getMyBooksByUserId() {
         List<MyBooksDTO> myBooksDTO = myBookService.getMyBooksByUserId();
         return ResponseEntity.ok(myBooksDTO);

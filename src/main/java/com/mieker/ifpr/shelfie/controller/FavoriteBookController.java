@@ -63,9 +63,4 @@ public class FavoriteBookController {
         List<ListUserFavoriteBookDTO> favoriteBookList = favoriteBookService.getAllFavoriteBooks();
         return ResponseEntity.status(200).body(favoriteBookList);
     }
-
-//    todo
-//    rotas :
-//        rota que contabiliza a quantidade de favoritos do livro - ver com a mayara depois a melhor estratégica
-
 }
